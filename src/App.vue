@@ -42,8 +42,8 @@
         </div>
       </div>
       <div class="teams__controls">
-        <button @click="saveToLocalStorage">Guardar</button>
-        <button @click="reset">Reestablecer</button>
+        <button class="teams__button" @click="saveToLocalStorage">Guardar</button>
+        <button class="teams__button" @click="reset">Reestablecer</button>
       </div>
     </div>
     
@@ -56,11 +56,11 @@
         <ul class="saved-teams__team">
           <li class="saved-teams__player" v-for="player in team1" :key="player.name">{{ player.name }}</li>
         </ul>
-        vs
+        <div>vs.</div>
         <ul class="saved-teams__team">
           <li class="saved-teams__player" v-for="player in team2" :key="player.name">{{ player.name }}</li>
         </ul>
-        <button @click="loadTeam({team1, team2})">Usar</button>
+        <button class="saved-teams__button" @click="loadTeam({team1, team2})">Usar</button>
       </li>
     </ul>
   </div>
@@ -89,6 +89,7 @@ const players = ref(PLAYERS_ARRAY)
 // Teams for the drag and drop functionality
 const team1 = ref([])
 const team2 = ref([])
+const likesTeams = ref(undefined)
 
 // Computed properties for calculating team scores
 const team1Score = computed(() => team1.value.reduce((sum, player) => sum + player.score, 0))
@@ -102,7 +103,8 @@ function saveToLocalStorage() {
   const localSavedTeams = JSON.parse(localStorage.getItem('saved-teams')) || []
   const currentTeamConfig = {
     team1: team1.value,
-    team2: team2.value
+    team2: team2.value,
+    likes: likesTeams.value
   }
   localStorage.setItem('saved-teams', JSON.stringify([...localSavedTeams, currentTeamConfig]))
   loadFromLocalStorage();
@@ -167,6 +169,7 @@ onMounted(() => {
 .player-pool {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   padding: 5px;
   background-color: #e8e8e8;
 }
@@ -194,6 +197,11 @@ onMounted(() => {
   margin-top: 16px;
 }
 
+.teams__button {
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
 .team-box {
   padding: 5px;
   min-height: 200px;
@@ -208,11 +216,6 @@ onMounted(() => {
   cursor: pointer;
 }
 
-button {
-  padding: 10px 20px;
-  cursor: pointer;
-}
-
 .saved-teams {
   display: flex;
   flex-direction: column;
@@ -223,15 +226,18 @@ button {
 
 .saved-teams__pair {
   display: flex;
+  align-items: center;
   background: white;
   list-style: none;
+  padding: 8px;
+  gap: 8px;
 }
 
 .saved-teams__team {
   display: flex;
   gap: 4px;
   list-style: none;
-  padding: 8px;
+  padding: 0;
 }
 
 .saved-teams__player {
@@ -243,5 +249,11 @@ button {
   display: flex;
   align-items: center;
   border-radius: 4px;
+}
+
+.saved-teams__button {
+  padding: 4px 8px;
+  font-size: 12px;
+  margin-left: auto;
 }
 </style>
