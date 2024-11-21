@@ -261,4 +261,14 @@ onMounted(() => {
   font-size: 12px;
   margin-left: auto;
 }
+
+@media (prefers-color-scheme: dark) {
+  .player {
+    background-color: #2d2d2d;
+    color: white;
+  }
+  .player-pool, .team-box {
+    background-color: #545454;
+  }
+}
 </style>
