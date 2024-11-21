@@ -267,8 +267,11 @@ onMounted(() => {
     background-color: #2d2d2d;
     color: white;
   }
-  .player-pool, .team-box, .saved-teams__pair {
+  .player-pool, .team-box, .saved-teams {
     background-color: #545454;
+  }
+  .saved-teams__pair {
+    background-color: #242424;
   }
 }
 </style>
