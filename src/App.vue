@@ -8,7 +8,10 @@
       <draggable v-model="players" item-key="name" group="players" class="player-pool">
         <template #item="{ element, index }">
           <div class="player" :key="index">
-            {{ element.name }} ({{ element.score }})
+            {{ element.name }} 
+            <span v-if="showScore">
+              ({{ element.score }})
+            </span>
           </div>
         </template>
       </draggable>
@@ -19,11 +22,14 @@
       <div class="teams__wrapper">
         <div class="teams__team">
           <h2 class="heading-2">Equipo 1</h2>
-          <p style="margin: 0 0 8px">(Power Level: {{ team1Score }})</p>
+          <p v-if="showScore" style="margin: 0 0 8px">(Power Level: {{ team1Score }})</p>
           <draggable v-model="team1" item-key="name" group="players" class="team-box">
             <template #item="{ element }">
               <div class="player" :key="element.name">
-                {{ element.name }} ({{ element.score }})
+                {{ element.name }} 
+                <span v-if="showScore">
+                  ({{ element.score }})
+                </span>
               </div>
             </template>
           </draggable>
@@ -31,16 +37,23 @@
         
         <div class="teams__team">
           <h2 class="heading-2">Equipo 2</h2>
-          <p style="margin: 0 0 8px">(Power Level: {{ team2Score }})</p>
+          <p v-if="showScore" style="margin: 0 0 8px">(Power Level: {{ team2Score }})</p>
           <draggable v-model="team2" item-key="name" group="players" class="team-box">
             <template #item="{ element }">
               <div class="player" :key="element.name">
-                {{ element.name }} ({{ element.score }})
+                {{ element.name }} 
+                <span v-if="showScore">
+                  ({{ element.score }})
+                </span>
               </div>
             </template>
           </draggable>
         </div>
       </div>
+      <label>
+        <input v-model="showScore" type="checkbox"/>
+        Mostrar puntajes
+      </label>
       <div class="teams__controls">
         <button class="teams__button" @click="saveToLocalStorage">Guardar</button>
         <button class="teams__button" @click="reset">Reestablecer</button>
@@ -99,6 +112,9 @@ const team2Score = computed(() => team2.value.reduce((sum, player) => sum + play
 
 // Hold previous team savedTeams
 const savedTeams = ref([])
+
+// Interface settings
+const showScore = ref(true);
 
 // Method to save current team configuration to localStorage
 function saveToLocalStorage() {
@@ -169,6 +185,9 @@ onMounted(() => {
 }
 
 .teams {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   margin-bottom: 24px;
 }
 
@@ -188,7 +207,6 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   gap: 12px;
-  margin-top: 16px;
 }
 
 .teams__button {
