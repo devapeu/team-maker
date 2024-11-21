@@ -103,6 +103,7 @@ const savedTeams = ref([])
 // Method to save current team configuration to localStorage
 function saveToLocalStorage() {
   const localSavedTeams = JSON.parse(localStorage.getItem('saved-teams')) || []
+  if (!team1.value.length || !team2.value.length) return 
   const currentTeamConfig = {
     team1: team1.value,
     team2: team2.value,
@@ -119,16 +120,12 @@ function loadFromLocalStorage() {
   if (config) {
     const parsedConfig = JSON.parse(config)
     savedTeams.value = parsedConfig || []
-  } else {
-    //alert('No configuration found!')
   }
 }
 
 function loadTeam(pair) {
   const slottedPlayersIds = [ ...pair.team1, ...pair.team2 ].map(({id}) => id);
-  const availablePlayers = PLAYERS_ARRAY.filter(player => !slottedPlayersIds.includes(player.id));
-  
-  console.log({ slottedPlayersIds, availablePlayers, all: PLAYERS_ARRAY })
+  const availablePlayers = PLAYERS_ARRAY.filter(player => !slottedPlayersIds.includes(player.id));  
   team1.value = pair.team1;
   team2.value = pair.team2;
   players.value = availablePlayers;
