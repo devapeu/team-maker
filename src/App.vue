@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="picker">
     <h1 class="heading-1" style="display: none;">Team Selector</h1>
     
     <!-- Player List -->
-    <div class="player-list">
-      <h2 class="heading-2">Players</h2>
+    <div class="players">
+      <h2 class="heading-2">Jugadores</h2>
       <draggable v-model="players" item-key="name" group="players" class="player-pool">
         <template #item="{ element, index }">
           <div class="player" :key="index">
@@ -16,33 +16,36 @@
     
     <!-- Teams -->
     <div class="teams">
-      <div class="team">
-        <h2 class="heading-2">Team 1</h2>
-        <p style="margin: 0 0 8px">(Power Level: {{ team1Score }})</p>
-        <draggable v-model="team1" item-key="name" group="players" class="team-box">
-          <template #item="{ element }">
-            <div class="player" :key="element.name">
-              {{ element.name }} ({{ element.score }})
-            </div>
-          </template>
-        </draggable>
+      <div class="teams__wrapper">
+        <div class="teams__team">
+          <h2 class="heading-2">Equipo 1</h2>
+          <p style="margin: 0 0 8px">(Power Level: {{ team1Score }})</p>
+          <draggable v-model="team1" item-key="name" group="players" class="team-box">
+            <template #item="{ element }">
+              <div class="player" :key="element.name">
+                {{ element.name }} ({{ element.score }})
+              </div>
+            </template>
+          </draggable>
+        </div>
+        
+        <div class="teams__team">
+          <h2 class="heading-2">Equipo 2</h2>
+          <p style="margin: 0 0 8px">(Power Level: {{ team2Score }})</p>
+          <draggable v-model="team2" item-key="name" group="players" class="team-box">
+            <template #item="{ element }">
+              <div class="player" :key="element.name">
+                {{ element.name }} ({{ element.score }})
+              </div>
+            </template>
+          </draggable>
+        </div>
       </div>
-      
-      <div class="team">
-        <h2 class="heading-2">Team 2</h2>
-        <p style="margin: 0 0 8px">(Power Level: {{ team2Score }})</p>
-        <draggable v-model="team2" item-key="name" group="players" class="team-box">
-          <template #item="{ element }">
-            <div class="player" :key="element.name">
-              {{ element.name }} ({{ element.score }})
-            </div>
-          </template>
-        </draggable>
+      <div class="teams__controls">
+        <button @click="saveToLocalStorage">Guardar</button>
+        <button @click="reset">Reestablecer</button>
       </div>
     </div>
-    <!-- Save and Load savedTeams -->
-    <button @click="saveToLocalStorage">Guardar</button>
-    <button @click="reset">Reestablecer</button>
     
     <h2 class="heading-2">Combinaciones anteriores</h2>
     <ul class="saved-teams">
@@ -139,8 +142,9 @@ onMounted(() => {
 </script>
 
 <style scoped>
-#app {
+.picker {
   text-align: center;
+  max-width: 720px;
 }
 
 .heading-1 {
@@ -153,15 +157,11 @@ onMounted(() => {
   margin: 0 0 12px;
 }
 
-.player-list, .teams {
+.players {
   display: flex;
-  justify-content: center;
-  margin: 10px;
-}
-
-.player-list {
   flex-direction: column;
   align-items: center;
+  margin-bottom: 24px;
 }
 
 .player-pool {
@@ -171,11 +171,27 @@ onMounted(() => {
   background-color: #e8e8e8;
 }
 
-.team {
+.teams {
+  margin-bottom: 24px;
+}
+
+.teams__wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.teams__team {
   margin: 10px;
   padding: 10px;
   border: 2px solid #ccc;
   width: 200px;
+}
+
+.teams__controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
 }
 
 .team-box {
