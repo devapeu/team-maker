@@ -263,11 +263,11 @@ onMounted(() => {
 }
 
 @media (prefers-color-scheme: dark) {
-  .player {
+  .player, .saved-teams__player {
     background-color: #2d2d2d;
     color: white;
   }
-  .player-pool, .team-box {
+  .player-pool, .team-box, .saved-teams__pair {
     background-color: #545454;
   }
 }
