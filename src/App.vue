@@ -166,7 +166,7 @@ onMounted(() => {
 
 .heading-2 {
   font-size: 24px;
-  margin: 0 0 12px;
+  margin: 0;
 }
 
 .players {
