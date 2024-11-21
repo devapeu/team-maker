@@ -178,10 +178,10 @@ onMounted(() => {
 .teams__wrapper {
   display: flex;
   justify-content: center;
+  gap: 10px;
 }
 
 .teams__team {
-  margin: 10px;
   padding: 10px;
   border: 2px solid #ccc;
   width: 200px;
@@ -230,8 +230,16 @@ onMounted(() => {
   gap: 8px;
 }
 
+@media (max-width: 480px) {
+  .saved-teams__pair {
+    flex-direction: column;
+  }
+}
+
 .saved-teams__team {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 4px;
   list-style: none;
   padding: 0;
