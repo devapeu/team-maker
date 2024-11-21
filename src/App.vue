@@ -206,7 +206,7 @@ onMounted(() => {
 }
 
 .player {
-  padding: 5px;
+  padding: 8px 12px;
   background: white;
   border: 1px solid #ddd;
   margin: 5px;
