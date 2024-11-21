@@ -21,8 +21,10 @@
     <div class="teams">
       <div class="teams__wrapper">
         <div class="teams__team">
-          <h2 class="heading-2">Equipo 1</h2>
-          <p v-if="showScore" style="margin: 0 0 8px">(Power Level: {{ team1Score }})</p>
+          <div>
+            <h2 class="heading-2">Equipo 1</h2>
+            <p v-if="showScore" style="margin: 0">(Power Level: {{ team1Score }})</p>
+          </div>
           <draggable v-model="team1" item-key="name" group="players" class="team-box">
             <template #item="{ element }">
               <div class="player" :key="element.name">
@@ -36,8 +38,10 @@
         </div>
         
         <div class="teams__team">
-          <h2 class="heading-2">Equipo 2</h2>
-          <p v-if="showScore" style="margin: 0 0 8px">(Power Level: {{ team2Score }})</p>
+          <div>
+            <h2 class="heading-2">Equipo 2</h2>
+            <p v-if="showScore" style="margin: 0">(Power Level: {{ team2Score }})</p>
+          </div>
           <draggable v-model="team2" item-key="name" group="players" class="team-box">
             <template #item="{ element }">
               <div class="player" :key="element.name">
@@ -202,6 +206,9 @@ onMounted(() => {
   padding: 10px;
   border: 2px solid #ccc;
   width: 200px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .teams__controls {
