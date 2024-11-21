@@ -1,5 +1,5 @@
 <template>
-  <div class="picker">
+  <fragment>
     <h1 class="heading-1" style="display: none;">Team Selector</h1>
     
     <!-- Player List -->
@@ -47,23 +47,25 @@
       </div>
     </div>
     
-    <h2 class="heading-2">Combinaciones anteriores</h2>
-    <ul class="saved-teams">
-      <li 
-        v-for="({ team1, team2 }, index) in savedTeams" 
-        :key="index"
-        class="saved-teams__pair">
-        <ul class="saved-teams__team">
-          <li class="saved-teams__player" v-for="player in team1" :key="player.name">{{ player.name }}</li>
-        </ul>
-        <div>vs.</div>
-        <ul class="saved-teams__team">
-          <li class="saved-teams__player" v-for="player in team2" :key="player.name">{{ player.name }}</li>
-        </ul>
-        <button class="saved-teams__button" @click="loadTeam({team1, team2})">Usar</button>
-      </li>
-    </ul>
-  </div>
+    <template v-if="savedTeams.length">
+      <h2 class="heading-2">Combinaciones anteriores</h2>
+      <ul class="saved-teams">
+        <li 
+          v-for="({ team1, team2 }, index) in savedTeams" 
+          :key="index"
+          class="saved-teams__pair">
+          <ul class="saved-teams__team">
+            <li class="saved-teams__player" v-for="player in team1" :key="player.name">{{ player.name }}</li>
+          </ul>
+          <div>vs.</div>
+          <ul class="saved-teams__team">
+            <li class="saved-teams__player" v-for="player in team2" :key="player.name">{{ player.name }}</li>
+          </ul>
+          <button class="saved-teams__button" @click="loadTeam({team1, team2})">Usar</button>
+        </li>
+      </ul>
+    </template>
+  </fragment>
 </template>
 
 <script setup>
@@ -144,11 +146,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.picker {
-  text-align: center;
-  max-width: 720px;
-}
-
 .heading-1 {
   font-size: 32px;
   margin: 0 0 12px;
