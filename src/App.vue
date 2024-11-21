@@ -182,6 +182,7 @@ onMounted(() => {
   justify-content: center;
   padding: 5px;
   background-color: #e8e8e8;
+  margin-top: 12px;
 }
 
 .teams {
