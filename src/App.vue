@@ -1,93 +1,84 @@
 <template>
-  <fragment>
-    <h1 class="heading-1" style="display: none;">Team Selector</h1>
-    
-    <!-- Player List -->
-    <div class="players">
-      <h2 class="heading-2">Jugadores</h2>
-      <draggable v-model="players" item-key="name" group="players" class="player-pool">
-        <template #item="{ element, index }">
-          <div class="player" :key="index">
-            {{ element.name }} 
-            <span v-if="showScore">
-              ({{ element.score }})
-            </span>
-          </div>
-        </template>
-      </draggable>
-    </div>
-    
-    <!-- Teams -->
-    <div class="teams">
-      <div class="teams__wrapper">
-        <div class="teams__team">
-          <div>
-            <h2 class="heading-2">Equipo 1</h2>
-            <p v-if="showScore" style="margin: 0">(Power Level: {{ team1Score }})</p>
-          </div>
-          <draggable v-model="team1" item-key="name" group="players" class="team-box">
-            <template #item="{ element }">
-              <div class="player" :key="element.name">
-                {{ element.name }} 
-                <span v-if="showScore">
-                  ({{ element.score }})
-                </span>
-              </div>
-            </template>
-          </draggable>
+  <h1 class="heading-1" style="display: none;">Team Selector</h1>
+  
+  <!-- Player List -->
+  <div class="players">
+    <h2 class="heading-2">Jugadores</h2>
+    <draggable v-model="players" item-key="name" group="players" class="player-pool">
+      <template #item="{ element, index }">
+        <div class="player" :key="index">
+          {{ element.name }} 
+          <span v-if="showScore">
+            ({{ element.score }})
+          </span>
         </div>
-        
-        <div class="teams__team">
-          <div>
-            <h2 class="heading-2">Equipo 2</h2>
-            <p v-if="showScore" style="margin: 0">(Power Level: {{ team2Score }})</p>
-          </div>
-          <draggable v-model="team2" item-key="name" group="players" class="team-box">
-            <template #item="{ element }">
-              <div class="player" :key="element.name">
-                {{ element.name }} 
-                <span v-if="showScore">
-                  ({{ element.score }})
-                </span>
-              </div>
-            </template>
-          </draggable>
+      </template>
+    </draggable>
+  </div>
+  
+  <!-- Teams -->
+  <div class="teams">
+    <div class="teams__wrapper">
+      <div class="teams__team">
+        <div>
+          <h2 class="heading-2">Equipo 1</h2>
+          <p v-if="showScore" style="margin: 0">(Power Level: {{ team1Score }})</p>
         </div>
+        <draggable v-model="team1" item-key="name" group="players" class="team-box">
+          <template #item="{ element }">
+            <div class="player" :key="element.name">
+              {{ element.name }} 
+              <span v-if="showScore">
+                ({{ element.score }})
+              </span>
+            </div>
+          </template>
+        </draggable>
       </div>
-      <label>
-        <input v-model="showScore" type="checkbox"/>
-        Mostrar puntajes
-      </label>
-      <div class="teams__controls">
-        <button class="teams__button" @click="saveToLocalStorage">Guardar</button>
-        <button class="teams__button" @click="reset">Reestablecer</button>
+      
+      <div class="teams__team">
+        <div>
+          <h2 class="heading-2">Equipo 2</h2>
+          <p v-if="showScore" style="margin: 0">(Power Level: {{ team2Score }})</p>
+        </div>
+        <draggable v-model="team2" item-key="name" group="players" class="team-box">
+          <template #item="{ element }">
+            <div class="player" :key="element.name">
+              {{ element.name }} 
+              <span v-if="showScore">
+                ({{ element.score }})
+              </span>
+            </div>
+          </template>
+        </draggable>
       </div>
     </div>
-    
-    <template v-if="savedTeams.length">
-      <h2 class="heading-2">Combinaciones anteriores</h2>
-      <ul class="saved-teams">
-        <li 
-          v-for="({ team1, team2 }, index) in savedTeams" 
-          :key="index"
-          class="saved-teams__pair">
-          <ul class="saved-teams__team">
-            <li class="saved-teams__player" v-for="player in team1" :key="player.name">{{ player.name }}</li>
-          </ul>
-          <div>vs.</div>
-          <ul class="saved-teams__team">
-            <li class="saved-teams__player" v-for="player in team2" :key="player.name">{{ player.name }}</li>
-          </ul>
-          <button class="saved-teams__button" @click="loadTeam({team1, team2})">Usar</button>
-        </li>
-      </ul>
-    </template>
-  </fragment>
+    <OpinionBanner
+      v-if="hasPlayersInTeams"
+      :teamOpinion="likesTeams"
+      @update="likesTeams = $event" />
+    <label>
+      <input v-model="showScore" type="checkbox"/>
+      Mostrar puntajes
+    </label>
+    <div class="teams__controls">
+      <button class="teams__button" @click="saveToLocalStorage">Guardar</button>
+      <button class="teams__button" @click="reset">Reestablecer</button>
+    </div>
+  </div>
+  
+  <PreviousTeams 
+    v-if="savedTeams.length"
+    :savedTeams=savedTeams
+    @load="loadTeam($event)"
+    @delete="deleteTeam($event)"/>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import draggable from "vuedraggable/dist/vuedraggable.common";
+import OpinionBanner from './components/OpinionBanner.vue';
+import PreviousTeams from './components/PreviousTeams.vue';
 
 const PLAYERS_ARRAY = [
   { id: 1, name: 'Ayax', score: 100 },
@@ -106,6 +97,7 @@ const PLAYERS_ARRAY = [
 const players = ref(PLAYERS_ARRAY)
 
 // Teams for the drag and drop functionality
+const id = ref(0)
 const team1 = ref([])
 const team2 = ref([])
 const likesTeams = ref(undefined)
@@ -113,6 +105,9 @@ const likesTeams = ref(undefined)
 // Computed properties for calculating team scores
 const team1Score = computed(() => team1.value.reduce((sum, player) => sum + player.score, 0))
 const team2Score = computed(() => team2.value.reduce((sum, player) => sum + player.score, 0))
+const hasPlayersInTeams = computed(() => {
+  return team1.value.length && team2.value.length;
+})
 
 // Hold previous team savedTeams
 const savedTeams = ref([])
@@ -124,14 +119,23 @@ const showScore = ref(true);
 function saveToLocalStorage() {
   const localSavedTeams = JSON.parse(localStorage.getItem('saved-teams')) || []
   if (!team1.value.length || !team2.value.length) return 
+
   const currentTeamConfig = {
+    id: Date.now(),
     team1: team1.value,
     team2: team2.value,
-    likes: likesTeams.value
+    likesTeams: likesTeams.value
   }
-  localStorage.setItem('saved-teams', JSON.stringify([...localSavedTeams, currentTeamConfig]))
+  
+  const existingTeamIndex = localSavedTeams.findIndex(team => team.id === id.value);
+  if (existingTeamIndex !== -1) {
+    localSavedTeams.splice(existingTeamIndex, 1, currentTeamConfig)
+  } else {
+    localSavedTeams.push(currentTeamConfig)
+  }
+
+  localStorage.setItem('saved-teams', JSON.stringify(localSavedTeams))
   loadFromLocalStorage();
-  alert('Configuration saved!')
 }
 
 // Method to load team configuration from localStorage
@@ -143,18 +147,29 @@ function loadFromLocalStorage() {
   }
 }
 
-function loadTeam(pair) {
-  const slottedPlayersIds = [ ...pair.team1, ...pair.team2 ].map(({id}) => id);
+function loadTeam(saved) {
+  const slottedPlayersIds = [ ...saved.team1, ...saved.team2 ].map(({id}) => id);
   const availablePlayers = PLAYERS_ARRAY.filter(player => !slottedPlayersIds.includes(player.id));  
-  team1.value = pair.team1;
-  team2.value = pair.team2;
+  team1.value = saved.team1;
+  team2.value = saved.team2;
+  id.value = saved.id;
+  likesTeams.value = saved.likesTeams;
   players.value = availablePlayers;
+  window.scrollTo(0,0);
+}
+
+function deleteTeam(id) {
+  savedTeams.value = savedTeams.value.filter(team => team.id !== id);
+  localStorage.setItem('saved-teams', JSON.stringify(savedTeams.value))
+  loadFromLocalStorage();
 }
 
 function reset() {
   players.value = PLAYERS_ARRAY;
   team1.value = [];
   team2.value = [];
+  likesTeams.value = undefined;
+  id.value = 0; 
 }
 
 onMounted(() => {
@@ -234,55 +249,6 @@ onMounted(() => {
   border: 1px solid #ddd;
   margin: 5px;
   cursor: pointer;
-}
-
-.saved-teams {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 12px;
-  background-color: #e8e8e8;
-}
-
-.saved-teams__pair {
-  display: flex;
-  align-items: center;
-  background: white;
-  list-style: none;
-  padding: 8px;
-  gap: 8px;
-}
-
-@media (max-width: 480px) {
-  .saved-teams__pair {
-    flex-direction: column;
-  }
-}
-
-.saved-teams__team {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 4px;
-  list-style: none;
-  padding: 0;
-}
-
-.saved-teams__player {
-  background: #f0f0f0;
-  border: 1px solid #e8e8e8;
-  height: 24px;
-  padding: 0 8px;
-  line-height: 1;
-  display: flex;
-  align-items: center;
-  border-radius: 4px;
-}
-
-.saved-teams__button {
-  padding: 4px 8px;
-  font-size: 12px;
-  margin-left: auto;
 }
 
 @media (prefers-color-scheme: dark) {
