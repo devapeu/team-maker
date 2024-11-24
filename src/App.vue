@@ -159,9 +159,11 @@ function loadTeam(saved) {
 }
 
 function deleteTeam(id) {
-  savedTeams.value = savedTeams.value.filter(team => team.id !== id);
-  localStorage.setItem('saved-teams', JSON.stringify(savedTeams.value))
-  loadFromLocalStorage();
+  if (confirm("Estas seguro que quieres borrar este equipo?")) {
+    savedTeams.value = savedTeams.value.filter(team => team.id !== id);
+    localStorage.setItem('saved-teams', JSON.stringify(savedTeams.value))
+    loadFromLocalStorage();
+  }
 }
 
 function reset() {
