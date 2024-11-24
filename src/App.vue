@@ -179,90 +179,71 @@ onMounted(() => {
 })
 </script>
 
-<style scoped>
-.heading-1 {
-  font-size: 32px;
-  margin: 0 0 12px;
-}
+<style lang="sass" scoped>
+.heading-1
+  font-size: 32px
+  margin: 0 0 12px
 
-.heading-2 {
-  font-size: 24px;
-  margin: 0;
-}
+.heading-2
+  font-size: 24px
+  margin: 0
 
-.players {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 24px;
-}
+.players
+  display: flex
+  flex-direction: column
+  align-items: center
+  margin-bottom: 24px
 
-.player-pool {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  padding: 5px;
-  background-color: #e8e8e8;
-  margin-top: 12px;
-}
+.player-pool
+  display: flex
+  flex-wrap: wrap
+  justify-content: center
+  padding: 5px
+  background-color: #e8e8e8
+  margin-top: 12px
 
-.teams {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin-bottom: 24px;
-}
+.teams
+  display: flex
+  flex-direction: column
+  gap: 16px
+  margin-bottom: 24px
+  &__wrapper
+    display: flex
+    justify-content: center
+    gap: 8px
+  &__team
+    padding: 8px
+    border: 2px solid #ccc
+    width: 200px
+    display: flex
+    flex-direction: column
+    gap: 12px
+  &__controls
+    display: flex
+    justify-content: center
+    gap: 12px
+  &__button
+    padding: 10px 20px
+    cursor: pointer
 
-.teams__wrapper {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
+.team-box
+  padding: 5px
+  min-height: 200px
+  background-color: #e8e8e8
 
-.teams__team {
-  padding: 10px;
-  border: 2px solid #ccc;
-  width: 200px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
+.player
+  padding: 8px 12px
+  background: white
+  border: 1px solid #ddd
+  margin: 5px
+  cursor: pointer
 
-.teams__controls {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-}
-
-.teams__button {
-  padding: 10px 20px;
-  cursor: pointer;
-}
-
-.team-box {
-  padding: 5px;
-  min-height: 200px;
-  background-color: #e8e8e8;
-}
-
-.player {
-  padding: 8px 12px;
-  background: white;
-  border: 1px solid #ddd;
-  margin: 5px;
-  cursor: pointer;
-}
-
-@media (prefers-color-scheme: dark) {
-  .player, .saved-teams__player {
-    background-color: #2d2d2d;
-    color: white;
-  }
-  .player-pool, .team-box, .saved-teams {
-    background-color: #545454;
-  }
-  .saved-teams__pair {
-    background-color: #242424;
-  }
-}
+@media (prefers-color-scheme: dark)
+  .player, .saved-teams__player
+    background-color: #2d2d2d
+    color: white
+  .player-pool, .team-box, .saved-teams
+    background-color: #545454
+  .saved-teams__pair
+    background-color: #242424
 </style>

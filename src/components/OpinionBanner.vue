@@ -1,6 +1,8 @@
 <template>
   <div class="opinion-banner">
-    ¿Buen equipo?
+    <div class="opinion-banner__label">
+      ¿Buen equipo?
+    </div>
     <button 
       :class="{ 'opinion-banner__button--true': teamOpinion === true }"
       @click="updateOpinion(true)">Ta weno 😎</button>
@@ -33,6 +35,11 @@ function updateOpinion(value) {
   align-items: center
   padding: 12px 
   background: #eee
+  @media (max-width: 480px)
+    flex-wrap: wrap
+  &__label
+    @media (max-width: 480px)
+      flex: 1 1 100%
   &__button
     &--true
       border: 1px solid #22c55e
