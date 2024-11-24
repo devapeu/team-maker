@@ -84,13 +84,13 @@ const PLAYERS_ARRAY = [
   { id: 1, name: 'Ayax', score: 100 },
   { id: 2, name: 'Diego', score: 90 },
   { id: 3, name: 'Piero', score: 90 },
-  { id: 4, name: 'Jair', score: 70 },
+  { id: 4, name: 'Jair', score: 75 },
   { id: 5, name: 'Jaume', score: 75 },
-  { id: 6, name: 'Sebastian', score: 60 },
-  { id: 7, name: 'Renato', score: 60 },
-  { id: 8, name: 'Hector', score: 50 },
-  { id: 9, name: 'Jardani', score: 55 },
-  { id: 10, name: 'Christian', score: 50 },
+  { id: 6, name: 'Sebastian', score: 70 },
+  { id: 7, name: 'Renato', score: 70 },
+  { id: 8, name: 'Hector', score: 65 },
+  { id: 9, name: 'Jardani', score: 65 },
+  { id: 10, name: 'Christian', score: 65 },
 ]
 
 // List of players with names and scores

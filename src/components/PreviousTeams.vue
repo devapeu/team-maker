@@ -8,10 +8,7 @@
         class="saved-teams__pair">
         <div class="saved-teams__controls">
           <template v-if="likesTeams !== undefined">
-            {{ likesTeams ? "😀" : "😡" }}
-          </template>
-          <template v-else>
-            🫥
+            {{ likesTeams ? "👍" : "👎" }}
           </template>
           <div>
             <button class="saved-teams__button" @click="emit('delete', id)">Borrar</button>
