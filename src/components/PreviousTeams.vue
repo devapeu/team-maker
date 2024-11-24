@@ -32,8 +32,6 @@
   </section>
 </template>
 <script setup>
-import { defineEmits, defineProps } from 'vue'
-
 const { savedTeams } = defineProps({
   savedTeams: {
     type: Array,

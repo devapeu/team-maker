@@ -1,12 +1,15 @@
 <template>
   <div class="opinion-banner">
     ¿Buen equipo?
-    <button @click="updateOpinion">{{ teamOpinionLabel }}</button>
+    <button 
+      :class="{ 'opinion-banner__button--true': teamOpinion === true }"
+      @click="updateOpinion(true)">Ta weno 😎</button>
+    <button 
+      :class="{ 'opinion-banner__button--false': teamOpinion === false }"
+      @click="updateOpinion(false)">Wakala 🤢</button>
   </div>
 </template>
 <script setup>
-import { defineEmits, defineProps, computed } from 'vue'
-
 const { teamOpinion } = defineProps({
   teamOpinion: {
     type: [Boolean, undefined],
@@ -16,16 +19,9 @@ const { teamOpinion } = defineProps({
 
 const emit = defineEmits(['update']);
 
-const teamOpinionLabel = computed(() => {
-  if (teamOpinion === true) return 'Ta weno 😎';
-  if (teamOpinion === false) return 'Cringe 🤢';
-  return 'Cambiar opinion'
-})
-
-function updateOpinion() {
-  if (teamOpinion === undefined) emit('update', true);
-  else if (teamOpinion === true) emit('update', false);
-  else if (teamOpinion === false) emit('update', undefined);
+function updateOpinion(value) {
+  if (teamOpinion === value) emit('update', undefined)
+  emit('update', value);
 }
 
 </script>
@@ -37,4 +33,11 @@ function updateOpinion() {
   align-items: center
   padding: 12px 
   background: #eee
-</style>
+  &__button
+    &--true
+      border: 1px solid #22c55e
+      background-color: #bbf7d0
+    &--false
+      border: 1px solid #ef4444
+      background-color: #fee2e2
+  </style>
