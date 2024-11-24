@@ -79,7 +79,6 @@ const emit = defineEmits(['load', 'delete'])
     display: flex
     align-items: center
     border-radius: 4px
-
   &__button
     padding: 4px 8px
     font-size: 12px

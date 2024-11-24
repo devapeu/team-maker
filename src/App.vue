@@ -61,7 +61,7 @@
       <input v-model="showScore" type="checkbox"/>
       Mostrar puntajes
     </label>
-    <div class="teams__controls">
+    <div class="teams_  _controls">
       <button class="teams__button" @click="saveToLocalStorage">Guardar</button>
       <button class="teams__button" @click="reset">Reestablecer</button>
     </div>
@@ -75,7 +75,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import draggable from "vuedraggable/dist/vuedraggable.common";
 import OpinionBanner from './components/OpinionBanner.vue';
 import PreviousTeams from './components/PreviousTeams.vue';
@@ -121,7 +121,7 @@ function saveToLocalStorage() {
   if (!team1.value.length || !team2.value.length) return 
 
   const currentTeamConfig = {
-    id: Date.now(),
+    id: getPairId(team1.value, team2.value),
     team1: team1.value,
     team2: team2.value,
     likesTeams: likesTeams.value
@@ -173,6 +173,19 @@ function reset() {
   likesTeams.value = undefined;
   id.value = 0; 
 }
+
+function getPairId(team1, team2) {
+  const teams = 
+    [team1.map(({id}) => id), team2.map(({id}) => id)]
+    .map(innerArr => innerArr.slice().sort((a, b) => a - b))
+    .sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)));
+
+  return JSON.stringify(teams)
+}
+
+watch([team1, team2], () => {
+  id.value = getPairId(team1.value, team2.value);
+})
 
 onMounted(() => {
   loadFromLocalStorage();
