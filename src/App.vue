@@ -227,7 +227,7 @@ onMounted(() => {
     cursor: pointer
 
 .team-box
-  padding: 5px
+  padding: 4px
   min-height: 200px
   background-color: #e8e8e8
 
@@ -235,7 +235,7 @@ onMounted(() => {
   padding: 8px 12px
   background: white
   border: 1px solid #ddd
-  margin: 5px
+  margin: 2px
   cursor: pointer
 
 @media (prefers-color-scheme: dark)
