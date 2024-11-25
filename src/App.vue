@@ -252,11 +252,9 @@ onMounted(() => {
   cursor: pointer
 
 @media (prefers-color-scheme: dark)
-  .player, .saved-teams__player
+  .player
     background-color: #2d2d2d
     color: white
-  .player-pool, .team-box, .saved-teams
+  .player-pool, .team-box
     background-color: #545454
-  .saved-teams__pair
-    background-color: #242424
 </style>

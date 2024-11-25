@@ -83,4 +83,13 @@ const emit = defineEmits(['load', 'delete'])
     padding: 4px 8px
     font-size: 12px
     margin-left: auto
+
+@media (prefers-color-scheme: dark)
+  .saved-teams
+    background-color: #545454
+    &__player
+      background-color: #2d2d2d
+      color: white
+    &__pair
+      background-color: #242424
 </style>

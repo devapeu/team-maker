@@ -42,6 +42,8 @@ function updateOpinion(value) {
   max-width: 450px
   width: 100%
   margin: auto
+  @media (prefers-color-scheme: dark)
+    background: #2d2d2d
   @media (max-width: 480px)
     flex-wrap: wrap
   &__label
