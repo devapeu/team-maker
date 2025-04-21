@@ -7,9 +7,11 @@
     <draggable v-model="players" item-key="name" group="players" class="player-pool">
       <template #item="{ element, index }">
         <div class="player" :key="index">
-          {{ element.name }} 
-          <span v-if="showScore">
-            ({{ element.score }})
+          <div class="player__name">{{ element.name }} </div>
+          <span 
+            v-if="showScore"
+            class="player__score">
+            {{ element.score }}
           </span>
         </div>
       </template>
@@ -27,9 +29,11 @@
         <draggable v-model="team1" item-key="name" group="players" class="team-box">
           <template #item="{ element }">
             <div class="player" :key="element.name">
-              {{ element.name }} 
-              <span v-if="showScore">
-                ({{ element.score }})
+              <div class="player__name">{{ element.name }}</div>
+              <span 
+                v-if="showScore"
+                class="player__score">
+                {{ element.score }}
               </span>
             </div>
           </template>
@@ -44,9 +48,11 @@
         <draggable v-model="team2" item-key="name" group="players" class="team-box">
           <template #item="{ element }">
             <div class="player" :key="element.name">
-              {{ element.name }} 
-              <span v-if="showScore">
-                ({{ element.score }})
+              <div class="player__name">{{ element.name }}</div>
+              <span 
+                v-if="showScore"
+                class="player__score">
+                {{ element.score }}
               </span>
             </div>
           </template>
