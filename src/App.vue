@@ -7,7 +7,6 @@
     <draggable v-model="players" item-key="name" group="players" class="player-pool">
       <template #item="{ element, index }">
         <PlayerBadge 
-          :key="index"
           :player="element"
           :showScore="showScore" />
       </template>
@@ -25,7 +24,6 @@
         <draggable v-model="team1" item-key="name" group="players" class="team-box">
           <template #item="{ element }">
             <PlayerBadge 
-              :key="index"
               :player="element"
               :showScore="showScore" />
           </template>
@@ -40,7 +38,6 @@
         <draggable v-model="team2" item-key="name" group="players" class="team-box">
           <template #item="{ element }">
             <PlayerBadge 
-              :key="index"
               :player="element"
               :showScore="showScore" />
           </template>
@@ -70,27 +67,26 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
+import { PLAYERS_ARRAY } from './data/players.js'
 import draggable from "vuedraggable/dist/vuedraggable.common";
 import OpinionBanner from './components/OpinionBanner.vue';
 import PreviousTeams from './components/PreviousTeams.vue';
 import PlayerBadge from './components/PlayerBadge.vue';
 
-const PLAYERS_ARRAY = [
-  { id: 1, name: 'Ayax', score: 100, main: 'kronos' },
-  { id: 2, name: 'Diego', score: 90, main: 'ra' },
-  { id: 3, name: 'Piero', score: 90, main: 'odin' },
-  { id: 4, name: 'Jair', score: 75, main: 'gaia' },
-  { id: 5, name: 'Jaume', score: 75, main: 'gaia' },
-  { id: 6, name: 'Sebastian', score: 70, main: 'zeus' },
-  { id: 7, name: 'Renato', score: 70, main: 'thor' },
-  { id: 8, name: 'Hector', score: 65, main: 'zeus' },
-  { id: 9, name: 'Jardani', score: 65, main: 'zeus' },
-  { id: 10, name: 'Christian', score: 65, main: 'isis' },
-  { id: 11, name: 'Almeida', score: 65, main: 'nuwa' },
-]
-
 // List of players with names and scores
-const players = ref(PLAYERS_ARRAY)
+const playersMap = PLAYERS_ARRAY.map(player => {
+  const values = Object.values(player.scores);
+  const average = values.reduce((a, b) => a + b, 0) / values.length;
+
+  console.log(average)
+
+  return {
+    ...player,
+    score: Math.round(average),
+  }
+})
+
+const players = ref(playersMap)
 
 // Teams for the drag and drop functionality
 const id = ref(0)
@@ -145,7 +141,7 @@ function loadFromLocalStorage() {
 
 function loadTeam(saved) {
   const slottedPlayersIds = [ ...saved.team1, ...saved.team2 ].map(({id}) => id);
-  const availablePlayers = PLAYERS_ARRAY.filter(player => !slottedPlayersIds.includes(player.id));  
+  const availablePlayers = playersMap.filter(player => !slottedPlayersIds.includes(player.id));  
   team1.value = saved.team1;
   team2.value = saved.team2;
   id.value = saved.id;
@@ -163,7 +159,7 @@ function deleteTeam(id) {
 }
 
 function reset() {
-  players.value = PLAYERS_ARRAY;
+  players.value = playersMap;
   team1.value = [];
   team2.value = [];
   likesTeams.value = undefined;
