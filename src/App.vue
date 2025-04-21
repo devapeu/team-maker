@@ -6,14 +6,10 @@
     <h2 class="heading-2">Jugadores</h2>
     <draggable v-model="players" item-key="name" group="players" class="player-pool">
       <template #item="{ element, index }">
-        <div class="player" :key="index">
-          <div class="player__name">{{ element.name }} </div>
-          <span 
-            v-if="showScore"
-            class="player__score">
-            {{ element.score }}
-          </span>
-        </div>
+        <PlayerBadge 
+          :key="index"
+          :player="element"
+          :showScore="showScore" />
       </template>
     </draggable>
   </div>
@@ -22,39 +18,31 @@
   <div class="teams">
     <div class="teams__wrapper">
       <div class="teams__team">
-        <div>
-          <h2 class="heading-2">Equipo 1</h2>
-          <p v-if="showScore" style="margin: 0">(Power Level: {{ team1Score }})</p>
+        <div class="teams__header">
+          <h2 class="teams__name">Equipo 1</h2>
+          <p v-if="showScore" style="margin: 0">{{ team1Score }}</p>
         </div>
         <draggable v-model="team1" item-key="name" group="players" class="team-box">
           <template #item="{ element }">
-            <div class="player" :key="element.name">
-              <div class="player__name">{{ element.name }}</div>
-              <span 
-                v-if="showScore"
-                class="player__score">
-                {{ element.score }}
-              </span>
-            </div>
+            <PlayerBadge 
+              :key="index"
+              :player="element"
+              :showScore="showScore" />
           </template>
         </draggable>
       </div>
       
       <div class="teams__team">
-        <div>
-          <h2 class="heading-2">Equipo 2</h2>
-          <p v-if="showScore" style="margin: 0">(Power Level: {{ team2Score }})</p>
+        <div class="teams__header teams__header--inverse">
+          <h2 class="teams__name">Equipo 2</h2>
+          <p v-if="showScore" style="margin: 0">{{ team2Score }}</p>
         </div>
         <draggable v-model="team2" item-key="name" group="players" class="team-box">
           <template #item="{ element }">
-            <div class="player" :key="element.name">
-              <div class="player__name">{{ element.name }}</div>
-              <span 
-                v-if="showScore"
-                class="player__score">
-                {{ element.score }}
-              </span>
-            </div>
+            <PlayerBadge 
+              :key="index"
+              :player="element"
+              :showScore="showScore" />
           </template>
         </draggable>
       </div>
@@ -85,18 +73,20 @@ import { ref, computed, onMounted, watch } from 'vue'
 import draggable from "vuedraggable/dist/vuedraggable.common";
 import OpinionBanner from './components/OpinionBanner.vue';
 import PreviousTeams from './components/PreviousTeams.vue';
+import PlayerBadge from './components/PlayerBadge.vue';
 
 const PLAYERS_ARRAY = [
-  { id: 1, name: 'Ayax', score: 100 },
-  { id: 2, name: 'Diego', score: 90 },
-  { id: 3, name: 'Piero', score: 90 },
-  { id: 4, name: 'Jair', score: 75 },
-  { id: 5, name: 'Jaume', score: 75 },
-  { id: 6, name: 'Sebastian', score: 70 },
-  { id: 7, name: 'Renato', score: 70 },
-  { id: 8, name: 'Hector', score: 65 },
-  { id: 9, name: 'Jardani', score: 65 },
-  { id: 10, name: 'Christian', score: 65 },
+  { id: 1, name: 'Ayax', score: 100, main: 'kronos' },
+  { id: 2, name: 'Diego', score: 90, main: 'ra' },
+  { id: 3, name: 'Piero', score: 90, main: 'odin' },
+  { id: 4, name: 'Jair', score: 75, main: 'gaia' },
+  { id: 5, name: 'Jaume', score: 75, main: 'gaia' },
+  { id: 6, name: 'Sebastian', score: 70, main: 'zeus' },
+  { id: 7, name: 'Renato', score: 70, main: 'thor' },
+  { id: 8, name: 'Hector', score: 65, main: 'zeus' },
+  { id: 9, name: 'Jardani', score: 65, main: 'zeus' },
+  { id: 10, name: 'Christian', score: 65, main: 'isis' },
+  { id: 11, name: 'Almeida', score: 65, main: 'nuwa' },
 ]
 
 // List of players with names and scores
@@ -225,4 +215,6 @@ onMounted(() => {
   padding: 4px
   min-height: 200px
   background-color: #0D0C0A
+  @media (max-width: 425px)
+    padding: 0
 </style>
