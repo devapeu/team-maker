@@ -67,7 +67,7 @@
       <input v-model="showScore" type="checkbox"/>
       Mostrar puntajes
     </label>
-    <div class="teams_  _controls">
+    <div class="teams__controls">
       <button class="teams__button" @click="saveToLocalStorage">Guardar</button>
       <button class="teams__button" @click="reset">Reestablecer</button>
     </div>
@@ -224,5 +224,5 @@ onMounted(() => {
 .team-box
   padding: 4px
   min-height: 200px
-  background-color: #e8e8e8
+  background-color: #0D0C0A
 </style>
