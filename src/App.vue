@@ -215,46 +215,8 @@ onMounted(() => {
   background-color: #e8e8e8
   margin-top: 12px
 
-.teams
-  display: flex
-  flex-direction: column
-  gap: 16px
-  margin-bottom: 24px
-  &__wrapper
-    display: flex
-    justify-content: center
-    gap: 8px
-  &__team
-    padding: 8px
-    border: 2px solid #ccc
-    width: 200px
-    display: flex
-    flex-direction: column
-    gap: 12px
-  &__controls
-    display: flex
-    justify-content: center
-    gap: 12px
-  &__button
-    padding: 10px 20px
-    cursor: pointer
-
 .team-box
   padding: 4px
   min-height: 200px
   background-color: #e8e8e8
-
-.player
-  padding: 8px 12px
-  background: white
-  border: 1px solid #ddd
-  margin: 2px
-  cursor: pointer
-
-@media (prefers-color-scheme: dark)
-  .player
-    background-color: #2d2d2d
-    color: white
-  .player-pool, .team-box
-    background-color: #545454
 </style>
