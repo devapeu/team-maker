@@ -3,7 +3,6 @@
   
   <!-- Player List -->
   <div class="players">
-    <h2 class="heading-2">Jugadores</h2>
     <draggable v-model="players" item-key="name" group="players" class="player-pool">
       <template #item="{ element, index }">
         <PlayerBadge 
@@ -19,7 +18,7 @@
       <div class="teams__team">
         <div class="teams__header">
           <h2 class="teams__name">Equipo 1</h2>
-          <p v-if="showScore" style="margin: 0">{{ team1Score }}</p>
+          <p v-if="showScore" class="teams__score">{{ team1Score }}</p>
         </div>
         <draggable v-model="team1" item-key="name" group="players" class="team-box">
           <template #item="{ element }">
@@ -33,7 +32,7 @@
       <div class="teams__team">
         <div class="teams__header teams__header--inverse">
           <h2 class="teams__name">Equipo 2</h2>
-          <p v-if="showScore" style="margin: 0">{{ team2Score }}</p>
+          <p v-if="showScore" class="teams__score">{{ team2Score }}</p>
         </div>
         <draggable v-model="team2" item-key="name" group="players" class="team-box">
           <template #item="{ element }">
@@ -45,10 +44,10 @@
       </div>
     </div>
     <OpinionBanner
-      v-if="hasPlayersInTeams"
+      v-if="false && hasPlayersInTeams"
       :teamOpinion="likesTeams"
       @update="likesTeams = $event" />
-    <label>
+    <label v-if="false">
       <input v-model="showScore" type="checkbox"/>
       Mostrar puntajes
     </label>
@@ -204,13 +203,6 @@ onMounted(() => {
   flex-wrap: wrap
   justify-content: center
   padding: 5px
-  background-color: #e8e8e8
+  background-color: #161005
   margin-top: 12px
-
-.team-box
-  padding: 4px
-  min-height: 200px
-  background-color: #0D0C0A
-  @media (max-width: 425px)
-    padding: 0
 </style>
