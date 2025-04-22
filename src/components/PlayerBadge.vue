@@ -6,7 +6,7 @@ function getGodIcon(name) {
 }
 
 function displayProfile() {
-  console.log(player.scores);
+  console.log(JSON.stringify(props.player.scores));
 }
 
 const props = defineProps({
@@ -23,14 +23,16 @@ const props = defineProps({
 
 </script>
 <template>
-  <div class="player">
-    <img class="player__icon" :src="getGodIcon(player.main)" />
-    <div class="player__name">{{ player.name }} </div>
-    <span 
-      v-if="showScore"
-      class="player__score"
-      @click="displayProfile">
-      {{ player.score }}
-    </span>
+  <div class="drag-wrapper">
+    <div class="player">
+      <img class="player__icon" :src="getGodIcon(player.main)" />
+      <div class="player__name">{{ player.name }} </div>
+      <span 
+        v-if="showScore"
+        class="player__score"
+        @click="displayProfile">
+        {{ player.score }}
+      </span>
+    </div>
   </div>
 </template>
