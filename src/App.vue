@@ -15,7 +15,9 @@
         </div>
         <draggable v-model="players" item-key="name" group="players" class="player-pool">
           <template #item="{ element, index }">
-            <PlayerBadge :player="element" />
+            <PlayerBadge 
+              :player="element" 
+              @click="moveToAvailable(element.id)"/>
           </template>
         </draggable>
       </div>
@@ -147,6 +149,14 @@ function resetAvailable() {
   team1.value = [];
   team2.value = [];
 }
+
+function moveToAvailable(id) {
+  const player = players.value.find(player => player.id === id);
+  if (player) {
+    autobalance.value.push(player);
+    players.value = players.value.filter(player => player.id !== id);
+  }
+}
 </script>
 
 <style lang="sass" scoped>
@@ -156,7 +166,7 @@ function resetAvailable() {
   width: 100%
   max-width: 640px
   margin: 0 auto
-  @media (min-width: 1024px)
+  @media (min-width: 768px)
     max-width: 1024px
     display: grid
     grid-template-columns: 1fr 1fr
