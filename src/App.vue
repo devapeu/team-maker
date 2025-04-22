@@ -158,7 +158,8 @@ function resetAvailable() {
   margin: 0 auto
   @media (min-width: 1024px)
     max-width: 1024px
-    display: flex
+    display: grid
+    grid-template-columns: 1fr 1fr
     gap: 48px
 
 .section-header
