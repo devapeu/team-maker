@@ -5,28 +5,31 @@
     </div>
   </header>
   
-  <main class="container">
+  <main class="team-builder">
     <!-- Player List -->
     <div class="players">
-      <h2 class="draggable-label">Todos los jugadores</h2>
-      <draggable v-model="players" item-key="name" group="players" class="player-pool">
-        <template #item="{ element, index }">
-          <PlayerBadge :player="element" />
-        </template>
-      </draggable>
-    </div>
+      <div class="all-players">
+        <h2 class="draggable-label">Todos los jugadores</h2>
+        <draggable v-model="players" item-key="name" group="players" class="player-pool">
+          <template #item="{ element, index }">
+            <PlayerBadge :player="element" />
+          </template>
+        </draggable>
+      </div>
 
-    <div class="auto-balance">
-      <h2 class="draggable-label">Jugadores disponibles</h2>
-      <draggable v-model="autobalance" item-key="name" group="players" class="player-pool">
-        <template #item="{ element, index }">
-          <PlayerBadge :player="element" />
-        </template>
-      </draggable>
+      <div class="auto-balance">
+        <h2 class="draggable-label">Jugadores disponibles</h2>
+        <draggable v-model="autobalance" item-key="name" group="players" class="player-pool">
+          <template #item="{ element, index }">
+            <PlayerBadge :player="element" />
+          </template>
+        </draggable>
+      </div>
     </div>
     
     <!-- Teams -->
     <div class="teams">
+      <h2 class="draggable-label">Equipos</h2>
       <div class="teams__wrapper">
         <div class="teams__team">
           <div class="teams__header">
@@ -140,6 +143,17 @@ function reset() {
 </script>
 
 <style lang="sass" scoped>
+
+.team-builder
+  padding: 8px
+  width: 100%
+  max-width: 640px
+  margin: 0 auto
+  @media (min-width: 1024px)
+    max-width: 1024px
+    display: flex
+    gap: 48px
+
 .heading-1
   font-size: 32px
   margin: 0 0 12px
@@ -148,10 +162,10 @@ function reset() {
   font-size: 24px
   margin: 0
 
-.players
+.all-players
   margin-bottom: 16px
   .player
-    opacity: 0.5
+    opacity: 0.33
 
 .draggable-label
   font-size: 14px
