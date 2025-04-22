@@ -62,7 +62,6 @@
       </div>
       <div class="teams__controls">
         <button class="teams__button" @click="autoBalanceTeams">Auto Balance</button>
-        <button class="teams__button" @click="saveToLocalStorage">Guardar</button>
         <button class="teams__button" @click="reset">Reestablecer</button>
       </div>
     </div>
