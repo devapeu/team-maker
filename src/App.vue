@@ -3,7 +3,19 @@
   
   <!-- Player List -->
   <div class="players">
+    <h2 class="draggable-label">Todos los jugadores</h2>
     <draggable v-model="players" item-key="name" group="players" class="player-pool">
+      <template #item="{ element, index }">
+        <PlayerBadge 
+          :player="element"
+          :showScore="showScore" />
+      </template>
+    </draggable>
+  </div>
+
+  <div class="auto-balance">
+    <h2 class="draggable-label">Jugadores disponibles</h2>
+    <draggable v-model="autobalance" item-key="name" group="players" class="player-pool">
       <template #item="{ element, index }">
         <PlayerBadge 
           :player="element"
@@ -86,6 +98,7 @@ const players = ref(playersMap)
 
 // Teams for the drag and drop functionality
 const id = ref(0)
+const autobalance = ref([])
 const team1 = ref([])
 const team2 = ref([])
 const likesTeams = ref(undefined)
@@ -156,6 +169,7 @@ function deleteTeam(id) {
 
 function reset() {
   players.value = playersMap;
+  autobalance.value = [];
   team1.value = [];
   team2.value = [];
   likesTeams.value = undefined;
@@ -190,9 +204,18 @@ onMounted(() => {
   margin: 0
 
 .players
-  display: flex
-  flex-direction: column
-  align-items: center
+  margin-bottom: 24px
+  .player
+    opacity: 0.5
+
+.draggable-label
+  font-size: 14px
+  opacity: 0.75
+  font-weight: normal
+  margin: 0
+  margin-bottom: 4px
+
+.auto-balance
   margin-bottom: 24px
 
 .player-pool
@@ -201,5 +224,5 @@ onMounted(() => {
   justify-content: center
   padding: 5px
   background-color: #161005
-  margin-top: 12px
+  min-height: 100px
 </style>
