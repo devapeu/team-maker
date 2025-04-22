@@ -31,7 +31,7 @@
         <div class="teams__team">
           <div class="teams__header">
             <h2 class="teams__name">Equipo 1</h2>
-            <p v-if="showScore" class="teams__score">{{ team1Score }}</p>
+            <p class="teams__score">{{ team1Score }}</p>
           </div>
           <draggable v-model="team1" item-key="name" group="players" class="team-box">
             <template #item="{ element }">
@@ -43,7 +43,7 @@
         <div class="teams__team">
           <div class="teams__header teams__header--inverse">
             <h2 class="teams__name">Equipo 2</h2>
-            <p v-if="showScore" class="teams__score">{{ team2Score }}</p>
+            <p class="teams__score">{{ team2Score }}</p>
           </div>
           <draggable v-model="team2" item-key="name" group="players" class="team-box">
             <template #item="{ element }">
