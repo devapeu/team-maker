@@ -294,5 +294,5 @@ onMounted(() => {
   justify-content: center
   padding: 5px
   background-color: #161005
-  min-height: 100px
+  min-height: 50px
 </style>
