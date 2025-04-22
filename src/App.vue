@@ -193,7 +193,8 @@ function autoBalanceTeams() {
 
     if (Math.abs(team1.length - team2.length) <= 1) {
       combinations.push({
-        team1, team2,
+        team1: team1.sort((a, b) => b.score - a.score),
+        team2: team2.sort((a, b) => b.score - a.score),
         difference: Math.abs(score1 - score2),
         score1, score2
       })
