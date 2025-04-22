@@ -295,4 +295,7 @@ onMounted(() => {
   padding: 5px
   background-color: #161005
   min-height: 50px
+  transition: 100ms ease-out all
+  &:hover
+    box-shadow: 0 0 5px rgba(241,194,50, 0.25) 
 </style>
