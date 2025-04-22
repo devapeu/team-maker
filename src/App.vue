@@ -230,26 +230,6 @@ onMounted(() => {
 </script>
 
 <style lang="sass" scoped>
-
-.header
-  background: black
-  width: 100%
-  margin-bottom: 16px
-  padding: 8px 12px
-  border-bottom: 1px solid #948772
-  box-shadow: 0 5px 10px rgba(241,194,50, 0.25) 
-  &__wrapper
-    max-width: 1024px
-    width: 100%
-    margin: 0 auto
-  h1
-    font-family: 'DM Serif Text', serif
-    font-size: 18px
-    color: #FFECA0
-    margin: 0
-    text-align: center
-    text-shadow: 0 0 5px rgba(241,194,50, 0.5) 
-
 .heading-1
   font-size: 32px
   margin: 0 0 12px
