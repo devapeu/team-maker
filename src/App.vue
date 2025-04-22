@@ -61,7 +61,6 @@
       <div class="teams__controls">
         <button class="teams__button" @click="autoBalanceTeams">Auto Balance</button>
         <button class="teams__button" @click="resetAvailable">Reestablecer</button>
-        <button class="teams__button" @click="openDrawer">test </button>
       </div>
     </div>
   </main>
