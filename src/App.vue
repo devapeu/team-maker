@@ -76,7 +76,7 @@
     </div>
     
     <PreviousTeams 
-      v-if="savedTeams.length"
+      v-if="false || savedTeams.length"
       :savedTeams=savedTeams
       @load="loadTeam($event)"
       @delete="deleteTeam($event)"/>
