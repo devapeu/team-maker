@@ -91,7 +91,6 @@ import { PLAYERS_ARRAY } from './data/players.js'
 import { chartOptions } from './data/chartOptions.js'
 import draggable from "vuedraggable/dist/vuedraggable.common";
 import PlayerBadge from './components/PlayerBadge.vue';
-
 import { NDrawer, NDrawerContent } from "naive-ui"
 import {
   Chart as ChartJS,
@@ -113,7 +112,7 @@ ChartJS.register(
   Legend
 )
 
-// List of players with names and scores
+// Handle player data and calculate overall player score
 const playersMap = PLAYERS_ARRAY.map(player => {
   const values = Object.values(player.scores);
   const average = values.reduce((a, b) => a + b, 0) / values.length;
@@ -125,18 +124,17 @@ const playersMap = PLAYERS_ARRAY.map(player => {
 
 const players = ref(playersMap)
 
-const active = ref(false)
-
-const openPlayerDetails = (id) => {
-  playerDetailsActive.value = playersMap.find(player => player.id === id);
-  active.value = true
-}
-
 // Teams for the drag and drop functionality
 const autobalance = ref([])
 const team1 = ref([])
 const team2 = ref([])
 
+// Calculate score for Team 1 and Team 2 
+const team1Score = computed(() => team1.value.reduce((sum, player) => sum + player.score, 0))
+const team2Score = computed(() => team2.value.reduce((sum, player) => sum + player.score, 0))
+
+// Slideout & Player Profile Details
+const active = ref(false)
 const playerDetailsActive = ref(false)
 const activePlayerData = computed(() => {
   const labels = Object.keys(playerDetailsActive.value.scores);
@@ -158,10 +156,12 @@ const activePlayerData = computed(() => {
   }
 })
 
-// Computed properties for calculating team scores
-const team1Score = computed(() => team1.value.reduce((sum, player) => sum + player.score, 0))
-const team2Score = computed(() => team2.value.reduce((sum, player) => sum + player.score, 0))
+const openPlayerDetails = (id) => {
+  playerDetailsActive.value = playersMap.find(player => player.id === id);
+  active.value = true
+}
 
+// Autobalance method
 function autoBalanceTeams() {
   const playerPool = [...team1.value, ...team2.value, ...autobalance.value];
   const scores = playerPool.map(player => player.score);
@@ -204,6 +204,7 @@ function autoBalanceTeams() {
 
 }
 
+// Player manipluating functions
 function reset() {
   players.value = playersMap;
   autobalance.value = [];
