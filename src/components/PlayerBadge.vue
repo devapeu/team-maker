@@ -6,7 +6,7 @@ function getGodIcon(name) {
 }
 
 function displayProfile() {
-  console.log(JSON.stringify(props.player.scores));
+  emit('displayProfile', props.player.id);
 }
 
 const props = defineProps({
@@ -14,10 +14,6 @@ const props = defineProps({
     type: Object,
     required: true
   },
-  showScore: {
-    type: Boolean,
-    default: false
-  }
 });
 
 
@@ -27,7 +23,6 @@ const props = defineProps({
     <img class="player__icon" :src="getGodIcon(player.main)" />
     <div class="player__name">{{ player.name }} </div>
     <span 
-      v-if="showScore"
       class="player__score"
       @click="displayProfile">
       {{ player.score }}
