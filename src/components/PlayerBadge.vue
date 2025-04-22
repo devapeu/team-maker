@@ -1,5 +1,5 @@
 <script setup>
-import { computed, defineProps } from 'vue';
+import { computed } from 'vue';
 
 function getGodIcon(name) {
   return new URL(`../assets/gods/${name}_icon.avif`, import.meta.url).href;
