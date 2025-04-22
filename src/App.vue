@@ -17,7 +17,8 @@
           <template #item="{ element, index }">
             <PlayerBadge 
               :player="element" 
-              @click="moveToAvailable(element.id)"/>
+              @click-score="moveToAvailable(element.id)"
+              @click-profile="openPlayerDetails"/>
           </template>
         </draggable>
       </div>
@@ -26,7 +27,9 @@
         <h2 class="draggable-label">Jugadores disponibles</h2>
         <draggable v-model="autobalance" item-key="name" group="players" class="player-pool">
           <template #item="{ element, index }">
-            <PlayerBadge :player="element" />
+            <PlayerBadge 
+              :player="element"
+              @click-profile="openPlayerDetails" />
           </template>
         </draggable>
       </div>
@@ -43,7 +46,9 @@
           </div>
           <draggable v-model="team1" item-key="name" group="players" class="team-box">
             <template #item="{ element }">
-              <PlayerBadge :player="element" />
+              <PlayerBadge 
+                :player="element" 
+                @click-profile="openPlayerDetails" />
             </template>
           </draggable>
         </div>
@@ -66,6 +71,16 @@
       </div>
     </div>
   </main>
+  <n-drawer v-model:show="active" :width="502" placement="right">
+    <n-drawer-content>
+      {{ playerDetailsActive.name }}
+      <ul>
+        <li v-for="(value, name, index)  in playerDetailsActive.scores">
+          {{ name }}: {{ value }} 
+        </li>
+      </ul>
+    </n-drawer-content>
+  </n-drawer>
 </template>
 
 <script setup>
@@ -73,6 +88,8 @@ import { ref, computed, watch } from 'vue'
 import { PLAYERS_ARRAY } from './data/players.js'
 import draggable from "vuedraggable/dist/vuedraggable.common";
 import PlayerBadge from './components/PlayerBadge.vue';
+
+import { NDrawer, NDrawerContent } from "naive-ui"
 
 // List of players with names and scores
 const playersMap = PLAYERS_ARRAY.map(player => {
@@ -86,10 +103,19 @@ const playersMap = PLAYERS_ARRAY.map(player => {
 
 const players = ref(playersMap)
 
+const active = ref(false)
+
+const openPlayerDetails = (id) => {
+  playerDetailsActive.value = playersMap.find(player => player.id === id);
+  active.value = true
+}
+
 // Teams for the drag and drop functionality
 const autobalance = ref([])
 const team1 = ref([])
 const team2 = ref([])
+
+const playerDetailsActive = ref(false)
 
 // Computed properties for calculating team scores
 const team1Score = computed(() => team1.value.reduce((sum, player) => sum + player.score, 0))

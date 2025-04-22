@@ -1,13 +1,5 @@
 <script setup>
-import { computed } from 'vue';
-
-function getGodIcon(name) {
-  return new URL(`../assets/gods/${name}_icon.avif`, import.meta.url).href;
-}
-
-function displayProfile() {
-  emit('displayProfile', props.player.id);
-}
+const emit = defineEmits(['click-profile', 'click-score']);
 
 const props = defineProps({
   player: {
@@ -16,15 +8,28 @@ const props = defineProps({
   },
 });
 
+function getGodIcon(name) {
+  return new URL(`../assets/gods/${name}_icon.avif`, import.meta.url).href;
+}
+
+function clickProfile() {
+  emit('click-profile', props.player.id);
+}
+
+function clickScore() {
+  emit('click-score', props.player.id);
+}
 
 </script>
 <template>
   <div class="player">
-    <img class="player__icon" :src="getGodIcon(player.main)" />
+    <img 
+      class="player__icon" :src="getGodIcon(player.main)"
+      @click="clickProfile"/>
     <div class="player__name">{{ player.name }} </div>
     <span 
       class="player__score"
-      @click="displayProfile">
+      @click="clickScore">
       {{ player.score }}
     </span>
   </div>
