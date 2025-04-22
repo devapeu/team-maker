@@ -5,6 +5,10 @@ function getGodIcon(name) {
   return new URL(`../assets/gods/${name}_icon.avif`, import.meta.url).href;
 }
 
+function displayProfile() {
+  console.log(player.scores);
+}
+
 const props = defineProps({
   player: {
     type: Object,
@@ -24,7 +28,8 @@ const props = defineProps({
     <div class="player__name">{{ player.name }} </div>
     <span 
       v-if="showScore"
-      class="player__score">
+      class="player__score"
+      @click="displayProfile">
       {{ player.score }}
     </span>
   </div>
