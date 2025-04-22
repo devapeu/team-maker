@@ -23,16 +23,14 @@ const props = defineProps({
 
 </script>
 <template>
-  <div class="drag-wrapper">
-    <div class="player">
-      <img class="player__icon" :src="getGodIcon(player.main)" />
-      <div class="player__name">{{ player.name }} </div>
-      <span 
-        v-if="showScore"
-        class="player__score"
-        @click="displayProfile">
-        {{ player.score }}
-      </span>
-    </div>
+  <div class="player">
+    <img class="player__icon" :src="getGodIcon(player.main)" />
+    <div class="player__name">{{ player.name }} </div>
+    <span 
+      v-if="showScore"
+      class="player__score"
+      @click="displayProfile">
+      {{ player.score }}
+    </span>
   </div>
 </template>
