@@ -76,9 +76,6 @@ import PlayerBadge from './components/PlayerBadge.vue';
 const playersMap = PLAYERS_ARRAY.map(player => {
   const values = Object.values(player.scores);
   const average = values.reduce((a, b) => a + b, 0) / values.length;
-
-  console.log(average)
-
   return {
     ...player,
     score: Math.round(average),
