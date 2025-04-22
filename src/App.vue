@@ -60,26 +60,12 @@
           </draggable>
         </div>
       </div>
-      <OpinionBanner
-        v-if="false && hasPlayersInTeams"
-        :teamOpinion="likesTeams"
-        @update="likesTeams = $event" />
-      <label v-if="false">
-        <input v-model="showScore" type="checkbox"/>
-        Mostrar puntajes
-      </label>
       <div class="teams__controls">
         <button class="teams__button" @click="autoBalanceTeams">Auto Balance</button>
         <button class="teams__button" @click="saveToLocalStorage">Guardar</button>
         <button class="teams__button" @click="reset">Reestablecer</button>
       </div>
     </div>
-    
-    <PreviousTeams 
-      v-if="false || savedTeams.length"
-      :savedTeams=savedTeams
-      @load="loadTeam($event)"
-      @delete="deleteTeam($event)"/>
   </main>
 </template>
 
