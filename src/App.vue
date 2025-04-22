@@ -249,7 +249,7 @@ onMounted(() => {
     color: #FFECA0
     margin: 0
     text-align: center
-    text-shadow: 0 0 5px rgb(241,194,50) 
+    text-shadow: 0 0 5px rgba(241,194,50, 0.5) 
 
 .heading-1
   font-size: 32px
