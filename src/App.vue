@@ -64,6 +64,7 @@
       Mostrar puntajes
     </label>
     <div class="teams__controls">
+      <button class="teams__button" @click="autoBalanceTeams">Auto Balance</button>
       <button class="teams__button" @click="saveToLocalStorage">Guardar</button>
       <button class="teams__button" @click="reset">Reestablecer</button>
     </div>
@@ -165,6 +166,48 @@ function deleteTeam(id) {
     localStorage.setItem('saved-teams', JSON.stringify(savedTeams.value))
     loadFromLocalStorage();
   }
+}
+
+function autoBalanceTeams() {
+  const playerPool = [...team1.value, ...team2.value, ...autobalance.value];
+  const scores = playerPool.map(player => player.score);
+
+  const combinations = [];
+  const total = scores.length;
+  const max = Math.pow(2, total);
+
+  for (let i = 1; i < max - 1; i++) {
+    const team1 = [];
+    const team2 = [];
+    let score1 = 0, score2 = 0;
+    for (let j = 0; j < total; j++) {
+      if ((i & (1 << j)) !== 0) {
+        team1.push(playerPool[j]);
+        score1 += playerPool[j].score;
+      } else {
+        team2.push(playerPool[j]);
+        score2 += playerPool[j].score;
+
+      }
+    }
+
+    if (Math.abs(team1.length - team2.length) <= 1) {
+      combinations.push({
+        team1, team2,
+        difference: Math.abs(score1 - score2),
+        score1, score2
+      })
+    }
+  }
+
+  combinations.sort((a, b) => a.difference - b.difference);
+  const top3 = combinations.slice(0, 3);
+  const randomTeam = top3[Math.floor(Math.random() * top3.length)];
+
+  team1.value = randomTeam.team1;
+  team2.value = randomTeam.team2;
+  autobalance.value = [];
+
 }
 
 function reset() {
