@@ -1,80 +1,86 @@
 <template>
-  <h1 class="heading-1" style="display: none;">Team Selector</h1>
+  <header class="header">
+    <div class="header__wrapper">
+      <h1>Age of Mythology - Auto Balancer 3000</h1>
+    </div>
+  </header>
   
-  <!-- Player List -->
-  <div class="players">
-    <h2 class="draggable-label">Todos los jugadores</h2>
-    <draggable v-model="players" item-key="name" group="players" class="player-pool">
-      <template #item="{ element, index }">
-        <PlayerBadge 
-          :player="element"
-          :showScore="showScore" />
-      </template>
-    </draggable>
-  </div>
+  <main class="container">
+    <!-- Player List -->
+    <div class="players">
+      <h2 class="draggable-label">Todos los jugadores</h2>
+      <draggable v-model="players" item-key="name" group="players" class="player-pool">
+        <template #item="{ element, index }">
+          <PlayerBadge 
+            :player="element"
+            :showScore="showScore" />
+        </template>
+      </draggable>
+    </div>
 
-  <div class="auto-balance">
-    <h2 class="draggable-label">Jugadores disponibles</h2>
-    <draggable v-model="autobalance" item-key="name" group="players" class="player-pool">
-      <template #item="{ element, index }">
-        <PlayerBadge 
-          :player="element"
-          :showScore="showScore" />
-      </template>
-    </draggable>
-  </div>
-  
-  <!-- Teams -->
-  <div class="teams">
-    <div class="teams__wrapper">
-      <div class="teams__team">
-        <div class="teams__header">
-          <h2 class="teams__name">Equipo 1</h2>
-          <p v-if="showScore" class="teams__score">{{ team1Score }}</p>
+    <div class="auto-balance">
+      <h2 class="draggable-label">Jugadores disponibles</h2>
+      <draggable v-model="autobalance" item-key="name" group="players" class="player-pool">
+        <template #item="{ element, index }">
+          <PlayerBadge 
+            :player="element"
+            :showScore="showScore" />
+        </template>
+      </draggable>
+    </div>
+    
+    <!-- Teams -->
+    <div class="teams">
+      <div class="teams__wrapper">
+        <div class="teams__team">
+          <div class="teams__header">
+            <h2 class="teams__name">Equipo 1</h2>
+            <p v-if="showScore" class="teams__score">{{ team1Score }}</p>
+          </div>
+          <draggable v-model="team1" item-key="name" group="players" class="team-box">
+            <template #item="{ element }">
+              <PlayerBadge 
+                :player="element"
+                :showScore="showScore" />
+            </template>
+          </draggable>
         </div>
-        <draggable v-model="team1" item-key="name" group="players" class="team-box">
-          <template #item="{ element }">
-            <PlayerBadge 
-              :player="element"
-              :showScore="showScore" />
-          </template>
-        </draggable>
+        
+        <div class="teams__team">
+          <div class="teams__header teams__header--inverse">
+            <h2 class="teams__name">Equipo 2</h2>
+            <p v-if="showScore" class="teams__score">{{ team2Score }}</p>
+          </div>
+          <draggable v-model="team2" item-key="name" group="players" class="team-box">
+            <template #item="{ element }">
+              <PlayerBadge 
+                :player="element"
+                :showScore="showScore" />
+            </template>
+          </draggable>
+        </div>
       </div>
-      
-      <div class="teams__team">
-        <div class="teams__header teams__header--inverse">
-          <h2 class="teams__name">Equipo 2</h2>
-          <p v-if="showScore" class="teams__score">{{ team2Score }}</p>
-        </div>
-        <draggable v-model="team2" item-key="name" group="players" class="team-box">
-          <template #item="{ element }">
-            <PlayerBadge 
-              :player="element"
-              :showScore="showScore" />
-          </template>
-        </draggable>
+      <OpinionBanner
+        v-if="false && hasPlayersInTeams"
+        :teamOpinion="likesTeams"
+        @update="likesTeams = $event" />
+      <label v-if="false">
+        <input v-model="showScore" type="checkbox"/>
+        Mostrar puntajes
+      </label>
+      <div class="teams__controls">
+        <button class="teams__button" @click="autoBalanceTeams">Auto Balance</button>
+        <button class="teams__button" @click="saveToLocalStorage">Guardar</button>
+        <button class="teams__button" @click="reset">Reestablecer</button>
       </div>
     </div>
-    <OpinionBanner
-      v-if="false && hasPlayersInTeams"
-      :teamOpinion="likesTeams"
-      @update="likesTeams = $event" />
-    <label v-if="false">
-      <input v-model="showScore" type="checkbox"/>
-      Mostrar puntajes
-    </label>
-    <div class="teams__controls">
-      <button class="teams__button" @click="autoBalanceTeams">Auto Balance</button>
-      <button class="teams__button" @click="saveToLocalStorage">Guardar</button>
-      <button class="teams__button" @click="reset">Reestablecer</button>
-    </div>
-  </div>
-  
-  <PreviousTeams 
-    v-if="savedTeams.length"
-    :savedTeams=savedTeams
-    @load="loadTeam($event)"
-    @delete="deleteTeam($event)"/>
+    
+    <PreviousTeams 
+      v-if="savedTeams.length"
+      :savedTeams=savedTeams
+      @load="loadTeam($event)"
+      @delete="deleteTeam($event)"/>
+  </main>
 </template>
 
 <script setup>
@@ -239,6 +245,26 @@ onMounted(() => {
 </script>
 
 <style lang="sass" scoped>
+
+.header
+  background: black
+  width: 100%
+  margin-bottom: 16px
+  padding: 8px 12px
+  border-bottom: 1px solid #948772
+  box-shadow: 0 5px 10px rgba(241,194,50, 0.25) 
+  &__wrapper
+    max-width: 1024px
+    width: 100%
+    margin: 0 auto
+  h1
+    font-family: 'DM Serif Text', serif
+    font-size: 18px
+    color: #FFECA0
+    margin: 0
+    text-align: center
+    text-shadow: 0 0 5px rgb(241,194,50) 
+
 .heading-1
   font-size: 32px
   margin: 0 0 12px
@@ -248,7 +274,7 @@ onMounted(() => {
   margin: 0
 
 .players
-  margin-bottom: 24px
+  margin-bottom: 16px
   .player
     opacity: 0.5
 
@@ -260,7 +286,7 @@ onMounted(() => {
   margin-bottom: 4px
 
 .auto-balance
-  margin-bottom: 24px
+  margin-bottom: 16px
 
 .player-pool
   display: flex
