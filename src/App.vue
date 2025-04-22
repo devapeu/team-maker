@@ -9,7 +9,10 @@
     <!-- Player List -->
     <div class="players">
       <div class="all-players">
-        <h2 class="draggable-label">Todos los jugadores</h2>
+        <div class="section-header">
+          <h2 class="draggable-label">Todos los jugadores</h2>
+          <button @click="reset">Reestablecer todos</button>
+        </div>
         <draggable v-model="players" item-key="name" group="players" class="player-pool">
           <template #item="{ element, index }">
             <PlayerBadge :player="element" />
@@ -57,7 +60,7 @@
       </div>
       <div class="teams__controls">
         <button class="teams__button" @click="autoBalanceTeams">Auto Balance</button>
-        <button class="teams__button" @click="reset">Reestablecer</button>
+        <button class="teams__button" @click="resetAvailable">Reestablecer</button>
         <button class="teams__button" @click="openDrawer">test </button>
       </div>
     </div>
@@ -138,7 +141,12 @@ function reset() {
   autobalance.value = [];
   team1.value = [];
   team2.value = [];
-  likesTeams.value = undefined;
+}
+
+function resetAvailable() {
+  autobalance.value = [...autobalance.value, ...team1.value, ...team2.value];
+  team1.value = [];
+  team2.value = [];
 }
 </script>
 
@@ -154,13 +162,19 @@ function reset() {
     display: flex
     gap: 48px
 
-.heading-1
-  font-size: 32px
-  margin: 0 0 12px
-
-.heading-2
-  font-size: 24px
-  margin: 0
+.section-header
+  display: flex
+  justify-content: space-between
+  align-items: flex-end
+  margin-bottom: 4px
+  button
+    color: #ccc
+    border: 1px solid #948772
+    background: transparent
+    font-size: 12px
+    padding: 2px 6px
+    border-radius: 4px
+    cursor: pointer
 
 .all-players
   margin-bottom: 16px
@@ -168,11 +182,10 @@ function reset() {
     opacity: 0.33
 
 .draggable-label
-  font-size: 14px
+  font-size: 16px
   opacity: 0.75
   font-weight: normal
   margin: 0
-  margin-bottom: 4px
 
 .auto-balance
   margin-bottom: 16px
