@@ -71,9 +71,11 @@
       </div>
     </div>
   </main>
-  <n-drawer v-model:show="active" :width="502" placement="right">
+  <n-drawer v-model:show="active" width="100%" placement="right">
     <n-drawer-content>
-      {{ playerDetailsActive.name }}
+      <h2 class="player-info__name">
+        {{ playerDetailsActive.name }}
+      </h2>
       <Radar
         id="my-chart-id"
         :options="chartOptions"
@@ -84,8 +86,9 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 import { PLAYERS_ARRAY } from './data/players.js'
+import { chartOptions } from './data/chartOptions.js'
 import draggable from "vuedraggable/dist/vuedraggable.common";
 import PlayerBadge from './components/PlayerBadge.vue';
 
@@ -109,17 +112,6 @@ ChartJS.register(
   Tooltip,
   Legend
 )
-
-const chartOptions = ref({ 
-  responsive: true, 
-  maintainAspectRatio: true, 
-  scales: { 
-    r: { 
-      suggestedMax: 100,
-      suggestedMin: 0 
-    } 
-  } 
-})
 
 // List of players with names and scores
 const playersMap = PLAYERS_ARRAY.map(player => {
@@ -152,8 +144,16 @@ const activePlayerData = computed(() => {
   return {
     labels: labels,
     datasets: [ 
-      { label: playerDetailsActive.value.name, data : data },
-      { label: "Promedio", data : [50, 50, 50, 50, 50, 50,] },
+      { 
+        label: playerDetailsActive.value.name, 
+        borderColor: 'orange',
+        data : data 
+      },
+      { 
+        label: "Promedio", 
+        borderColor: "grey",
+        data : [50, 50, 50, 50, 50, 50,]
+      },
     ],
   }
 })
@@ -233,7 +233,7 @@ function moveToAvailable(id) {
   width: 100%
   max-width: 640px
   margin: 0 auto
-  @media (min-width: 768px)
+  @media (min-width: 1024px)
     max-width: 1024px
     display: grid
     grid-template-columns: 1fr 1fr
