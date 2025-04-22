@@ -98,9 +98,6 @@ const likesTeams = ref(undefined)
 // Computed properties for calculating team scores
 const team1Score = computed(() => team1.value.reduce((sum, player) => sum + player.score, 0))
 const team2Score = computed(() => team2.value.reduce((sum, player) => sum + player.score, 0))
-const hasPlayersInTeams = computed(() => {
-  return team1.value.length && team2.value.length;
-})
 
 // Hold previous team savedTeams
 const savedTeams = ref([])
