@@ -74,11 +74,11 @@
   <n-drawer v-model:show="active" :width="502" placement="right">
     <n-drawer-content>
       {{ playerDetailsActive.name }}
-      <ul>
-        <li v-for="(value, name, index)  in playerDetailsActive.scores">
-          {{ name }}: {{ value }} 
-        </li>
-      </ul>
+      <Radar
+        id="my-chart-id"
+        :options="chartOptions"
+        :data="activePlayerData"
+      />
     </n-drawer-content>
   </n-drawer>
 </template>
@@ -90,6 +90,36 @@ import draggable from "vuedraggable/dist/vuedraggable.common";
 import PlayerBadge from './components/PlayerBadge.vue';
 
 import { NDrawer, NDrawerContent } from "naive-ui"
+import {
+  Chart as ChartJS,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend
+} from 'chart.js'
+import { Radar } from 'vue-chartjs'
+
+ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend
+)
+
+const chartOptions = ref({ 
+  responsive: true, 
+  maintainAspectRatio: true, 
+  scales: { 
+    r: { 
+      suggestedMax: 100,
+      suggestedMin: 0 
+    } 
+  } 
+})
 
 // List of players with names and scores
 const playersMap = PLAYERS_ARRAY.map(player => {
@@ -116,6 +146,17 @@ const team1 = ref([])
 const team2 = ref([])
 
 const playerDetailsActive = ref(false)
+const activePlayerData = computed(() => {
+  const labels = Object.keys(playerDetailsActive.value.scores);
+  const data = Object.values(playerDetailsActive.value.scores);
+  return {
+    labels: labels,
+    datasets: [ 
+      { label: playerDetailsActive.value.name, data : data },
+      { label: "Promedio", data : [50, 50, 50, 50, 50, 50,] },
+    ],
+  }
+})
 
 // Computed properties for calculating team scores
 const team1Score = computed(() => team1.value.reduce((sum, player) => sum + player.score, 0))
