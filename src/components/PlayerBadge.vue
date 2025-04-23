@@ -23,6 +23,9 @@ function clickScore() {
 </script>
 <template>
   <div class="player">
+    <div 
+      class="player__color"
+      :style="{ backgroundColor: player.color }"></div>
     <img 
       class="player__icon" :src="getGodIcon(player.main)"
       @click="clickProfile"/>

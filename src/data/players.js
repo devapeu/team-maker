@@ -11,6 +11,7 @@ export const PLAYERS_ARRAY = [
       micro: 80,
     },
     main: "kronos",
+    color: "#36ff32",
   },
   {
     id: 2,
@@ -24,6 +25,7 @@ export const PLAYERS_ARRAY = [
       micro: 95,
     },
     main: "ra",
+    color: "#ff0000",
   },
   {
     id: 3,
@@ -37,6 +39,7 @@ export const PLAYERS_ARRAY = [
       micro: 75,
     },
     main: "odin",
+    color: "#8e1942",
   },
   {
     id: 4,
@@ -50,6 +53,7 @@ export const PLAYERS_ARRAY = [
       micro: 30,
     },
     main: "gaia",
+    color: "#ffff19",
   },
   {
     id: 5,
@@ -63,6 +67,7 @@ export const PLAYERS_ARRAY = [
       micro: 85,
     },
     main: "gaia",
+    color: "#900cfc",
   },
   {
     id: 6,
@@ -76,6 +81,7 @@ export const PLAYERS_ARRAY = [
       micro: 25,
     },
     main: "zeus",
+    color: "#ff9721",
   },
   {
     id: 7,
@@ -89,6 +95,7 @@ export const PLAYERS_ARRAY = [
       micro: 75,
     },
     main: "thor",
+    color: "#32edff",
   },
   {
     id: 8,
@@ -102,6 +109,7 @@ export const PLAYERS_ARRAY = [
       micro: 15,
     },
     main: "zeus",
+    color: "#3232ff",
   },
   {
     id: 9,
@@ -115,6 +123,7 @@ export const PLAYERS_ARRAY = [
       micro: 40,
     },
     main: "zeus",
+    color: "#00bc7a",
   },
   {
     id: 10,
@@ -128,6 +137,7 @@ export const PLAYERS_ARRAY = [
       micro: 15,
     },
     main: "isis",
+    color: "#ff00ff",
   },
   {
     id: 11,
@@ -141,5 +151,6 @@ export const PLAYERS_ARRAY = [
       micro: 5,
     },
     main: "nuwa",
+    color: "grey",
   },
 ];
