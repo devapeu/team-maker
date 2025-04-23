@@ -75,9 +75,16 @@
   </main>
   <n-drawer v-model:show="active" width="100%" placement="right">
     <n-drawer-content>
-      <h2 class="player-info__name">
+      <div class="player-info">
+        <img 
+          class="player-info__image" 
+          :src="getGodIcon(playerDetailsActive.main)"
+          :style="{ borderColor: playerDetailsActive.color }"/>
+        <h2 class="player-info__name">
         {{ playerDetailsActive.name }}
-      </h2>
+        </h2>
+      </div>
+
       <Radar
         id="my-chart-id"
         :options="chartOptions"
@@ -227,6 +234,10 @@ function moveToAvailable(id) {
     players.value = players.value.filter(player => player.id !== id);
   }
 }
+
+function getGodIcon(name) {
+  return new URL(`./assets/gods/${name}_icon.avif`, import.meta.url).href;
+}
 </script>
 
 <style lang="sass" scoped>
@@ -281,4 +292,18 @@ function moveToAvailable(id) {
   @media (pointer: fine)
     &:hover
       box-shadow: 0 0 5px rgba(241,194,50, 0.25) 
+
+.player-info
+  display: flex
+  gap: 12px
+  align-items: center
+  padding-bottom: 12px
+  margin-bottom: 16px
+  border-bottom: 1px solid #948772
+  &__image
+    width: 48px
+    border-left-style: solid
+    border-left-width: 4px
+  &__name
+    margin-bottom: 0
 </style>
