@@ -52,11 +52,12 @@
     background: linear-gradient(to bottom, #3A3121, #161005)
     box-shadow: inset 0 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 5px rgba(0, 0, 0, 0.5)
     transition: 50ms ease-out all
-    &:hover
-      background: linear-gradient(to bottom, #3A3121, #161005)
-      box-shadow: inset 0 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 5px rgba(255, 191, 0, 0.75)
-      color: #edb634
-      border: 1px solid #d0a84b
+    @media (pointer: fine)
+      &:hover
+        background: linear-gradient(to bottom, #514735, #161005)
+        box-shadow: inset 0 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 5px rgba(255, 191, 0, 0.75)
+        color: #edb634
+        border: 1px solid #d0a84b
   @media (min-width: 1024px)
     font-size: 18px
     &__team
@@ -73,7 +74,8 @@
   padding: 4px
   min-height: 200px
   transition: 50ms ease-out all
-  &:hover
-    box-shadow: 0 0 10px rgba(255, 191, 0, 0.5) 
+  @media (pointer: fine)
+    &:hover
+      box-shadow: 0 0 10px rgba(255, 191, 0, 0.5) 
   @media (max-width: 425px)
     padding: 0
