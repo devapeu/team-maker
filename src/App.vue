@@ -60,7 +60,9 @@
           </div>
           <draggable v-model="team2" item-key="name" group="players" class="team-box">
             <template #item="{ element }">
-              <PlayerBadge :player="element" />
+              <PlayerBadge 
+                :player="element" 
+                @click-profile="openPlayerDetails" />
             </template>
           </draggable>
         </div>
