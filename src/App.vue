@@ -159,7 +159,7 @@ const activePlayerData = computed(() => {
       { 
         label: "Promedio", 
         borderColor: "grey",
-        data : [50, 50, 50, 50, 50, 50,]
+        data : [50, 50, 50, 50, 50, 50, 50, 50]
       },
     ],
   }
