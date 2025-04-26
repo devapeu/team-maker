@@ -179,40 +179,37 @@ function autoBalanceTeams() {
   const total = scores.length;
   const max = Math.pow(2, total);
 
-  const seen = new Set();
-
   for (let i = 1; i < max - 1; i++) {
-    const team1 = [];
-    const team2 = [];
-    let score1 = 0, score2 = 0;
-    for (let j = 0; j < total; j++) {
-      if ((i & (1 << j)) !== 0) {
-        team1.push(playerPool[j]);
-        score1 += playerPool[j].score;
-      } else {
-        team2.push(playerPool[j]);
-        score2 += playerPool[j].score;
+  const team1 = [], team2 = [];
+  let score1 = 0, score2 = 0;
 
-      }
-    }
-
-    if (Math.abs(team1.length - team2.length) <= 1) {
-      const t1 = team1.map(p => p.name).sort();
-      const t2 = team2.map(p => p.name).sort();
-      const key = [t1.join(','), t2.join(',')].sort().join('|');
-
-      if (!seen.has(key)) {
-        seen.add(key);
-        combinations.push({
-          team1, team2,
-          difference: Math.abs(score1 - score2),
-          score1, score2
-        });
-      }
+  for (let j = 0; j < total; j++) {
+    if ((i & (1 << j)) !== 0) {
+      team1.push(playerPool[j]);
+      score1 += playerPool[j].score;
+    } else {
+      team2.push(playerPool[j]);
+      score2 += playerPool[j].score;
     }
   }
 
+  if (Math.abs(team1.length - team2.length) <= 1) {
+    const min1 = team1.map(p => p.name).sort()[0];
+    const min2 = team2.map(p => p.name).sort()[0];
+
+    if (min1 > min2) continue; // Skip duplicate mirror
+
+    combinations.push({
+      team1, team2,
+      difference: Math.abs(score1 - score2),
+      score1, score2
+    });
+  }
+}
+
+
   combinations.sort((a, b) => a.difference - b.difference);
+  console.log(combinations)
   const top = combinations.slice(0, 3);
   const randomTeam = top[Math.floor(Math.random() * top.length)];
 
