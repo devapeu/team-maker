@@ -179,6 +179,8 @@ function autoBalanceTeams() {
   const total = scores.length;
   const max = Math.pow(2, total);
 
+  const seen = new Set();
+
   for (let i = 1; i < max - 1; i++) {
     const team1 = [];
     const team2 = [];
@@ -195,17 +197,24 @@ function autoBalanceTeams() {
     }
 
     if (Math.abs(team1.length - team2.length) <= 1) {
-      combinations.push({
-        team1, team2,
-        difference: Math.abs(score1 - score2),
-        score1, score2
-      })
+      const t1 = team1.map(p => p.name).sort();
+      const t2 = team2.map(p => p.name).sort();
+      const key = [t1.join(','), t2.join(',')].sort().join('|');
+
+      if (!seen.has(key)) {
+        seen.add(key);
+        combinations.push({
+          team1, team2,
+          difference: Math.abs(score1 - score2),
+          score1, score2
+        });
+      }
     }
   }
 
   combinations.sort((a, b) => a.difference - b.difference);
-  const top3 = combinations.slice(0, 3);
-  const randomTeam = top3[Math.floor(Math.random() * top3.length)];
+  const top = combinations.slice(0, 3);
+  const randomTeam = top[Math.floor(Math.random() * top.length)];
 
   team1.value = randomTeam.team1.sort((a, b) => b.score - a.score);
   team2.value = randomTeam.team2.sort((a, b) => b.score - a.score);
