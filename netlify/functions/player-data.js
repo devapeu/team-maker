@@ -52,26 +52,43 @@ exports.handler = async (event, context) => {
           const nodes = data?.nodes;
           if (nodes && nodes.length > 1 && nodes[1]?.data) {
             const playerInfo = nodes[1].data;
-            // Find leaderboard data - typically the ranked 1v1 data (leaderboard_id: 1)
             let overallWinRate = null;
             
-            // Check different leaderboard entries
+            // The data structure has field definitions at index 1 and values following
+            // Look for leaderboard entries with leaderboard_id: 1 (ranked 1v1)
             for (let i = 1; i < playerInfo.length; i++) {
               const entry = playerInfo[i];
-              if (entry && typeof entry === 'object' && entry.win_rate !== undefined && entry.leaderboard_id === 1) {
-                // Convert decimal to percentage and round to nearest integer
-                overallWinRate = Math.round(entry.win_rate * 100);
+              if (entry && typeof entry === 'object' && entry.leaderboard_id === 1) {
+                // Found ranked 1v1 data - extract win rate
+                if (entry.win_rate !== undefined && typeof entry.win_rate === 'number') {
+                  // win_rate is a decimal (0.0 to 1.0), convert to percentage
+                  overallWinRate = Math.round(entry.win_rate * 100);
+                } else if (entry.wins !== undefined && entry.losses !== undefined) {
+                  // Calculate win rate from wins/losses
+                  const totalGames = entry.wins + entry.losses;
+                  if (totalGames > 0) {
+                    overallWinRate = Math.round((entry.wins / totalGames) * 100);
+                  }
+                }
                 break;
               }
             }
             
-            // Fallback: if no ranked 1v1 data found, look for any win rate
+            // Fallback: if no ranked 1v1 data found, look for any leaderboard data
             if (overallWinRate === null) {
               for (let i = 1; i < playerInfo.length; i++) {
                 const entry = playerInfo[i];
-                if (entry && typeof entry === 'object' && entry.win_rate !== undefined) {
-                  overallWinRate = Math.round(entry.win_rate * 100);
-                  break;
+                if (entry && typeof entry === 'object') {
+                  if (entry.win_rate !== undefined && typeof entry.win_rate === 'number' && entry.win_rate <= 1) {
+                    overallWinRate = Math.round(entry.win_rate * 100);
+                    break;
+                  } else if (entry.wins !== undefined && entry.losses !== undefined) {
+                    const totalGames = entry.wins + entry.losses;
+                    if (totalGames > 0) {
+                      overallWinRate = Math.round((entry.wins / totalGames) * 100);
+                      break;
+                    }
+                  }
                 }
               }
             }

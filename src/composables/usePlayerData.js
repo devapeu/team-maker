@@ -1,6 +1,5 @@
 import { ref } from 'vue'
 import { PLAYERS_ARRAY } from '../data/players.js'
-import { calculateCombinedScore } from '../utils/playerUtils.js'
 
 export function usePlayerData() {
   // Reactive data
@@ -41,23 +40,15 @@ export function usePlayerData() {
       
       const winRateData = await response.json();
       
-      // Update players with win rates
+      // Update players with win rates (but keep original skill-based scores)
       const updatedPlayers = players.value.map(player => {
         const playerWinRateData = winRateData[player.profileId];
         const winRate = playerWinRateData?.winRate;
         
-        // Recalculate score using combined score (skill + win rate) if win rate is available
-        let updatedScore = player.score; // Default to skill-based score
-        if (winRate !== null && winRate !== undefined) {
-          const values = Object.values(player.scores);
-          const skillAverage = values.reduce((a, b) => a + b, 0) / values.length;
-          updatedScore = calculateCombinedScore(skillAverage, winRate);
-        }
-        
         return {
           ...player,
-          win_rate: winRate,
-          score: updatedScore
+          win_rate: winRate
+          // Note: Keeping original skill-based score, not updating it with win rate
         };
       });
       
@@ -92,22 +83,14 @@ export function usePlayerData() {
       '1075268390': { winRate: 30 }  // Almeida
     };
     
-    // Update players with mock win rates
+    // Update players with mock win rates (but keep original skill-based scores)
     const updatedPlayers = players.value.map(player => {
       const winRate = mockWinRateData[player.profileId]?.winRate;
       
-      // Recalculate score using combined score (skill + win rate) if win rate is available
-      let updatedScore = player.score; // Default to skill-based score
-      if (winRate !== null && winRate !== undefined) {
-        const values = Object.values(player.scores);
-        const skillAverage = values.reduce((a, b) => a + b, 0) / values.length;
-        updatedScore = calculateCombinedScore(skillAverage, winRate);
-      }
-      
       return {
         ...player,
-        win_rate: winRate,
-        score: updatedScore
+        win_rate: winRate
+        // Note: Keeping original skill-based score, not updating it with win rate
       };
     });
     

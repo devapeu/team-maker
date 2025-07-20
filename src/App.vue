@@ -96,7 +96,7 @@
           </h2>
           <div class="player-info__stats">
             <div class="stat-item">
-              <span class="stat-label">Combined Score:</span>
+              <span class="stat-label">Skill Score:</span>
               <span class="stat-value">{{ playerDetailsActive.score }}</span>
             </div>
             <div class="stat-item" v-if="playerDetailsActive.win_rate !== null && playerDetailsActive.win_rate !== undefined">

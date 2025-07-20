@@ -33,7 +33,7 @@ function clickScore() {
       <span 
         class="player__score"
         @click="clickScore"
-        :title="player.win_rate !== null ? `Combined Score (Skill + Win Rate)` : 'Skill-based Score'">
+        :title="'Skill-based Score'">
         {{ player.score }}
       </span>
       <span 
