@@ -1,7 +1,7 @@
 exports.handler = async (event, context) => {
   const { profileId, profileIds } = event.queryStringParameters || {};
   
-  // Handle single profile ID (for backward compatibility)
+  // Handle single profile ID 
   if (profileId && !profileIds) {
     try {
       const response = await fetch(`https://aomstats.io/profile/${profileId}/__data.json?leaderboard=0`);
