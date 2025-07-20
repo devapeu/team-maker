@@ -11,13 +11,13 @@
       <div class="all-players">
         <div class="section-header">
           <h2 class="draggable-label">Todos los jugadores</h2>
-          <button @click="reset">Reestablecer todos</button>
+          <button @click="handleReset">Reestablecer todos</button>
         </div>
         <draggable v-model="players" item-key="name" group="players" class="player-pool">
           <template #item="{ element, index }">
             <PlayerBadge 
               :player="element" 
-              @click-score="moveToAvailable(element.id)"
+              @click-score="handleMoveToAvailable(element.id)"
               @click-profile="openPlayerDetails"/>
           </template>
         </draggable>
@@ -95,8 +95,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { PLAYERS_ARRAY } from './data/players.js'
+import { onMounted } from 'vue'
 import { chartOptions } from './data/chartOptions.js'
 import draggable from "vuedraggable/dist/vuedraggable.common";
 import PlayerBadge from './components/PlayerBadge.vue';
@@ -112,6 +111,12 @@ import {
 } from 'chart.js'
 import { Radar } from 'vue-chartjs'
 
+// Composables
+import { usePlayerData } from './composables/usePlayerData.js'
+import { useTeamBalance } from './composables/useTeamBalance.js'
+import { usePlayerProfile } from './composables/usePlayerProfile.js'
+import { getGodIcon } from './utils/playerUtils.js'
+
 ChartJS.register(
   RadialLinearScale,
   PointElement,
@@ -121,226 +126,47 @@ ChartJS.register(
   Legend
 )
 
-// Handle player data and calculate overall player score
-const playersMap = PLAYERS_ARRAY.map(player => {
-  const values = Object.values(player.scores);
-  const average = values.reduce((a, b) => a + b, 0) / values.length;
-  return {
-    ...player,
-    score: Math.round(average),
-  }
+// Initialize composables
+const {
+  playersMap,
+  players,
+  apiData,
+  winRateData,
+  initializePlayers,
+  testProfileId
+} = usePlayerData()
+
+const {
+  autobalance,
+  team1,
+  team2,
+  team1Score,
+  team2Score,
+  autoBalanceTeams,
+  reset,
+  resetAvailable,
+  moveToAvailable
+} = useTeamBalance(playersMap)
+
+const {
+  active,
+  playerDetailsActive,
+  activePlayerData,
+  openPlayerDetails
+} = usePlayerProfile(playersMap)
+
+// Initialize players on component mount
+onMounted(() => {
+  initializePlayers();
 })
 
-const players = ref(playersMap)
-
-// Teams for the drag and drop functionality
-const autobalance = ref([])
-const team1 = ref([])
-const team2 = ref([])
-
-// Calculate score for Team 1 and Team 2 
-const team1Score = computed(() => team1.value.reduce((sum, player) => sum + player.score, 0))
-const team2Score = computed(() => team2.value.reduce((sum, player) => sum + player.score, 0))
-
-// Slideout & Player Profile Details
-const active = ref(false)
-const playerDetailsActive = ref(false)
-const activePlayerData = computed(() => {
-  const labels = Object.keys(playerDetailsActive.value.scores);
-  const data = Object.values(playerDetailsActive.value.scores);
-  return {
-    labels: labels,
-    datasets: [ 
-      { 
-        label: playerDetailsActive.value.name, 
-        borderColor: 'orange',
-        data : data 
-      },
-      { 
-        label: "Promedio", 
-        borderColor: "grey",
-        data : [50, 50, 50, 50, 50, 50, 50, 50]
-      },
-    ],
-  }
-})
-
-const openPlayerDetails = (id) => {
-  playerDetailsActive.value = playersMap.find(player => player.id === id);
-  active.value = true
+// Wrapper functions for template
+function handleReset() {
+  reset(players)
 }
 
-// Autobalance method
-function autoBalanceTeams() {
-  const playerPool = [...team1.value, ...team2.value, ...autobalance.value];
-  const scores = playerPool.map(player => player.score);
-
-  const combinations = [];
-  const total = scores.length;
-  const max = Math.pow(2, total);
-
-  for (let i = 1; i < max - 1; i++) {
-    const team1 = [], team2 = [];
-    let score1 = 0, score2 = 0;
-
-    for (let j = 0; j < total; j++) {
-      if ((i & (1 << j)) !== 0) {
-        team1.push(playerPool[j]);
-        score1 += playerPool[j].score;
-      } else {
-        team2.push(playerPool[j]);
-        score2 += playerPool[j].score;
-      }
-    }
-
-    if (Math.abs(team1.length - team2.length) <= 1) {
-      const min1 = team1.map(p => p.name).sort()[0];
-      const min2 = team2.map(p => p.name).sort()[0];
-
-      if (min1 > min2) continue; // Skip duplicate mirror
-
-      combinations.push({
-        team1, team2,
-        difference: Math.abs(score1 - score2),
-        score1, score2
-      });
-    }
-  }
-
-
-  combinations.sort((a, b) => a.difference - b.difference);
-  console.log(combinations)
-  const top = combinations.slice(0, 3);
-  const randomTeam = top[Math.floor(Math.random() * top.length)];
-
-  team1.value = randomTeam.team1.sort((a, b) => b.score - a.score);
-  team2.value = randomTeam.team2.sort((a, b) => b.score - a.score);
-  autobalance.value = [];
-
-}
-
-// Player manipluating functions
-function reset() {
-  players.value = playersMap;
-  autobalance.value = [];
-  team1.value = [];
-  team2.value = [];
-}
-
-function resetAvailable() {
-  autobalance.value = [...autobalance.value, ...team1.value, ...team2.value];
-  team1.value = [];
-  team2.value = [];
-}
-
-function moveToAvailable(id) {
-  const player = players.value.find(player => player.id === id);
-  if (player) {
-    autobalance.value.push(player);
-    players.value = players.value.filter(player => player.id !== id);
-  }
-}
-
-// API Data fetching
-const apiData = ref(null)
-const winRateData = ref({})
-
-async function fetchPlayerData() {
-  try {
-    // This will work in both development (Vite proxy) and production (Netlify redirects)
-    const response = await fetch('/api/profile/1073862520/__data.json');
-    const data = await response.json();
-    apiData.value = data;
-    console.log('Fetched API Data:', data);
-    console.log('Player Profile Data:', data.nodes?.[1]?.data?.[0]);
-    return data;
-  } catch (error) {
-    console.error('Error fetching player data:', error);
-    return null;
-  }
-}
-
-async function fetchAllPlayersWinRates() {
-  try {
-    // Get all profile IDs that are not null
-    const profileIds = playersMap.value
-      .filter(player => player.profileId && player.profileId !== null)
-      .map(player => player.profileId);
-    
-    if (profileIds.length === 0) {
-      console.log('No profile IDs found to fetch win rates');
-      return;
-    }
-    
-    console.log('Fetching win rates for profile IDs:', profileIds);
-    
-    // Call our Netlify function with multiple profile IDs
-    const response = await fetch(`/.netlify/functions/player-data?profileIds=${profileIds.join(',')}`);
-    const data = await response.json();
-    
-    winRateData.value = data;
-    console.log('Fetched win rate data:', data);
-    
-    // Update players' win rates with fetched data
-    updatePlayersWithApiWinRates(data);
-    
-    return data;
-  } catch (error) {
-    console.error('Error fetching players win rates:', error);
-    return null;
-  }
-}
-
-function updatePlayersWithApiWinRates(winRateData) {
-  // Update the players with the fetched win rates
-  playersMap.value = playersMap.value.map(player => {
-    if (player.profileId && winRateData[player.profileId]) {
-      const apiData = winRateData[player.profileId];
-      if (apiData.success && apiData.winRate !== null) {
-        console.log(`Updating ${player.name} win rate from ${player.winrate}% to ${apiData.winRate}%`);
-        return {
-          ...player,
-          winrate: apiData.winRate,
-          apiWinRate: apiData.winRate, // Keep original for reference
-          winRateSource: 'api'
-        };
-      } else {
-        console.warn(`Failed to get win rate for ${player.name} (${player.profileId}):`, apiData.error);
-        return {
-          ...player,
-          winRateSource: 'manual'
-        };
-      }
-    }
-    return {
-      ...player,
-      winRateSource: 'manual'
-    };
-  });
-}
-
-// Fetch data on component mount
-fetchPlayerData();
-fetchAllPlayersWinRates();
-
-// Helper function to test a profile ID (for finding player profile IDs)
-async function testProfileId(profileId) {
-  try {
-    const response = await fetch(`/.netlify/functions/player-data?profileId=${profileId}`);
-    const data = await response.json();
-    console.log(`Profile ${profileId} data:`, data);
-    return data;
-  } catch (error) {
-    console.error(`Error fetching profile ${profileId}:`, error);
-    return null;
-  }
-}
-
-// Expose testProfileId to window for easy testing in console
-window.testProfileId = testProfileId;
-
-function getGodIcon(name) {
-  return new URL(`./assets/gods/${name}_icon.avif`, import.meta.url).href;
+function handleMoveToAvailable(id) {
+  moveToAvailable(id, players)
 }
 </script>
 
