@@ -130,10 +130,7 @@ ChartJS.register(
 const {
   playersMap,
   players,
-  apiData,
-  winRateData,
-  initializePlayers,
-  testProfileId
+  initializePlayers
 } = usePlayerData()
 
 const {
