@@ -2,6 +2,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 1,
     name: "Ayax",
+    profileId: "1074827715",
     scores: {
       attack: 90,
       defense: 80,
@@ -19,6 +20,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 2,
     name: "Diego",
+    profileId: "1074199836",
     scores: {
       attack: 75,
       defense: 95,
@@ -36,6 +38,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 3,
     name: "Piero",
+    profileId: "1073862520",
     scores: {
       attack: 95,
       defense: 80,
@@ -53,6 +56,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 4,
     name: "Jair",
+    profileId: "1074875183", 
     scores: {
       attack: 30,
       defense: 40,
@@ -70,6 +74,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 5,
     name: "Jaume",
+    profileId: "1074196830",
     scores: {
       attack: 87,
       defense: 95,
@@ -87,6 +92,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 6,
     name: "Sebastian",
+    profileId: "1074910820",
     scores: {
       attack: 20,
       defense: 40,
@@ -104,6 +110,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 7,
     name: "Renato",
+    profileId: "1075027222",
     scores: {
       attack: 65,
       defense: 75,
@@ -121,6 +128,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 8,
     name: "Hector",
+    profileId: "1074849746",
     scores: {
       attack: 65,
       defense: 60,
@@ -138,6 +146,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 9,
     name: "Jardani",
+    profileId: "1074203172",
     scores: {
       attack: 55,
       defense: 40,
@@ -155,6 +164,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 10,
     name: "Christian",
+    profileId: "1074839111",
     scores: {
       attack: 10,
       defense: 30,
@@ -172,6 +182,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 11,
     name: "Almeida",
+    profileId: "1075268390",
     scores: {
       attack: 15,
       defense: 30,
