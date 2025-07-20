@@ -1,3 +1,14 @@
+/**
+ * Netlify serverless function to fetch Age of Mythology player data from aomstats.io
+ * 
+ * Usage:
+ * - Single player: ?profileId=1234567890
+ * - Multiple players: ?profileIds=1234567890,0987654321,1122334455
+ * 
+ * Returns win rates from ranked 1v1 matches (leaderboard_id: 1)
+ * with fallback to any available leaderboard data.
+ */
+
 exports.handler = async (event, context) => {
   const { profileId, profileIds } = event.queryStringParameters || {};
   

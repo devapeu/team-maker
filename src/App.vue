@@ -10,8 +10,18 @@
     <div class="players">
       <div class="all-players">
         <div class="section-header">
-          <h2 class="draggable-label">Todos los jugadores</h2>
-          <button @click="handleReset">Reestablecer todos</button>
+          <h2 class="draggable-label">
+            Todos los jugadores
+            <span v-if="isLoadingWinRates" class="loading-indicator">
+              (Cargando win rates...)
+            </span>
+          </h2>
+          <div class="header-buttons">
+            <button @click="handleRefreshWinRates" :disabled="isLoadingWinRates">
+              🔄 Win Rates
+            </button>
+            <button @click="handleReset">Reestablecer todos</button>
+          </div>
         </div>
         <draggable v-model="players" item-key="name" group="players" class="player-pool">
           <template #item="{ element, index }">
@@ -80,9 +90,25 @@
           class="player-info__image" 
           :src="getGodIcon(playerDetailsActive.main)"
           :style="{ borderColor: playerDetailsActive.color }"/>
-        <h2 class="player-info__name">
-        {{ playerDetailsActive.name }}
-        </h2>
+        <div class="player-info__details">
+          <h2 class="player-info__name">
+            {{ playerDetailsActive.name }}
+          </h2>
+          <div class="player-info__stats">
+            <div class="stat-item">
+              <span class="stat-label">Combined Score:</span>
+              <span class="stat-value">{{ playerDetailsActive.score }}</span>
+            </div>
+            <div class="stat-item" v-if="playerDetailsActive.win_rate !== null && playerDetailsActive.win_rate !== undefined">
+              <span class="stat-label">Win Rate:</span>
+              <span class="stat-value">{{ playerDetailsActive.win_rate }}%</span>
+            </div>
+            <div class="stat-item" v-else>
+              <span class="stat-label">Win Rate:</span>
+              <span class="stat-value">Not available</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <Radar
@@ -130,7 +156,10 @@ ChartJS.register(
 const {
   playersMap,
   players,
-  initializePlayers
+  isLoadingWinRates,
+  initializePlayers,
+  fetchPlayerWinRates,
+  testWithMockWinRates
 } = usePlayerData()
 
 const {
@@ -153,8 +182,14 @@ const {
 } = usePlayerProfile(playersMap)
 
 // Initialize players on component mount
-onMounted(() => {
+onMounted(async () => {
   initializePlayers();
+  try {
+    await fetchPlayerWinRates();
+  } catch (error) {
+    console.log('Netlify function not available in development, using mock data');
+    testWithMockWinRates();
+  }
 })
 
 // Wrapper functions for template
@@ -164,6 +199,16 @@ function handleReset() {
 
 function handleMoveToAvailable(id) {
   moveToAvailable(id, players)
+}
+
+// Handle win rate refresh
+async function handleRefreshWinRates() {
+  try {
+    await fetchPlayerWinRates();
+  } catch (error) {
+    console.log('Using mock win rates for development');
+    testWithMockWinRates();
+  }
 }
 </script>
 
@@ -185,14 +230,22 @@ function handleMoveToAvailable(id) {
   justify-content: space-between
   align-items: flex-end
   margin-bottom: 4px
-  button
-    color: #ccc
-    border: 1px solid #948772
-    background: transparent
-    font-size: 12px
-    padding: 2px 6px
-    border-radius: 4px
-    cursor: pointer
+  
+.header-buttons
+  display: flex
+  gap: 8px
+  
+.header-buttons button
+  color: #ccc
+  border: 1px solid #948772
+  background: transparent
+  font-size: 12px
+  padding: 2px 6px
+  border-radius: 4px
+  cursor: pointer
+  &:disabled
+    opacity: 0.5
+    cursor: not-allowed
 
 .all-players
   margin-bottom: 16px
@@ -204,6 +257,11 @@ function handleMoveToAvailable(id) {
   opacity: 0.75
   font-weight: normal
   margin: 0
+  
+.loading-indicator
+  font-size: 12px
+  color: #4ade80
+  font-style: italic
 
 .auto-balance
   margin-bottom: 16px
@@ -231,6 +289,24 @@ function handleMoveToAvailable(id) {
     width: 48px
     border-left-style: solid
     border-left-width: 4px
+  &__details
+    flex: 1
   &__name
-    margin-bottom: 0
+    margin-bottom: 8px
+  &__stats
+    display: flex
+    flex-direction: column
+    gap: 4px
+
+.stat-item
+  display: flex
+  justify-content: space-between
+  font-size: 14px
+  
+.stat-label
+  color: #ccc
+  
+.stat-value
+  color: #4ade80
+  font-weight: bold
 </style>

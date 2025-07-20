@@ -28,11 +28,20 @@ function clickScore() {
       :src="getGodIcon(player.main)"
       :style="{ borderLeftColor: player.color }"
       @click="clickProfile"/>
-    <div class="player__name">{{ player.name }} </div>
-    <span 
-      class="player__score"
-      @click="clickScore">
-      {{ player.score }}
-    </span>
+    <div class="player__name">{{ player.name }}</div>
+    <div class="player__stats">
+      <span 
+        class="player__score"
+        @click="clickScore"
+        :title="player.win_rate !== null ? `Combined Score (Skill + Win Rate)` : 'Skill-based Score'">
+        {{ player.score }}
+      </span>
+      <span 
+        v-if="player.win_rate !== null && player.win_rate !== undefined"
+        class="player__winrate"
+        :title="`Win Rate from aomstats`">
+        {{ player.win_rate }}%
+      </span>
+    </div>
   </div>
 </template>
