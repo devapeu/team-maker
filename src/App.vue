@@ -241,6 +241,104 @@ function moveToAvailable(id) {
   }
 }
 
+// API Data fetching
+const apiData = ref(null)
+const winRateData = ref({})
+
+async function fetchPlayerData() {
+  try {
+    // This will work in both development (Vite proxy) and production (Netlify redirects)
+    const response = await fetch('/api/profile/1073862520/__data.json');
+    const data = await response.json();
+    apiData.value = data;
+    console.log('Fetched API Data:', data);
+    console.log('Player Profile Data:', data.nodes?.[1]?.data?.[0]);
+    return data;
+  } catch (error) {
+    console.error('Error fetching player data:', error);
+    return null;
+  }
+}
+
+async function fetchAllPlayersWinRates() {
+  try {
+    // Get all profile IDs that are not null
+    const profileIds = playersMap.value
+      .filter(player => player.profileId && player.profileId !== null)
+      .map(player => player.profileId);
+    
+    if (profileIds.length === 0) {
+      console.log('No profile IDs found to fetch win rates');
+      return;
+    }
+    
+    console.log('Fetching win rates for profile IDs:', profileIds);
+    
+    // Call our Netlify function with multiple profile IDs
+    const response = await fetch(`/.netlify/functions/player-data?profileIds=${profileIds.join(',')}`);
+    const data = await response.json();
+    
+    winRateData.value = data;
+    console.log('Fetched win rate data:', data);
+    
+    // Update players' win rates with fetched data
+    updatePlayersWithApiWinRates(data);
+    
+    return data;
+  } catch (error) {
+    console.error('Error fetching players win rates:', error);
+    return null;
+  }
+}
+
+function updatePlayersWithApiWinRates(winRateData) {
+  // Update the players with the fetched win rates
+  playersMap.value = playersMap.value.map(player => {
+    if (player.profileId && winRateData[player.profileId]) {
+      const apiData = winRateData[player.profileId];
+      if (apiData.success && apiData.winRate !== null) {
+        console.log(`Updating ${player.name} win rate from ${player.winrate}% to ${apiData.winRate}%`);
+        return {
+          ...player,
+          winrate: apiData.winRate,
+          apiWinRate: apiData.winRate, // Keep original for reference
+          winRateSource: 'api'
+        };
+      } else {
+        console.warn(`Failed to get win rate for ${player.name} (${player.profileId}):`, apiData.error);
+        return {
+          ...player,
+          winRateSource: 'manual'
+        };
+      }
+    }
+    return {
+      ...player,
+      winRateSource: 'manual'
+    };
+  });
+}
+
+// Fetch data on component mount
+fetchPlayerData();
+fetchAllPlayersWinRates();
+
+// Helper function to test a profile ID (for finding player profile IDs)
+async function testProfileId(profileId) {
+  try {
+    const response = await fetch(`/.netlify/functions/player-data?profileId=${profileId}`);
+    const data = await response.json();
+    console.log(`Profile ${profileId} data:`, data);
+    return data;
+  } catch (error) {
+    console.error(`Error fetching profile ${profileId}:`, error);
+    return null;
+  }
+}
+
+// Expose testProfileId to window for easy testing in console
+window.testProfileId = testProfileId;
+
 function getGodIcon(name) {
   return new URL(`./assets/gods/${name}_icon.avif`, import.meta.url).href;
 }
