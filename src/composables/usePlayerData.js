@@ -31,6 +31,8 @@ export function usePlayerData() {
       // Get all profile IDs
       const profileIds = PLAYERS_ARRAY.map(player => player.profileId).join(',');
       
+      console.log('Fetching win rates for profile IDs:', profileIds);
+      
       // Fetch win rates using the netlify function
       const response = await fetch(`/.netlify/functions/player-data?profileIds=${profileIds}`);
       
@@ -39,11 +41,14 @@ export function usePlayerData() {
       }
       
       const winRateData = await response.json();
+      console.log('Raw win rate data received:', winRateData);
       
       // Update players with win rates (but keep original skill-based scores)
       const updatedPlayers = players.value.map(player => {
         const playerWinRateData = winRateData[player.profileId];
         const winRate = playerWinRateData?.winRate;
+        
+        console.log(`Player ${player.name} (${player.profileId}): win rate =`, winRate, 'from data:', playerWinRateData);
         
         return {
           ...player,
@@ -56,9 +61,11 @@ export function usePlayerData() {
       players.value = [...updatedPlayers];
       
       console.log('Win rates fetched successfully:', winRateData);
+      console.log('Updated players:', updatedPlayers.map(p => ({ name: p.name, winRate: p.win_rate })));
     } catch (error) {
       console.error('Error fetching win rates:', error);
       console.log('Note: Win rates will be available when deployed to Netlify with the serverless function.');
+      throw error; // Re-throw so the calling function can handle it
     } finally {
       isLoadingWinRates.value = false;
     }
@@ -67,6 +74,8 @@ export function usePlayerData() {
   // Development function to test win rate integration with mock data
   function testWithMockWinRates() {
     isLoadingWinRates.value = true;
+    
+    console.log('Using mock win rates for development testing');
     
     // Mock win rate data for testing
     const mockWinRateData = {
@@ -86,6 +95,7 @@ export function usePlayerData() {
     // Update players with mock win rates (but keep original skill-based scores)
     const updatedPlayers = players.value.map(player => {
       const winRate = mockWinRateData[player.profileId]?.winRate;
+      console.log(`Setting ${player.name} (${player.profileId}) win rate to:`, winRate);
       
       return {
         ...player,
@@ -98,6 +108,7 @@ export function usePlayerData() {
     players.value = [...updatedPlayers];
     
     console.log('Mock win rates applied for development testing');
+    console.log('Updated players:', updatedPlayers.map(p => ({ name: p.name, winRate: p.win_rate })));
     isLoadingWinRates.value = false;
   }
 

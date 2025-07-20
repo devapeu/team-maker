@@ -48,45 +48,46 @@ exports.handler = async (event, context) => {
           const data = await response.json();
           
           // Extract overall win rate from the API data
-          // Navigate through the nested structure to find leaderboard data
+          // The aomstats API returns data in a specific indexed format:
+          // nodes[1].data[1] contains field definitions
+          // nodes[1].data[2+] contains the actual values in indexed format
           const nodes = data?.nodes;
-          if (nodes && nodes.length > 1 && nodes[1]?.data) {
-            const playerInfo = nodes[1].data;
+          if (nodes && nodes.length > 1 && nodes[1]?.data && nodes[1].data.length > 1) {
+            const playerData = nodes[1].data;
             let overallWinRate = null;
             
-            // The data structure has field definitions at index 1 and values following
-            // Look for leaderboard entries with leaderboard_id: 1 (ranked 1v1)
-            for (let i = 1; i < playerInfo.length; i++) {
-              const entry = playerInfo[i];
-              if (entry && typeof entry === 'object' && entry.leaderboard_id === 1) {
-                // Found ranked 1v1 data - extract win rate
-                if (entry.win_rate !== undefined && typeof entry.win_rate === 'number') {
-                  // win_rate is a decimal (0.0 to 1.0), convert to percentage
-                  overallWinRate = Math.round(entry.win_rate * 100);
-                } else if (entry.wins !== undefined && entry.losses !== undefined) {
-                  // Calculate win rate from wins/losses
-                  const totalGames = entry.wins + entry.losses;
-                  if (totalGames > 0) {
-                    overallWinRate = Math.round((entry.wins / totalGames) * 100);
+            // The template at index 1 shows the field mapping
+            const template = playerData[1];
+            if (template && template.win_rate !== undefined) {
+              const winRateIndex = template.win_rate;
+              
+              // Check if we have data at the win_rate index
+              if (playerData[winRateIndex] !== undefined) {
+                const winRateValue = playerData[winRateIndex];
+                if (typeof winRateValue === 'number') {
+                  if (winRateValue >= 0 && winRateValue <= 1) {
+                    // Decimal format (0.0 to 1.0)
+                    overallWinRate = Math.round(winRateValue * 100);
+                  } else if (winRateValue >= 0 && winRateValue <= 100) {
+                    // Already in percentage format
+                    overallWinRate = Math.round(winRateValue);
                   }
                 }
-                break;
               }
-            }
-            
-            // Fallback: if no ranked 1v1 data found, look for any leaderboard data
-            if (overallWinRate === null) {
-              for (let i = 1; i < playerInfo.length; i++) {
-                const entry = playerInfo[i];
-                if (entry && typeof entry === 'object') {
-                  if (entry.win_rate !== undefined && typeof entry.win_rate === 'number' && entry.win_rate <= 1) {
-                    overallWinRate = Math.round(entry.win_rate * 100);
-                    break;
-                  } else if (entry.wins !== undefined && entry.losses !== undefined) {
-                    const totalGames = entry.wins + entry.losses;
+              
+              // If no main win rate found or it's 0, calculate from wins/losses
+              if (overallWinRate === null || overallWinRate === 0) {
+                const winsIndex = template.wins;
+                const lossesIndex = template.losses;
+                
+                if (winsIndex !== undefined && lossesIndex !== undefined) {
+                  const wins = playerData[winsIndex];
+                  const losses = playerData[lossesIndex];
+                  
+                  if (typeof wins === 'number' && typeof losses === 'number') {
+                    const totalGames = wins + losses;
                     if (totalGames > 0) {
-                      overallWinRate = Math.round((entry.wins / totalGames) * 100);
-                      break;
+                      overallWinRate = Math.round((wins / totalGames) * 100);
                     }
                   }
                 }

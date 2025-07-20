@@ -184,12 +184,8 @@ const {
 // Initialize players on component mount
 onMounted(async () => {
   initializePlayers();
-  try {
-    await fetchPlayerWinRates();
-  } catch (error) {
-    console.log('Netlify function not available in development, using mock data');
-    testWithMockWinRates();
-  }
+  console.log('App mounted, using mock data for testing');
+  testWithMockWinRates();
 })
 
 // Wrapper functions for template
