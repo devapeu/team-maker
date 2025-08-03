@@ -142,6 +142,17 @@ const team2 = ref([])
 const team1Score = computed(() => team1.value.reduce((sum, player) => sum + player.score, 0))
 const team2Score = computed(() => team2.value.reduce((sum, player) => sum + player.score, 0))
 
+const team_id = computed(() => {
+  if (!team1.value || !team2.value) return '';
+
+  const sortedTeam1 = [...team1.value.map(t => t.profile_id)].map(String).sort();
+  const sortedTeam2 = [...team2.value.map(t => t.profile_id)].map(String).sort();
+
+  const sortedTeams = [sortedTeam1, sortedTeam2].sort((a, b) => a.join(',').localeCompare(b.join(',')));
+
+  return sortedTeams.map(team => team.join(',')).join(' vs ');
+})
+
 // Slideout & Player Profile Details
 const active = ref(false)
 const playerDetailsActive = ref(false)
