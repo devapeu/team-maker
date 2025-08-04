@@ -204,7 +204,7 @@ watch([team1, team2], async ([newTeam1, newTeam2]) => {
     return;
   }
 
-  const res = await fetch(`http://167.71.242.62:3000/teams/${teamId}`);
+  const res = await fetch(`https://167.71.242.62:3000/teams/${teamId}`);
   const data = await res.json();
 
   if (data.teams === null) {
