@@ -42,7 +42,16 @@
         <div class="teams__team">
           <div class="teams__header">
             <h2 class="teams__name">Equipo 1</h2>
-            <p class="teams__score">{{ team1Score }}</p>
+            <p
+              v-if="teamWinRate !== null"
+              class="teams__winrate">
+              Wins: <span>{{ teamWinRate[team1Id] }}</span>
+            </p>
+            <p
+              v-else
+              class="teams__score">
+              {{ team1Score }}
+            </p>
           </div>
           <draggable v-model="team1" item-key="name" group="players" class="team-box">
             <template #item="{ element }">
@@ -56,7 +65,16 @@
         <div class="teams__team">
           <div class="teams__header teams__header--inverse">
             <h2 class="teams__name">Equipo 2</h2>
-            <p class="teams__score">{{ team2Score }}</p>
+            <p
+              v-if="teamWinRate !== null"
+              class="teams__winrate">
+              Wins: <span>{{ teamWinRate[team2Id] }}</span>
+            </p>
+            <p
+              v-else
+              class="teams__score">
+              {{ team2Score }}
+            </p>
           </div>
           <draggable v-model="team2" item-key="name" group="players" class="team-box">
             <template #item="{ element }">
@@ -95,7 +113,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch} from 'vue'
 import { PLAYERS_ARRAY } from './data/players.js'
 import { chartOptions } from './data/chartOptions.js'
 import draggable from "vuedraggable/dist/vuedraggable.common";
@@ -138,20 +156,14 @@ const autobalance = ref([])
 const team1 = ref([])
 const team2 = ref([])
 
+// Win Rate stuff
+const teamWinRate = ref(null);
+const team1Id = ref('');
+const team2Id = ref('');
+
 // Calculate score for Team 1 and Team 2 
-const team1Score = computed(() => team1.value.reduce((sum, player) => sum + player.score, 0))
-const team2Score = computed(() => team2.value.reduce((sum, player) => sum + player.score, 0))
-
-const team_id = computed(() => {
-  if (!team1.value || !team2.value) return '';
-
-  const sortedTeam1 = [...team1.value.map(t => t.profile_id)].map(String).sort();
-  const sortedTeam2 = [...team2.value.map(t => t.profile_id)].map(String).sort();
-
-  const sortedTeams = [sortedTeam1, sortedTeam2].sort((a, b) => a.join(',').localeCompare(b.join(',')));
-
-  return sortedTeams.map(team => team.join(',')).join(' vs ');
-})
+const team1Score = computed(() => team1.value.reduce((sum, player) => sum + player.score, 0));
+const team2Score = computed(() => team2.value.reduce((sum, player) => sum + player.score, 0));
 
 // Slideout & Player Profile Details
 const active = ref(false)
@@ -180,6 +192,30 @@ const openPlayerDetails = (id) => {
   playerDetailsActive.value = playersMap.find(player => player.id === id);
   active.value = true
 }
+
+watch([team1, team2], async ([newTeam1, newTeam2]) => {
+  const t1 = newTeam1.map(p => String(p.profile_id)).sort();
+  const t2 = newTeam2.map(p => String(p.profile_id)).sort();
+  const sortedTeams = [t1, t2].sort((a, b) => a.join(',').localeCompare(b.join(',')));
+  const teamId = sortedTeams.map(t => t.join(',')).join(' vs ');
+
+  if (!teamId || teamId === ' vs ') {
+    resetTeamIds();
+    return;
+  }
+
+  const res = await fetch(`http://localhost:3000/teams/${teamId}`);
+  const data = await res.json();
+
+  if (data.teams === null) {
+    resetTeamIds();
+    return
+  };
+
+  team1Id.value = t1;
+  team2Id.value = t2;
+  teamWinRate.value = data;
+})
 
 // Autobalance method
 function autoBalanceTeams() {
@@ -220,8 +256,7 @@ function autoBalanceTeams() {
 
 
   combinations.sort((a, b) => a.difference - b.difference);
-  console.log(combinations)
-  const top = combinations.slice(0, 3);
+  const top = combinations.slice(0, 5);
   const randomTeam = top[Math.floor(Math.random() * top.length)];
 
   team1.value = randomTeam.team1.sort((a, b) => b.score - a.score);
@@ -236,6 +271,12 @@ function reset() {
   autobalance.value = [];
   team1.value = [];
   team2.value = [];
+}
+
+function resetTeamIds() {
+  team1Id.value = null;
+  team2Id.value = null;
+  teamWinRate.value = null;
 }
 
 function resetAvailable() {
