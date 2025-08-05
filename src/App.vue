@@ -204,7 +204,7 @@ watch([team1, team2], async ([newTeam1, newTeam2]) => {
     return;
   }
 
-  const res = await fetch(`https://comix.fluffygangcomic.com:3000/teams/${teamId}`);
+  const res = await fetch(`https://comix.fluffygangcomic.com/aomstats/teams/${teamId}`);
   const data = await res.json();
 
   if (data.teams === null) {
