@@ -41,7 +41,7 @@
       <div class="teams__wrapper">
         <div class="teams__team">
           <div class="teams__header">
-            <h2 class="teams__name">Equipo 1</h2>
+            <h2 class="teams__name">{{ team1Label }}</h2>
             <p
               v-if="teamWinRate !== null"
               class="teams__winrate">
@@ -64,7 +64,7 @@
         
         <div class="teams__team">
           <div class="teams__header teams__header--inverse">
-            <h2 class="teams__name">Equipo 2</h2>
+            <h2 class="teams__name">{{ team2Label }}</h2>
             <p
               v-if="teamWinRate !== null"
               class="teams__winrate">
@@ -160,6 +160,21 @@ const team2 = ref([])
 const teamWinRate = ref(null);
 const team1Id = ref('');
 const team2Id = ref('');
+
+const teamNames = {
+  "1074199836,1074203172,1074849746": "Team Frontón",
+  "1073862520,1074827715,1074839111": "Team 4to  B"
+}
+
+// Team Labels
+const team1Label = computed(() => {
+  const teamId = team1.value.map(p => String(p.profile_id)).sort().join(",");
+  return teamNames[teamId] ? teamNames[teamId] : "Equipo 1";
+})
+const team2Label = computed(() => {
+  const teamId = team2.value.map(p => String(p.profile_id)).sort().join(",");
+  return teamNames[teamId] ? teamNames[teamId] : "Equipo 2";
+})
 
 // Calculate score for Team 1 and Team 2 
 const team1Score = computed(() => team1.value.reduce((sum, player) => sum + player.score, 0));
