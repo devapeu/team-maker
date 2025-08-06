@@ -170,6 +170,7 @@ const teamNames = {
   "1073862520,1075027222": "Team Fimbulwinter",
   "1074203172,1074910820": "Team Rayo",
   "1074849746,1075027222": "Team C.A.F.E.",
+  "1074203172,1074849746,1074910820": "Oops! All Zeus",
 }
 
 // Team Labels
