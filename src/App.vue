@@ -163,12 +163,14 @@ const team2Id = ref('');
 
 const teamNames = {
   "1074199836,1074203172,1074849746": "Team Frontón",
-  "1073862520,1074827715,1074839111": "Team 4to  B"
+  "1073862520,1074827715,1074839111": "Team 4to B",
+  "1073862520,1074199836,1074827715": "Team Big Three",
 }
 
 // Team Labels
 const team1Label = computed(() => {
   const teamId = team1.value.map(p => String(p.profile_id)).sort().join(",");
+  console.log(teamId);
   return teamNames[teamId] ? teamNames[teamId] : "Equipo 1";
 })
 const team2Label = computed(() => {
