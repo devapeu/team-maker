@@ -141,8 +141,8 @@ export const PLAYERS_ARRAY = [
     scores: {
       attack: 55,
       defense: 40,
-      strategy: 25,
-      speed: 30,
+      strategy: 35,
+      speed: 35,
       macro: 70,
       micro: 40,
       mentality: 80,
