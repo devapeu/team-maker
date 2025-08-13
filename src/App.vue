@@ -103,7 +103,7 @@
         </h2>
       </div>
 
-      <template v-if="activePlayerGods.length">
+      <template v-if="activePlayerGods?.length">
         <label>Filtrar desde: </label>
         <select v-model="activePlayerGodsFilter">
           <option value="2-week">2 semanas</option>
@@ -277,6 +277,10 @@ watch([team1, team2], async ([newTeam1, newTeam2]) => {
   team1Id.value = t1;
   team2Id.value = t2;
   teamWinRate.value = data;
+})
+
+watch(playerDetailsActive, isOpen => {
+  activePlayerGodsFilter.value = 'all';
 })
 
 watch(activePlayerGodsFilter, async (newFilter) => {
