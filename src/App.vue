@@ -103,6 +103,30 @@
         </h2>
       </div>
 
+      <template v-if="activePlayerGods.length">
+        <table class="player-gods">
+          <thead>
+            <tr>
+              <th>Dios Mayor</th>
+              <th>Partidas</th>
+              <th>Winrate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="row in activePlayerGods">
+              <td>
+                <div class="player-gods__item">
+                  <img width="32" :src="getGodIcon(row.name)" />
+                  {{ row.name }}
+                </div>
+              </td>
+              <td>{{ row.total_games }}</td>
+              <td :class="getPercentColor(row.winrate_percent)">{{ row.winrate_percent.toFixed() }}%</td>
+            </tr>
+          </tbody>
+        </table>
+      </template>
+
       <Radar
         id="my-chart-id"
         :options="chartOptions"
@@ -191,6 +215,7 @@ const team2Score = computed(() => team2.value.reduce((sum, player) => sum + play
 // Slideout & Player Profile Details
 const active = ref(false)
 const playerDetailsActive = ref(false)
+const activePlayerGods = ref({});
 const activePlayerData = computed(() => {
   const labels = Object.keys(playerDetailsActive.value.scores);
   const data = Object.values(playerDetailsActive.value.scores);
@@ -211,8 +236,13 @@ const activePlayerData = computed(() => {
   }
 })
 
-const openPlayerDetails = (id) => {
+const openPlayerDetails = async (id) => {
   playerDetailsActive.value = playersMap.find(player => player.id === id);
+
+  const res = await fetch(`https://comix.fluffygangcomic.com/aomstats/gods/${playerDetailsActive.value.profile_id}`);
+  const data  = await res.json();
+  activePlayerGods.value = data.gods;
+
   active.value = true
 }
 
@@ -319,6 +349,12 @@ function moveToAvailable(id) {
 function getGodIcon(name) {
   return new URL(`./assets/gods/${name}_icon.avif`, import.meta.url).href;
 }
+
+function getPercentColor(number) {
+  if (number > 50) return 'percent-green'
+  else if (number > 45) return 'percent-yellow'
+  else return 'percent-red'
+}
 </script>
 
 <style lang="sass" scoped>
@@ -387,4 +423,25 @@ function getGodIcon(name) {
     border-left-width: 4px
   &__name
     margin-bottom: 0
+
+.percent
+  &-green
+    color: #4ce171
+  &-yellow
+    color: #ffde7e
+  &-red
+    color: #f47a7a
+
+.player-gods
+  width: 100%
+  border-collapse: collapse
+  td, th
+    text-align: left
+    padding: 8px
+    border-bottom: 1px solid #948772
+  &__item
+    display: flex
+    align-items: center
+    gap: 8px
+    text-transform: capitalize
 </style>
