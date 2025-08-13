@@ -347,7 +347,7 @@ function moveToAvailable(id) {
 }
 
 function getGodIcon(name) {
-  return new URL(`./assets/gods/${name}_icon.avif`, import.meta.url).href;
+  return new URL(`./assets/gods/${name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}_icon.avif`, import.meta.url).href;
 }
 
 function getPercentColor(number) {
