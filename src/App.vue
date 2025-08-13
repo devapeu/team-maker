@@ -104,6 +104,14 @@
       </div>
 
       <template v-if="activePlayerGods.length">
+        <label>Filtrar desde: </label>
+        <select v-model="activePlayerGodsFilter">
+          <option value="2-week">2 semanas</option>
+          <option value="1-month">1 mes</option>
+          <option value="2-month">2 meses</option>
+          <option value="6-month">6 meses</option>
+          <option value="all">Todo</option>
+        </select>
         <table class="player-gods">
           <thead>
             <tr>
@@ -216,6 +224,7 @@ const team2Score = computed(() => team2.value.reduce((sum, player) => sum + play
 const active = ref(false)
 const playerDetailsActive = ref(false)
 const activePlayerGods = ref({});
+const activePlayerGodsFilter = ref('all');
 const activePlayerData = computed(() => {
   const labels = Object.keys(playerDetailsActive.value.scores);
   const data = Object.values(playerDetailsActive.value.scores);
@@ -269,6 +278,30 @@ watch([team1, team2], async ([newTeam1, newTeam2]) => {
   team2Id.value = t2;
   teamWinRate.value = data;
 })
+
+watch(activePlayerGodsFilter, async (newFilter) => {
+  let value = 0;
+  const todayCopy = new Date();
+
+  switch (newFilter) {
+    case '2-week':
+      todayCopy.setDate(todayCopy.getDate() - 14);
+      value = Math.round(todayCopy.getTime() / 1000);
+      break;
+    case '1-month':
+      todayCopy.setMonth(todayCopy.getMonth() - 1);
+      value = Math.round(todayCopy.getTime() / 1000);
+      break;
+    case '2-month':
+      todayCopy.setMonth(todayCopy.getMonth() - 2);
+      value = Math.round(todayCopy.getTime() / 1000);
+      break;
+  }
+
+  const res = await fetch(`https://comix.fluffygangcomic.com/aomstats/gods/${playerDetailsActive.value.profile_id}?after=${value}`);
+  const data  = await res.json();
+  activePlayerGods.value = data.gods;
+});
 
 // Autobalance method
 function autoBalanceTeams() {
