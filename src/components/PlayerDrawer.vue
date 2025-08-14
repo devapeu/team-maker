@@ -12,14 +12,16 @@
       </div>
 
       <template v-if="activePlayerGods?.length">
-        <label>Filtrar desde: </label>
-        <select v-model="activePlayerGodsFilter">
-          <option value="2-week">2 semanas</option>
-          <option value="1-month">1 mes</option>
-          <option value="2-month">2 meses</option>
-          <option value="6-month">6 meses</option>
-          <option value="all">Todo</option>
-        </select>
+        <div class="player-controls">  
+          <label>Filtrar desde: </label>
+          <select v-model="activePlayerGodsFilter">
+            <option value="2-week">2 semanas</option>
+            <option value="1-month">1 mes</option>
+            <option value="2-month">2 meses</option>
+            <option value="6-month">6 meses</option>
+            <option value="all">Todo</option>
+          </select>
+        </div>
         <table class="player-gods">
           <thead>
             <tr>
@@ -191,6 +193,16 @@ watch(
     align-items: center
     gap: 8px
     text-transform: capitalize
+
+.player-controls
+  display: flex
+  gap: 8px
+  align-items: center
+  justify-content: flex-end
+  label
+    color: #bbb
+  select
+    padding: 2px 10px
 
 .percent
   &-green
