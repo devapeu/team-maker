@@ -91,85 +91,17 @@
       </div>
     </div>
   </main>
-  <n-drawer v-model:show="active" width="100%" placement="right">
-    <n-drawer-content>
-      <div class="player-info">
-        <img 
-          class="player-info__image" 
-          :src="getGodIcon(playerDetailsActive.main)"
-          :style="{ borderColor: playerDetailsActive.color }"/>
-        <h2 class="player-info__name">
-        {{ playerDetailsActive.name }}
-        </h2>
-      </div>
-
-      <template v-if="activePlayerGods?.length">
-        <label>Filtrar desde: </label>
-        <select v-model="activePlayerGodsFilter">
-          <option value="2-week">2 semanas</option>
-          <option value="1-month">1 mes</option>
-          <option value="2-month">2 meses</option>
-          <option value="6-month">6 meses</option>
-          <option value="all">Todo</option>
-        </select>
-        <table class="player-gods">
-          <thead>
-            <tr>
-              <th>Dios Mayor</th>
-              <th>Partidas</th>
-              <th>Winrate</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="row in activePlayerGods">
-              <td>
-                <div class="player-gods__item">
-                  <img width="32" :src="getGodIcon(row.name)" />
-                  {{ row.name }}
-                </div>
-              </td>
-              <td>{{ row.total_games }}</td>
-              <td :class="getPercentColor(row.winrate_percent)">{{ row.winrate_percent.toFixed() }}%</td>
-            </tr>
-          </tbody>
-        </table>
-      </template>
-
-      <Radar
-        id="my-chart-id"
-        :options="chartOptions"
-        :data="activePlayerData"
-      />
-    </n-drawer-content>
-  </n-drawer>
+  <PlayerDrawer
+    v-model:active="active"
+    :playerDetailsActive="playerDetailsActive" />
 </template>
 
 <script setup>
 import { ref, computed, watch} from 'vue'
 import { PLAYERS_ARRAY } from './data/players.js'
-import { chartOptions } from './data/chartOptions.js'
 import draggable from "vuedraggable/dist/vuedraggable.common";
 import PlayerBadge from './components/PlayerBadge.vue';
-import { NDrawer, NDrawerContent } from "naive-ui"
-import {
-  Chart as ChartJS,
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend
-} from 'chart.js'
-import { Radar } from 'vue-chartjs'
-
-ChartJS.register(
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend
-)
+import PlayerDrawer from './components/PlayerDrawer.vue';
 
 // Handle player data and calculate overall player score
 const playersMap = PLAYERS_ARRAY.map(player => {
@@ -223,35 +155,9 @@ const team2Score = computed(() => team2.value.reduce((sum, player) => sum + play
 // Slideout & Player Profile Details
 const active = ref(false)
 const playerDetailsActive = ref(false)
-const activePlayerGods = ref({});
-const activePlayerGodsFilter = ref('all');
-const activePlayerData = computed(() => {
-  const labels = Object.keys(playerDetailsActive.value.scores);
-  const data = Object.values(playerDetailsActive.value.scores);
-  return {
-    labels: labels,
-    datasets: [ 
-      { 
-        label: playerDetailsActive.value.name, 
-        borderColor: 'orange',
-        data : data 
-      },
-      { 
-        label: "Promedio", 
-        borderColor: "grey",
-        data : [50, 50, 50, 50, 50, 50, 50, 50]
-      },
-    ],
-  }
-})
 
 const openPlayerDetails = async (id) => {
   playerDetailsActive.value = playersMap.find(player => player.id === id);
-
-  const res = await fetch(`https://comix.fluffygangcomic.com/aomstats/gods/${playerDetailsActive.value.profile_id}`);
-  const data  = await res.json();
-  activePlayerGods.value = data.gods;
-
   active.value = true
 }
 
@@ -278,34 +184,6 @@ watch([team1, team2], async ([newTeam1, newTeam2]) => {
   team2Id.value = t2;
   teamWinRate.value = data;
 })
-
-watch(playerDetailsActive, isOpen => {
-  activePlayerGodsFilter.value = 'all';
-})
-
-watch(activePlayerGodsFilter, async (newFilter) => {
-  let value = 0;
-  const todayCopy = new Date();
-
-  switch (newFilter) {
-    case '2-week':
-      todayCopy.setDate(todayCopy.getDate() - 14);
-      value = Math.round(todayCopy.getTime() / 1000);
-      break;
-    case '1-month':
-      todayCopy.setMonth(todayCopy.getMonth() - 1);
-      value = Math.round(todayCopy.getTime() / 1000);
-      break;
-    case '2-month':
-      todayCopy.setMonth(todayCopy.getMonth() - 2);
-      value = Math.round(todayCopy.getTime() / 1000);
-      break;
-  }
-
-  const res = await fetch(`https://comix.fluffygangcomic.com/aomstats/gods/${playerDetailsActive.value.profile_id}?after=${value}`);
-  const data  = await res.json();
-  activePlayerGods.value = data.gods;
-});
 
 // Autobalance method
 function autoBalanceTeams() {
@@ -382,16 +260,6 @@ function moveToAvailable(id) {
     players.value = players.value.filter(player => player.id !== id);
   }
 }
-
-function getGodIcon(name) {
-  return new URL(`./assets/gods/${name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}_icon.avif`, import.meta.url).href;
-}
-
-function getPercentColor(number) {
-  if (number > 50) return 'percent-green'
-  else if (number > 45) return 'percent-yellow'
-  else return 'percent-red'
-}
 </script>
 
 <style lang="sass" scoped>
@@ -446,39 +314,4 @@ function getPercentColor(number) {
   @media (pointer: fine)
     &:hover
       box-shadow: 0 0 5px rgba(241,194,50, 0.25) 
-
-.player-info
-  display: flex
-  gap: 12px
-  align-items: center
-  padding-bottom: 12px
-  margin-bottom: 16px
-  border-bottom: 1px solid #948772
-  &__image
-    width: 48px
-    border-left-style: solid
-    border-left-width: 4px
-  &__name
-    margin-bottom: 0
-
-.percent
-  &-green
-    color: #4ce171
-  &-yellow
-    color: #ffde7e
-  &-red
-    color: #f47a7a
-
-.player-gods
-  width: 100%
-  border-collapse: collapse
-  td, th
-    text-align: left
-    padding: 8px
-    border-bottom: 1px solid #948772
-  &__item
-    display: flex
-    align-items: center
-    gap: 8px
-    text-transform: capitalize
 </style>
