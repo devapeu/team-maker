@@ -11,6 +11,14 @@
         </h2>
       </div>
 
+      <button 
+        key="close-btn"
+        tabindex="-1"
+        class="close-drawer" 
+        @click="closeDrawer">
+        &times;
+      </button>
+
       <div class="player-controls">  
         <label>Filtrar desde: </label>
         <select v-model="timestampFilter">
@@ -214,6 +222,10 @@ function getPlayerName(id) {
   return PLAYERS_ARRAY.find(p => p.profile_id == id)?.name;
 }
 
+function closeDrawer() {
+  drawerActive.value = false;
+}
+
 onMounted(() => {
   fetchGods(props.playerDetailsActive.profile_id, timestampValue.value);
   fetchPartners(props.playerDetailsActive.profile_id, timestampValue.value);
@@ -289,6 +301,21 @@ watch(
   margin-top: 20px
   margin-bottom: 0
   font-size: 18px
+
+.close-drawer
+  position: absolute
+  top: 20px
+  right: 30px
+  width: 32px
+  height: 32px
+  font-size: 24px
+  background: none
+  border: none
+  color: #ccc
+  font-weight: 100
+  border-radius: 5px
+  &:focus
+    outline: none
 
 .percent
   &-teal
