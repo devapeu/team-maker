@@ -171,7 +171,7 @@ export const PLAYERS_ARRAY = [
   },
   {
     id: 11,
-    name: "Almeida",
+    name: "Almeyda",
     scores: {
       attack: 15,
       defense: 30,
