@@ -60,15 +60,23 @@
             <tr>
               <th>Jugador</th>
               <th>Partidas Ganadas</th>
+              <th>Total Partidas</th>
+              <th>Winrate</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="player in activePlayerPartners">
+            <tr v-for="player in activePlayerPartners" :key="player[0]">
               <td>
                 {{ getPlayerName(player[0]) }}
               </td>
               <td>
-                {{ player[1] }}
+                {{ player[1].wins }}
+              </td>
+              <td>
+                {{ player[1].total }}
+              </td>
+              <td>
+                {{ ((player[1].wins / player[1].total) * 100).toFixed(1) }}%
               </td>
             </tr>
           </tbody>
@@ -126,7 +134,7 @@ const drawerActive = computed({
   set: (val) => emit('update:active', val)
 })
 
-const activePlayerPartners = ref({});
+const activePlayerPartners = ref([]);
 const activePlayerGods = ref({});
 const timestampFilter = ref('2-week');
 const timestampValue = computed(() => {
@@ -178,13 +186,16 @@ async function fetchPartners(profileId, after = 0) {
   const res = await fetch(`https://comix.fluffygangcomic.com/aomstats/partners/${profileId}?after=${after}`);
   const data = await res.json();
 
-  if (data.players == null) {
-    activePlayerPartners.value = {};
+  if (!data.players) {
+    activePlayerPartners.value = [];
     return;
   }
-
-  const sortedPlayers = Object.entries(data.players).slice().sort((a,b) => b[1] - a[1]);
-    
+  // Sort by wins descending, then by total descending
+  const sortedPlayers = Object.entries(data.players)
+    .sort((a, b) => {
+      if (b[1].wins !== a[1].wins) return b[1].wins - a[1].wins;
+      return b[1].total - a[1].total;
+    });
   activePlayerPartners.value = sortedPlayers;
 }
 
