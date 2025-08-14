@@ -22,7 +22,8 @@
         </select>
       </div>
       <template v-if="activePlayerGods?.length">
-        <table class="player-gods">
+        <h2 class="player-section-title">Victorias</h2>
+        <table class="player-table">
           <thead>
             <tr>
               <th>Dios Mayor</th>
@@ -31,9 +32,11 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="row in activePlayerGods">
+            <tr 
+              v-for="row in activePlayerGods"
+              :key="row.name">
               <td>
-                <div class="player-gods__item">
+                <div class="player-table__item">
                   <img width="32" :src="getGodIcon(row.name)" />
                   {{ row.name }}
                 </div>
@@ -45,8 +48,35 @@
         </table>
       </template>
       <template v-else>
-        <div class="player-gods--empty">
+        <div class="empty-state">
           No hay partidas en ese intervalo de tiempo.
+        </div>
+      </template>
+
+      <template v-if="activePlayerPartners?.length">
+        <h2 class="player-section-title">Mejores Compañeros</h2>
+        <table class="player-table">
+          <thead>
+            <tr>
+              <th>Jugador</th>
+              <th>Partidas Ganadas</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="player in activePlayerPartners">
+              <td>
+                {{ getPlayerName(player[0]) }}
+              </td>
+              <td>
+                {{ player[1] }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </template>
+      <template v-else>
+        <div class="empty-state">
+          No se han encontrado compañeros de equipo para este jugador.
         </div>
       </template>
 
@@ -60,6 +90,7 @@
 </template>
 
 <script setup>
+import { PLAYERS_ARRAY } from '../data/players.js'
 import { onMounted, computed, ref, watch } from 'vue'
 import { Radar } from 'vue-chartjs'
 import { chartOptions } from '../data/chartOptions.js'
@@ -95,6 +126,7 @@ const drawerActive = computed({
   set: (val) => emit('update:active', val)
 })
 
+const activePlayerPartners = ref({});
 const activePlayerGods = ref({});
 const timestampFilter = ref('2-week');
 const timestampValue = computed(() => {
@@ -141,6 +173,16 @@ async function fetchGods(profileId, after = 0) {
   activePlayerGods.value = data.gods;
 }
 
+async function fetchPartners(profileId, after = 0) {
+  if (!profileId) return;
+  const res = await fetch(`https://comix.fluffygangcomic.com/aomstats/partners/${profileId}?after=${after}`);
+  const data = await res.json();
+
+  const sortedPlayers = Object.entries(data.players).slice().sort((a,b) => b[1] - a[1]);
+    
+  activePlayerPartners.value = sortedPlayers;
+}
+
 function getGodIcon(name) {
   return new URL(`../assets/gods/${name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}_icon.avif`, import.meta.url).href;
 }
@@ -151,14 +193,20 @@ function getPercentColor(number) {
   else return 'percent-red'
 }
 
+function getPlayerName(id) {
+  return PLAYERS_ARRAY.find(p => p.profile_id == id)?.name;
+}
+
 onMounted(() => {
   fetchGods(props.playerDetailsActive.profile_id, timestampValue.value);
+  fetchPartners(props.playerDetailsActive.profile_id, timestampValue.value);
 });
 
 watch(
   () => props.playerDetailsActive.profile_id,
   (newId, oldId) => {
     fetchGods(props.playerDetailsActive.profile_id, timestampValue.value);
+    fetchPartners(props.playerDetailsActive.profile_id, timestampValue.value);
   }
 );
 
@@ -166,6 +214,7 @@ watch(
   timestampFilter,
   (newFilter) => {
     fetchGods(props.playerDetailsActive.profile_id, timestampValue.value);
+    fetchPartners(props.playerDetailsActive.profile_id, timestampValue.value);
   }
 );
 </script>
@@ -185,16 +234,16 @@ watch(
   &__name
     margin-bottom: 0
 
-.player-gods
+.empty-state
+  margin-top: 10px
+  padding: 20px
+  color: #aaa
+  text-align: center
+  border: 1px solid #948772
+
+.player-table
   width: 100%
   border-collapse: collapse
-  margin-top: 10px
-  &--empty
-    margin-top: 10px
-    padding: 20px
-    color: #aaa
-    text-align: center
-    border: 1px solid #948772
   td, th
     text-align: left
     padding: 8px
@@ -211,9 +260,15 @@ watch(
   align-items: center
   justify-content: flex-end
   label
+    font-weight: 500
     color: #bbb
   select
     padding: 2px 10px
+
+.player-section-title
+  margin-top: 20px
+  margin-bottom: 0
+  font-size: 18px
 
 .percent
   &-green
