@@ -1,5 +1,9 @@
 <template>
-  <n-drawer v-model:show="drawerActive" width="100%" placement="right">
+  <n-drawer 
+    v-model:show="drawerActive"
+    width="100%"
+    placement="right"
+    :auto-focus="false">
     <n-drawer-content>
       <div class="player-info">
         <img 
@@ -13,7 +17,6 @@
 
       <button 
         key="close-btn"
-        tabindex="-1"
         class="close-drawer" 
         @click="closeDrawer">
         &times;
