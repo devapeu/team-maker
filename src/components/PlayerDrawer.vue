@@ -178,6 +178,11 @@ async function fetchPartners(profileId, after = 0) {
   const res = await fetch(`https://comix.fluffygangcomic.com/aomstats/partners/${profileId}?after=${after}`);
   const data = await res.json();
 
+  if (data.players == null) {
+    activePlayerPartners.value = {};
+    return;
+  }
+
   const sortedPlayers = Object.entries(data.players).slice().sort((a,b) => b[1] - a[1]);
     
   activePlayerPartners.value = sortedPlayers;
