@@ -204,7 +204,8 @@ function getGodIcon(name) {
 }
 
 function getPercentColor(number) {
-  if (number > 50) return 'percent-green'
+  if (number > 70) return 'percent-teal'
+  else if (number > 50) return 'percent-green'
   else if (number > 45) return 'percent-yellow'
   else return 'percent-red'
 }
@@ -290,6 +291,8 @@ watch(
   font-size: 18px
 
 .percent
+  &-teal
+    color: #31e1bb
   &-green
     color: #4ce171
   &-yellow
