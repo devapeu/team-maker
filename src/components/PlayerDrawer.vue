@@ -59,8 +59,8 @@
           <thead>
             <tr>
               <th>Jugador</th>
-              <th>Partidas Ganadas</th>
-              <th>Total Partidas</th>
+              <th>Ganadas</th>
+              <th>Total</th>
               <th>Winrate</th>
             </tr>
           </thead>
@@ -260,6 +260,9 @@ watch(
 .player-table
   width: 100%
   border-collapse: collapse
+  th
+    color: #aaa
+    font-weight: normal
   td, th
     text-align: left
     padding: 8px
