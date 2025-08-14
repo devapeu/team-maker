@@ -11,17 +11,17 @@
         </h2>
       </div>
 
+      <div class="player-controls">  
+        <label>Filtrar desde: </label>
+        <select v-model="timestampFilter">
+          <option value="2-week">2 semanas</option>
+          <option value="1-month">1 mes</option>
+          <option value="2-month">2 meses</option>
+          <option value="6-month">6 meses</option>
+          <option value="all">Todo</option>
+        </select>
+      </div>
       <template v-if="activePlayerGods?.length">
-        <div class="player-controls">  
-          <label>Filtrar desde: </label>
-          <select v-model="activePlayerGodsFilter">
-            <option value="2-week">2 semanas</option>
-            <option value="1-month">1 mes</option>
-            <option value="2-month">2 meses</option>
-            <option value="6-month">6 meses</option>
-            <option value="all">Todo</option>
-          </select>
-        </div>
         <table class="player-gods">
           <thead>
             <tr>
@@ -43,6 +43,11 @@
             </tr>
           </tbody>
         </table>
+      </template>
+      <template v-else>
+        <div class="player-gods--empty">
+          No hay partidas en ese intervalo de tiempo.
+        </div>
       </template>
 
       <Radar
@@ -91,7 +96,24 @@ const drawerActive = computed({
 })
 
 const activePlayerGods = ref({});
-const activePlayerGodsFilter = ref('all');
+const timestampFilter = ref('2-week');
+const timestampValue = computed(() => {
+  const today = new Date();
+
+  switch (timestampFilter.value) {
+    case '2-week':
+      today.setDate(today.getDate() - 14);
+      return Math.round(today.getTime() / 1000);
+    case '1-month':
+      today.setMonth(today.getMonth() - 1);
+      return Math.round(today.getTime() / 1000);
+    case '2-month':
+      today.setMonth(today.getMonth() - 2);
+      return Math.round(today.getTime() / 1000);
+    default:
+      return 0;
+  }
+});
 const activePlayerData = computed(() => {
   const labels = Object.keys(props.playerDetailsActive.scores);
   const data = Object.values(props.playerDetailsActive.scores);
@@ -112,36 +134,11 @@ const activePlayerData = computed(() => {
   }
 })
 
-watch(activePlayerGodsFilter, async (newFilter) => {
-  let value = 0;
-  const todayCopy = new Date();
-
-  switch (newFilter) {
-    case '2-week':
-      todayCopy.setDate(todayCopy.getDate() - 14);
-      value = Math.round(todayCopy.getTime() / 1000);
-      break;
-    case '1-month':
-      todayCopy.setMonth(todayCopy.getMonth() - 1);
-      value = Math.round(todayCopy.getTime() / 1000);
-      break;
-    case '2-month':
-      todayCopy.setMonth(todayCopy.getMonth() - 2);
-      value = Math.round(todayCopy.getTime() / 1000);
-      break;
-  }
-
-  const res = await fetch(`https://comix.fluffygangcomic.com/aomstats/gods/${props.playerDetailsActive.profile_id}?after=${value}`);
-  const data  = await res.json();
-  activePlayerGods.value = data.gods;
-});
-
-async function fetchGods(profileId) {
+async function fetchGods(profileId, after = 0) {
   if (!profileId) return;
-  const res = await fetch(`https://comix.fluffygangcomic.com/aomstats/gods/${profileId}`);
+  const res = await fetch(`https://comix.fluffygangcomic.com/aomstats/gods/${profileId}?after=${after}`);
   const data = await res.json();
   activePlayerGods.value = data.gods;
-  activePlayerGodsFilter.value = '2-week';
 }
 
 function getGodIcon(name) {
@@ -155,13 +152,20 @@ function getPercentColor(number) {
 }
 
 onMounted(() => {
-  fetchGods(props.playerDetailsActive.profile_id);
+  fetchGods(props.playerDetailsActive.profile_id, timestampValue.value);
 });
 
 watch(
   () => props.playerDetailsActive.profile_id,
   (newId, oldId) => {
-    if (newId && newId !== oldId) fetchGods(newId);
+    fetchGods(props.playerDetailsActive.profile_id, timestampValue.value);
+  }
+);
+
+watch(
+  timestampFilter,
+  (newFilter) => {
+    fetchGods(props.playerDetailsActive.profile_id, timestampValue.value);
   }
 );
 </script>
@@ -184,6 +188,13 @@ watch(
 .player-gods
   width: 100%
   border-collapse: collapse
+  margin-top: 10px
+  &--empty
+    margin-top: 10px
+    padding: 20px
+    color: #aaa
+    text-align: center
+    border: 1px solid #948772
   td, th
     text-align: left
     padding: 8px
