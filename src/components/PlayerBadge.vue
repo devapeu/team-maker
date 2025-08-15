@@ -26,11 +26,15 @@ function clickScore() {
     <img 
       class="player__icon" 
       :src="getGodIcon(player.main)"
+      tabindex="0"
+      role="button"
       :style="{ borderLeftColor: player.color }"
       @click="clickProfile"/>
     <div class="player__name">{{ player.name }} </div>
     <span 
       class="player__score"
+      tabindex="0"
+      role="button"
       @click="clickScore">
       {{ player.score }}
     </span>
