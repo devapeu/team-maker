@@ -25,6 +25,7 @@
       <div class="player-controls">  
         <label>Filtrar desde: </label>
         <select v-model="timestampFilter">
+          <option value="1-week">1 semana</option>
           <option value="2-week">2 semanas</option>
           <option value="1-month">1 mes</option>
           <option value="2-month">2 meses</option>
@@ -152,6 +153,9 @@ const timestampValue = computed(() => {
   const today = new Date();
 
   switch (timestampFilter.value) {
+    case '1-week':
+      today.setDate(today.getDate() - 7);
+      return Math.round(today.getTime() / 1000);
     case '2-week':
       today.setDate(today.getDate() - 14);
       return Math.round(today.getTime() / 1000);
