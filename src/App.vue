@@ -89,6 +89,7 @@
         <button class="teams__button" @click="autoBalanceTeams">Auto Balance</button>
         <button class="teams__button" @click="resetAvailable">Reestablecer</button>
       </div>
+      <MapSelector />
     </div>
   </main>
   <PlayerDrawer
@@ -97,11 +98,12 @@
 </template>
 
 <script setup>
-import { ref, computed, watch} from 'vue'
+import { ref, computed, watch } from 'vue'
 import { PLAYERS_ARRAY } from './data/players.js'
 import draggable from "vuedraggable/dist/vuedraggable.common";
 import PlayerBadge from './components/PlayerBadge.vue';
 import PlayerDrawer from './components/PlayerDrawer.vue';
+import MapSelector from './components/MapSelector.vue';
 
 // Handle player data and calculate overall player score
 const playersMap = PLAYERS_ARRAY.map(player => {
