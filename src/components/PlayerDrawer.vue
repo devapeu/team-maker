@@ -88,7 +88,7 @@
                 {{ player[1].total }}
               </td>
               <td :class="getPercentColor((player[1].wins / player[1].total) * 100)">
-                {{ ((player[1].wins / player[1].total) * 100).toFixed(1) }}%
+                {{ ((player[1].wins / player[1].total) * 100).toFixed() }}%
               </td>
             </tr>
           </tbody>
