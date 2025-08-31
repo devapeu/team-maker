@@ -12,7 +12,7 @@ export const MAPS_ARRAY = [
   { id: "rm_highland", name: "Highland" },
   { id: "rm_marsh", name: "Marsh" },
   { id: "rm_megalopolis", name: "Megalopolis" },
-  { id: "rm_midgard", name: "Midgard" },
+  // { id: "rm_midgard", name: "Midgard" },
   { id: "rm_mirkwood", name: "Mirkwood" },
   { id: "rm_mount_olympus", name: "Mount Olympus" },
   { id: "rm_muspellheim", name: "Muspellheim" },
