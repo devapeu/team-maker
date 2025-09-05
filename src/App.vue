@@ -42,16 +42,21 @@
         <div class="teams__team">
           <div class="teams__header">
             <h2 class="teams__name">{{ team1Label }}</h2>
-            <p
-              v-if="teamWinRate !== null"
-              class="teams__winrate">
-              Wins: <span>{{ teamWinRate[team1Id] }}</span>
-            </p>
-            <p
-              v-else
-              class="teams__score">
-              {{ team1Score }}
-            </p>
+            <div
+              class="teams__header-side"
+              @mouseenter="winrateIsHovered = true"
+              @mouseleave="winrateIsHovered = false">
+              <p
+                v-if="teamWinRate !== null && !winrateIsHovered"
+                class="teams__winrate">
+                Wins: <span>{{ teamWinRate[team1Id] }}</span>
+              </p>
+              <p
+                v-else
+                class="teams__score">
+                {{ team1Score }}
+              </p>
+            </div>
           </div>
           <draggable v-model="team1" item-key="name" group="players" class="team-box">
             <template #item="{ element }">
@@ -65,16 +70,21 @@
         <div class="teams__team">
           <div class="teams__header teams__header--inverse">
             <h2 class="teams__name">{{ team2Label }}</h2>
-            <p
-              v-if="teamWinRate !== null"
-              class="teams__winrate">
-              Wins: <span>{{ teamWinRate[team2Id] }}</span>
-            </p>
-            <p
-              v-else
-              class="teams__score">
-              {{ team2Score }}
-            </p>
+            <div
+              class="teams__header-side"
+              @mouseenter="winrateIsHovered = true"
+              @mouseleave="winrateIsHovered = false">
+              <p
+                v-if="teamWinRate !== null && !winrateIsHovered"
+                class="teams__winrate">
+                Wins: <span>{{ teamWinRate[team2Id] }}</span>
+              </p>
+              <p
+                v-else
+                class="teams__score">
+                {{ team2Score }}
+              </p>
+            </div>
           </div>
           <draggable v-model="team2" item-key="name" group="players" class="team-box">
             <template #item="{ element }">
@@ -88,7 +98,7 @@
       <div 
         v-if="allPlayersPresent"
         class="all-players-present">
-        gogoogogogogogogo
+        gogogogogogogogo
       </div>
       <div class="teams__controls">
         <button class="teams__button" @click="autoBalanceTeams">Auto Balance</button>
@@ -131,6 +141,7 @@ const team2 = ref([])
 const teamWinRate = ref(null);
 const team1Id = ref('');
 const team2Id = ref('');
+const winrateIsHovered = ref(false);
 
 const teamNames = {
   "1074199836,1074203172,1074849746": "Team Frontón",
@@ -147,7 +158,6 @@ const teamNames = {
 // Team Labels
 const team1Label = computed(() => {
   const teamId = team1.value.map(p => String(p.profile_id)).sort().join(",");
-  console.log(teamId);
   return teamNames[teamId] ? teamNames[teamId] : "Equipo 1";
 })
 const team2Label = computed(() => {

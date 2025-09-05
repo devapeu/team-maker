@@ -12,20 +12,28 @@
     padding: 4px
     &--inverse
       flex-direction: row-reverse
+      .teams__header-side
+        text-align: left
   &__name
     font-size: 16px
     font-weight: normal
     text-align: center
     margin: 0
     font-family: $font-sans
+  &__header-side
+    flex: 1
+    text-align: right
   &__score
     font-size: 20px
+    height: 32px
+    width: 100%
     font-weight: bold
     color: $gold-500
     margin: 0 
     font-family: $font-serif
   &__winrate
     color: grey
+    height: 32px
     span
       font-weight: bold
       font-size: 18px
