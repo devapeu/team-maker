@@ -133,7 +133,7 @@ export const PLAYERS_ARRAY = [
     },
     profile_id: 1074849746,
     main: "zeus",
-    color: "#3232ff",
+    color: "#ff00ff",
   },
   {
     id: 9,
@@ -166,8 +166,8 @@ export const PLAYERS_ARRAY = [
       push: 60,
     },
     profile_id: 1074839111,
-    main: "isis",
-    color: "#ff00ff",
+    main: "kronos",
+    color: "#3232ff",
   },
   {
     id: 11,
