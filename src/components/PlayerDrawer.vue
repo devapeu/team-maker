@@ -15,8 +15,6 @@
         </h2>
       </div>
 
-      {{ averages }}
-
       <button 
         key="close-btn"
         class="close-drawer" 
