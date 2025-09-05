@@ -1,7 +1,7 @@
 export const MAPS_ARRAY = [
   { id: "rm_air", name: "Air" },
   { id: "rm_alfheim", name: "Alfheim" },
-  { id: "rm_anatolia", name: "Anatolia" },
+  // { id: "rm_anatolia", name: "Anatolia" },
   { id: "rm_arena", name: "Arena" },
   { id: "rm_bamboo_grove", name: "Bamboo Grove" },
   // { id: "rm_black_sea", name: "Black Sea" },
@@ -14,7 +14,7 @@ export const MAPS_ARRAY = [
   { id: "rm_megalopolis", name: "Megalopolis" },
   // { id: "rm_midgard", name: "Midgard" },
   // { id: "rm_mirkwood", name: "Mirkwood" },
-  { id: "rm_mount_olympus", name: "Mount Olympus" },
+  // { id: "rm_mount_olympus", name: "Mount Olympus" },
   { id: "rm_muspellheim", name: "Muspellheim" },
   { id: "rm_nile_shallows", name: "Nile Shallows" },
   { id: "rm_oasis", name: "Oasis" },
