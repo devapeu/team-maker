@@ -15,6 +15,8 @@
         </h2>
       </div>
 
+      {{ averages }}
+
       <button 
         key="close-btn"
         class="close-drawer" 
@@ -136,6 +138,7 @@ ChartJS.register(
 
 const props = defineProps({
   active: Boolean,
+  averages: Array,
   playerDetailsActive: Object,
 })
 
@@ -183,7 +186,7 @@ const activePlayerData = computed(() => {
       { 
         label: "Promedio", 
         borderColor: "grey",
-        data : [50, 50, 50, 50, 50, 50, 50, 50]
+        data : props.averages
       },
     ],
   }

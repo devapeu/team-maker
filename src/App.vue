@@ -109,7 +109,8 @@
   </main>
   <PlayerDrawer
     v-model:active="active"
-    :playerDetailsActive="playerDetailsActive" />
+    :playerDetailsActive="playerDetailsActive"
+    :averages="averages" />
 </template>
 
 <script setup>
@@ -129,6 +130,25 @@ const playersMap = PLAYERS_ARRAY.map(player => {
     score: Math.round(average),
   }
 })
+
+const averages = (() => {
+  const totals = {};
+  let count = 0;
+
+  for (const player of PLAYERS_ARRAY) {
+    for (const [key, value] of Object.entries(player.scores)) {
+      totals[key] = (totals[key] || 0) + value;
+    }
+    count++;
+  }
+
+  const result = {};
+  for (const [key, total] of Object.entries(totals)) {
+    result[key] = Math.round(total / count);
+  }
+
+  return Object.values(result);
+})();
 
 const players = ref(playersMap)
 
