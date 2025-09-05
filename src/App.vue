@@ -85,6 +85,11 @@
           </draggable>
         </div>
       </div>
+      <div 
+        v-if="allPlayersPresent"
+        class="all-players-present">
+        gogoogogogogogogo
+      </div>
       <div class="teams__controls">
         <button class="teams__button" @click="autoBalanceTeams">Auto Balance</button>
         <button class="teams__button" @click="resetAvailable">Reestablecer</button>
@@ -153,6 +158,8 @@ const team2Label = computed(() => {
 // Calculate score for Team 1 and Team 2 
 const team1Score = computed(() => team1.value.reduce((sum, player) => sum + player.score, 0));
 const team2Score = computed(() => team2.value.reduce((sum, player) => sum + player.score, 0));
+
+const allPlayersPresent = computed(() => players.value.length === 0 && autobalance.value.length === 0);
 
 // Slideout & Player Profile Details
 const active = ref(false)
@@ -316,4 +323,12 @@ function moveToAvailable(id) {
   @media (pointer: fine)
     &:hover
       box-shadow: 0 0 5px rgba(241,194,50, 0.25) 
+
+.all-players-present
+  text-align: center
+  font-size: 28px
+  text-transform: uppercase
+  margin-bottom: 20px
+  font-style: italic
+  letter-spacing: 1px
 </style>
