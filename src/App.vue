@@ -163,6 +163,9 @@ const team1Id = ref('');
 const team2Id = ref('');
 const winrateIsHovered = ref(false);
 
+// Add local cache for team winrate
+const teamsCache = ref({});
+
 const teamNames = {
   "1074199836,1074203172,1074849746": "Team Frontón",
   "1073862520,1074827715,1074839111": "Team 4to B",
@@ -211,12 +214,26 @@ watch([team1, team2], async ([newTeam1, newTeam2]) => {
     return;
   }
 
+  // Use cache if available
+  if (teamsCache.value[teamId]) {
+    const data = teamsCache.value[teamId];
+    if (data.teams === null) {
+      resetTeamIds();
+      return;
+    }
+    team1Id.value = t1;
+    team2Id.value = t2;
+    teamWinRate.value = data;
+    return;
+  }
+
   const res = await fetch(`https://comix.fluffygangcomic.com/aomstats/teams/${teamId}`);
   const data = await res.json();
+  teamsCache.value[teamId] = data;
 
   if (data.teams === null) {
     resetTeamIds();
-    return
+    return;
   };
 
   team1Id.value = t1;
