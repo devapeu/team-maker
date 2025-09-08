@@ -139,10 +139,10 @@ export const PLAYERS_ARRAY = [
     id: 9,
     name: "Jardani",
     scores: {
-      attack: 65,
+      attack: 75,
       defense: 80,
-      strategy: 45,
-      speed: 45,
+      strategy: 65,
+      speed: 65,
       macro: 80,
       micro: 60,
       //mentality: 80,
