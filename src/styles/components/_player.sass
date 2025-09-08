@@ -44,3 +44,25 @@
       font-size: 18px
     &__name
       padding: 12px 16px
+
+.vibrate-500ms
+  display: inline-block
+  animation: vibrate 500ms infinite
+
+.vibrate-200ms
+  display: inline-block
+  animation: vibrate 200ms infinite
+
+@keyframes vibrate
+  0%
+    transform: translate(0, 0)
+  20%
+    transform: translate(-1px, 1px)
+  40%
+    transform: translate(1px, -1px)
+  60%
+    transform: translate(-1px, -1px)
+  80%
+    transform: translate(1px, 1px)
+  100%
+    transform: translate(0, 0)

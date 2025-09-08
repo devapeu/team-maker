@@ -13,6 +13,13 @@
         <h2 class="player-info__name">
         {{ playerDetailsActive.name }}
         </h2>
+        <span 
+          v-if="activePlayerWinstreak > 2"
+          :class="[
+            activePlayerWinstreak > 6 ? 'vibrate-200ms' : activePlayerWinstreak > 4 ? 'vibrate-500ms' : ''
+          ]">
+          🔥 {{ activePlayerWinstreak }}
+        </span>
       </div>
 
       <button 
@@ -149,6 +156,7 @@ const drawerActive = computed({
 
 const activePlayerPartners = ref([]);
 const activePlayerGods = ref({});
+const activePlayerWinstreak = ref();
 const timestampFilter = ref('2-week');
 const timestampValue = computed(() => {
   const today = new Date();
@@ -197,6 +205,13 @@ async function fetchGods(profileId, after = 0) {
   activePlayerGods.value = data.gods;
 }
 
+async function fetchWinstreak(profileId) {
+  if (!profileId) return;
+  const res = await fetch(`https://comix.fluffygangcomic.com/aomstats/winstreak/${profileId}`);
+  const data = await res.json();
+  activePlayerWinstreak.value = data.winstreak;
+}
+
 async function fetchPartners(profileId, after = 0) {
   if (!profileId) return;
   const res = await fetch(`https://comix.fluffygangcomic.com/aomstats/partners/${profileId}?after=${after}`);
@@ -237,6 +252,7 @@ function closeDrawer() {
 onMounted(() => {
   fetchGods(props.playerDetailsActive.profile_id, timestampValue.value);
   fetchPartners(props.playerDetailsActive.profile_id, timestampValue.value);
+  fetchWinstreak(props.playerDetailsActive.profile_id);
 });
 
 watch(
@@ -244,6 +260,7 @@ watch(
   (newId, oldId) => {
     fetchGods(props.playerDetailsActive.profile_id, timestampValue.value);
     fetchPartners(props.playerDetailsActive.profile_id, timestampValue.value);
+    fetchWinstreak(props.playerDetailsActive.profile_id);
   }
 );
 
@@ -252,6 +269,7 @@ watch(
   (newFilter) => {
     fetchGods(props.playerDetailsActive.profile_id, timestampValue.value);
     fetchPartners(props.playerDetailsActive.profile_id, timestampValue.value);
+    fetchWinstreak(props.playerDetailsActive.profile_id);
   }
 );
 </script>
