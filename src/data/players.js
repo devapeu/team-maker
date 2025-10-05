@@ -183,7 +183,7 @@ export const PLAYERS_ARRAY = [
       //push: 10,
     },
     profile_id: 1075268390,
-    main: "nuwa",
+    main: "amaterasu",
     color: "grey",
   },
   //{
