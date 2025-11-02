@@ -249,27 +249,16 @@ function closeDrawer() {
   drawerActive.value = false;
 }
 
-onMounted(() => {
+function fetchData() {
   fetchGods(props.playerDetailsActive.profile_id, timestampValue.value);
   fetchPartners(props.playerDetailsActive.profile_id, timestampValue.value);
   fetchWinstreak(props.playerDetailsActive.profile_id);
-});
+}
 
 watch(
-  () => props.playerDetailsActive.profile_id,
+  [() => props.playerDetailsActive.profile_id, timestampFilter],
   (newId, oldId) => {
-    fetchGods(props.playerDetailsActive.profile_id, timestampValue.value);
-    fetchPartners(props.playerDetailsActive.profile_id, timestampValue.value);
-    fetchWinstreak(props.playerDetailsActive.profile_id);
-  }
-);
-
-watch(
-  timestampFilter,
-  (newFilter) => {
-    fetchGods(props.playerDetailsActive.profile_id, timestampValue.value);
-    fetchPartners(props.playerDetailsActive.profile_id, timestampValue.value);
-    fetchWinstreak(props.playerDetailsActive.profile_id);
+    fetchData();
   }
 );
 </script>
