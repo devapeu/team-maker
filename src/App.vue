@@ -116,6 +116,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
 import { PLAYERS_ARRAY } from './data/players.js'
+import { COLORS } from './data/colors.js'
 import draggable from "vuedraggable/dist/vuedraggable.common";
 import PlayerBadge from './components/PlayerBadge.vue';
 import PlayerDrawer from './components/PlayerDrawer.vue';
@@ -282,6 +283,27 @@ function autoBalanceTeams() {
   combinations.sort((a, b) => a.difference - b.difference);
   const top = combinations.slice(0, 5);
   const randomTeam = top[Math.floor(Math.random() * top.length)];
+
+  // Assign unique random colors from COLORS to players in the selected teams.
+  // Shuffle COLORS and assign without replacement to avoid repeats.
+  function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  }
+  
+  const totalPlayersSelected = randomTeam.team1.length + randomTeam.team2.length;
+  let colorPool = shuffle(COLORS.slice());
+  while (colorPool.length < totalPlayersSelected) {
+    colorPool = colorPool.concat(shuffle(COLORS.slice()));
+  }
+
+  // Assign colors sequentially from the pool so no two players share the same color
+  let colorIndex = 0;
+  randomTeam.team1.forEach(p => { p.color = colorPool[colorIndex++]; });
+  randomTeam.team2.forEach(p => { p.color = colorPool[colorIndex++]; });
 
   team1.value = randomTeam.team1.sort((a, b) => b.score - a.score);
   team2.value = randomTeam.team2.sort((a, b) => b.score - a.score);
