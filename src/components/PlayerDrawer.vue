@@ -274,7 +274,7 @@ watch(
   &__image
     width: 48px
     border-left-style: solid
-    border-left-width: 4px
+    border-left-width: 8.5px
   &__name
     margin-bottom: 0
 
