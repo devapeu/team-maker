@@ -11,7 +11,7 @@
       <div class="all-players">
         <div class="section-header">
           <h2 class="draggable-label">Todos los jugadores</h2>
-          <button @click="reset">Reestablecer todos</button>
+          <button class="sm-button" @click="reset">Reestablecer todos</button>
         </div>
         <draggable v-model="players" item-key="name" group="players" class="player-pool">
           <template #item="{ element, index }">
@@ -37,7 +37,10 @@
     
     <!-- Teams -->
     <div class="teams">
-      <h2 class="draggable-label">Equipos</h2>
+      <div class="section-header">
+        <h2 class="draggable-label">Equipos</h2>
+        <button class="sm-button" @click="resetAvailable">Reestablecer</button>
+      </div>
       <div class="teams__wrapper">
         <div class="teams__team">
           <div class="teams__header">
@@ -101,13 +104,13 @@
         gogogogogogogogo
       </div>
       <div class="teams__controls">
-        <button class="teams__button" @click="autoBalanceTeams">Auto Balance</button>
-        <button class="teams__button" @click="resetAvailable">Reestablecer</button>
+        <button class="teams__button" @click="autoBalanceTeams">
+          <ShuffleIcon class="teams__button__icon" aria-hidden="true"/>
+          Auto Balance
+        </button>
         <button class="teams__button" @click="sendPlannerToDiscord" title="Enviar a Discord">
-          <span class="teams__button__icon" aria-hidden="true">
-            <img :src="discordIcon" alt="discord" />
-          </span>
-          Enviar
+          <DiscordIcon class="teams__button__icon" aria-hidden="true"/>
+          Enviar a Discord
         </button>
       </div>
       <MapSelector />
@@ -133,16 +136,12 @@ import { ref, computed, watch } from 'vue'
 import html2canvas from 'html2canvas'
 import { PLAYERS_ARRAY } from './data/players.js'
 import { COLORS } from './data/colors.js'
-// safe reference to discord icon (fallback to path if asset missing)
-let discordIcon
-try {
-  discordIcon = new URL('./assets/discord.png', import.meta.url).href
-} catch (e) {
-  discordIcon = '/src/assets/discord.png'
-}
 import draggable from "vuedraggable/dist/vuedraggable.common";
 import PlayerBadge from './components/PlayerBadge.vue';
 import PlayerDrawer from './components/PlayerDrawer.vue';
+
+import ShuffleIcon from './components/ShuffleIcon.vue'
+import DiscordIcon from './components/DiscordIcon.vue'
 import MapSelector from './components/MapSelector.vue';
 
 // Toasts (non-blocking notifications)
@@ -424,14 +423,15 @@ async function sendPlannerToDiscord() {
   justify-content: space-between
   align-items: flex-end
   margin-bottom: 4px
-  button
-    color: #ccc
-    border: 1px solid #948772
-    background: transparent
-    font-size: 12px
-    padding: 2px 6px
-    border-radius: 4px
-    cursor: pointer
+
+.sm-button
+  color: #ccc
+  border: 1px solid #948772
+  background: transparent
+  font-size: 12px
+  padding: 2px 6px
+  border-radius: 4px
+  cursor: pointer
 
 .all-players
   margin-bottom: 16px
@@ -483,29 +483,23 @@ async function sendPlannerToDiscord() {
       border: 1px solid #d0a84b
 
 .teams__button__icon
-  position: absolute
-  left: 10px
-  top: 50%
-  transform: translateY(-50%)
-  width: 28px
-  height: 28px
+  width: 24px
+  height: 24px
   display: inline-flex
   align-items: center
   justify-content: center
-  border-radius: 50%
-  background: #4e5d94
-  box-shadow: 0 2px 6px rgba(78,93,148,0.25)
   transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease
-  img
-    width: 16px
-    height: 16px
-    display: block
-    filter: brightness(0) invert(1)
+  color: white
+  path
+    fill: currentColor
+
+  &.icon-discord
+    background: #5865F2
+    border-radius: 4px
+    padding: 4px
 
 .teams__button:hover .teams__button__icon
-  transform: translateY(-50%) scale(1.06)
-  box-shadow: 0 4px 12px rgba(78,93,148,0.32)
-  background: #3f4d7a
+  transform: translateY(-2px)
 
 .auto-balance
   margin-bottom: 16px
