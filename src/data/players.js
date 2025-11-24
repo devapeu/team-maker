@@ -98,7 +98,7 @@ export const PLAYERS_ARRAY = [
       //push: 65,
     },
     profile_id: 1074910820,
-    main: "zeus",
+    main: "poseidon",
     color: "#ff9721",
   },
   {
