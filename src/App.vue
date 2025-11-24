@@ -380,6 +380,11 @@ async function sendPlannerToDiscord() {
       return;
     }
 
+    if (team1.value.length === 0 || team2.value.length === 0) {
+      showToast('Pon al menos un jugador en cada equipo.', 'error', 3000);
+      return;
+    }
+
     // Increase scale for acceptable resolution (but watch file size)
     const canvas = await html2canvas(el, { backgroundColor: '#0f0f0f', scale: 2 });
     const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
