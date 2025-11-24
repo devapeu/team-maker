@@ -47,6 +47,7 @@ button
   background: linear-gradient(to bottom, #3A3121, #161005)
   box-shadow: inset 0 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 5px rgba(0, 0, 0, 0.5)
   transition: 150ms ease-out all
+  min-width: 140px
   @media (pointer: fine)
     &:hover
       background: linear-gradient(to bottom, #5c4727, #0f0b03)

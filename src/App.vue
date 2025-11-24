@@ -11,7 +11,7 @@
       <div class="all-players">
         <div class="section-header">
           <h2 class="draggable-label">Todos los jugadores</h2>
-          <button @click="reset">Reestablecer todos</button>
+          <button class="sm-button" @click="reset">Reestablecer todos</button>
         </div>
         <draggable v-model="players" item-key="name" group="players" class="player-pool">
           <template #item="{ element, index }">
@@ -37,7 +37,10 @@
     
     <!-- Teams -->
     <div class="teams">
-      <h2 class="draggable-label">Equipos</h2>
+      <div class="section-header">
+        <h2 class="draggable-label">Equipos</h2>
+        <button class="sm-button" @click="resetAvailable">Reestablecer</button>
+      </div>
       <div class="teams__wrapper">
         <div class="teams__team">
           <div class="teams__header">
@@ -101,8 +104,14 @@
         gogogogogogogogo
       </div>
       <div class="teams__controls">
-        <button class="teams__button" @click="autoBalanceTeams">Auto Balance</button>
-        <button class="teams__button" @click="resetAvailable">Reestablecer</button>
+        <button class="teams__button" @click="autoBalanceTeams">
+          <ShuffleIcon class="teams__button__icon" aria-hidden="true"/>
+          Auto Balance
+        </button>
+        <button class="teams__button" @click="sendPlannerToDiscord" title="Enviar a Discord">
+          <DiscordIcon class="teams__button__icon" aria-hidden="true"/>
+          Enviar a Discord
+        </button>
       </div>
       <MapSelector />
     </div>
@@ -111,16 +120,39 @@
     v-model:active="active"
     :playerDetailsActive="playerDetailsActive"
     :averages="averages" />
+  <div class="toast-container" aria-live="polite">
+    <div
+      v-for="t in toasts"
+      :key="t.id"
+      class="toast"
+      :class="`toast--${t.type}`">
+      {{ t.message }}
+    </div>
+  </div>
 </template>
 
 <script setup>
 import { ref, computed, watch } from 'vue'
+import html2canvas from 'html2canvas'
 import { PLAYERS_ARRAY } from './data/players.js'
 import { COLORS } from './data/colors.js'
 import draggable from "vuedraggable/dist/vuedraggable.common";
 import PlayerBadge from './components/PlayerBadge.vue';
 import PlayerDrawer from './components/PlayerDrawer.vue';
+
+import ShuffleIcon from './components/ShuffleIcon.vue'
+import DiscordIcon from './components/DiscordIcon.vue'
 import MapSelector from './components/MapSelector.vue';
+
+// Toasts (non-blocking notifications)
+const toasts = ref([])
+function showToast(message, type = 'info', duration = 5000) {
+  const id = Date.now() + Math.random()
+  toasts.value.push({ id, message, type })
+  setTimeout(() => {
+    toasts.value = toasts.value.filter(t => t.id !== id)
+  }, duration)
+}
 
 // Handle player data and calculate overall player score
 const playersMap = PLAYERS_ARRAY.map(player => {
@@ -338,6 +370,44 @@ function moveToAvailable(id) {
     players.value = players.value.filter(player => player.id !== id);
   }
 }
+
+// Capture the teams wrapper element and send it to Discord via webhook
+async function sendPlannerToDiscord() {
+  try {
+    const el = document.querySelector('.teams__wrapper');
+    if (!el) {
+      showToast('No se encontró el elemento de equipos.', 'error', 3000);
+      return;
+    }
+
+    if (team1.value.length === 0 || team2.value.length === 0) {
+      showToast('Pon al menos un jugador en cada equipo.', 'error', 3000);
+      return;
+    }
+
+    // Increase scale for acceptable resolution (but watch file size)
+    const canvas = await html2canvas(el, { backgroundColor: '#0f0f0f', scale: 2 });
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    if (!blob) throw new Error('No se pudo generar la imagen');
+
+    const form = new FormData();
+    form.append('file', blob, 'teams.png');
+    form.append('content', 'Distribución de equipos');
+
+    const webhookUrl = 'https://discord.com/api/webhooks/1442274909819633704/6a830IBy5CyuqOfP859belG5habkJDHMP8tCd8MkTH9aZKRg_D_3coGI8W8jyV0l80kk';
+
+    const res = await fetch(webhookUrl, { method: 'POST', body: form });
+    if (!res.ok) {
+      const txt = await res.text();
+      throw new Error(`Discord webhook failed: ${res.status} ${txt}`);
+    }
+
+    showToast('Enviado a Discord correctamente.', 'success', 3000);
+  } catch (err) {
+    console.error(err);
+    showToast('Error al enviar a Discord: ' + (err.message || err), 'error', 4000);
+  }
+}
 </script>
 
 <style lang="sass" scoped>
@@ -358,14 +428,15 @@ function moveToAvailable(id) {
   justify-content: space-between
   align-items: flex-end
   margin-bottom: 4px
-  button
-    color: #ccc
-    border: 1px solid #948772
-    background: transparent
-    font-size: 12px
-    padding: 2px 6px
-    border-radius: 4px
-    cursor: pointer
+
+.sm-button
+  color: #ccc
+  border: 1px solid #948772
+  background: transparent
+  font-size: 12px
+  padding: 2px 6px
+  border-radius: 4px
+  cursor: pointer
 
 .all-players
   margin-bottom: 16px
@@ -377,6 +448,63 @@ function moveToAvailable(id) {
   opacity: 0.75
   font-weight: normal
   margin: 0
+
+.teams__header-row
+  display: flex
+  align-items: center
+  gap: 12px
+
+.teams__controls
+  display: flex
+  gap: 12px
+  justify-content: center
+  margin-top: 14px
+
+.teams__button
+  margin: 0
+  min-width: 140px
+  position: relative
+  justify-content: center
+  gap: 0
+  padding-left: 44px
+  padding-right: 36px
+  padding: 10px 20px
+  cursor: pointer
+  color: #ddd
+  border: 1px solid #948772
+  border-radius: 5px
+  font-size: 16px
+  background: linear-gradient(to bottom, #3A3121, #161005)
+  box-shadow: inset 0 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 5px rgba(0, 0, 0, 0.5)
+  transition: 150ms ease-out all
+  display: inline-flex
+  align-items: center
+  gap: 8px
+  @media (pointer: fine)
+    &:hover
+      background: linear-gradient(to bottom, #5c4727, #0f0b03)
+      box-shadow: inset 0 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 5px rgba(255, 191, 0, 0.25)
+      color: #edb634
+      border: 1px solid #d0a84b
+
+.teams__button__icon
+  width: 24px
+  height: 24px
+  display: inline-flex
+  align-items: center
+  justify-content: center
+  transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease
+  color: white
+  path
+    fill: currentColor
+
+  &.icon-discord
+    background: #5865F2
+    border-radius: 4px
+    padding: 4px
+
+.teams__button:hover .teams__button__icon
+  transform: translateY(-2px)
 
 .auto-balance
   margin-bottom: 16px
@@ -400,4 +528,38 @@ function moveToAvailable(id) {
   margin-bottom: 20px
   font-style: italic
   letter-spacing: 1px
+
+// Toasts
+.toast-container
+  position: fixed
+  top: 16px
+  right: 16px
+  display: flex
+  flex-direction: column
+  gap: 8px
+  z-index: 9999
+
+.toast
+  min-width: 200px
+  max-width: 320px
+  color: #fff
+  padding: 10px 14px
+  border-radius: 8px
+  box-shadow: 0 6px 18px rgba(0,0,0,0.32)
+  font-size: 14px
+  animation: toast-slide-in 240ms ease-out
+
+.toast--success
+  background: #28a745
+
+.toast--error
+  background: #e74c3c
+
+@keyframes toast-slide-in
+  from
+    transform: translateX(120%)
+    opacity: 0
+  to
+    transform: translateX(0)
+    opacity: 1
 </style>
