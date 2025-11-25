@@ -200,21 +200,21 @@ const activePlayerData = computed(() => {
 
 async function fetchGods(profileId, after = 0) {
   if (!profileId) return;
-  const res = await fetch(`https://comix.fluffygangcomic.com/aomstats/gods/${profileId}?after=${after}`);
+  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/gods/${profileId}?after=${after}`);
   const data = await res.json();
   activePlayerGods.value = data.gods;
 }
 
 async function fetchWinstreak(profileId) {
   if (!profileId) return;
-  const res = await fetch(`https://comix.fluffygangcomic.com/aomstats/winstreak/${profileId}`);
+  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/winstreak/${profileId}`);
   const data = await res.json();
   activePlayerWinstreak.value = data.winstreak;
 }
 
 async function fetchPartners(profileId, after = 0) {
   if (!profileId) return;
-  const res = await fetch(`https://comix.fluffygangcomic.com/aomstats/partners/${profileId}?after=${after}`);
+  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/partners/${profileId}?after=${after}`);
   const data = await res.json();
 
   if (!data.players) {

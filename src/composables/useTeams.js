@@ -73,7 +73,7 @@ export function useTeams(autobalanceRef) {
       return
     }
 
-    const res = await fetch(`https://comix.fluffygangcomic.com/aomstats/teams/${teamId}`)
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/teams/${teamId}`)
     const data = await res.json()
     teamsCache.value[teamId] = data
 
