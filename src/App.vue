@@ -145,6 +145,10 @@ import DiscordIcon from './components/DiscordIcon.vue'
 import MapSelector from './components/MapSelector.vue';
 
 // Toasts (non-blocking notifications)
+
+const API_BASE = 'https://comix.fluffygangcomic.com/aomstats';
+const API_KEY = '1e7a2a92-83c2-43e0-b092-f63b39e33da0';
+
 const toasts = ref([])
 function showToast(message, type = 'info', duration = 5000) {
   const id = Date.now() + Math.random()
@@ -260,7 +264,7 @@ watch([team1, team2], async ([newTeam1, newTeam2]) => {
     return;
   }
 
-  const res = await fetch(`https://comix.fluffygangcomic.com/aomstats/teams/${teamId}`);
+  const res = await fetch(`${API_BASE}/teams/${teamId}`);
   const data = await res.json();
   teamsCache.value[teamId] = data;
 
@@ -371,7 +375,7 @@ function moveToAvailable(id) {
   }
 }
 
-// Capture the teams wrapper element and send it to Discord via webhook
+// Capture the teams wrapper element and send it to the proxy API which forwards to Discord
 async function sendPlannerToDiscord() {
   try {
     const el = document.querySelector('.teams__wrapper');
@@ -387,22 +391,36 @@ async function sendPlannerToDiscord() {
 
     // Increase scale for acceptable resolution (but watch file size)
     const canvas = await html2canvas(el, { backgroundColor: '#0f0f0f', scale: 2 });
-    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-    if (!blob) throw new Error('No se pudo generar la imagen');
+    const dataUrl = canvas.toDataURL('image/png');
+    if (!dataUrl) throw new Error('No se pudo generar la imagen');
 
-    const form = new FormData();
-    form.append('file', blob, 'teams.png');
-    form.append('content', 'Distribución de equipos');
+    // dataUrl is like: data:image/png;base64,AAAA...
+    const imageBase64 = dataUrl.split(',')[1];
+    if (!imageBase64) throw new Error('No se pudo extraer base64 de la imagen');
 
-    const webhookUrl = 'https://discord.com/api/webhooks/1442274909819633704/6a830IBy5CyuqOfP859belG5habkJDHMP8tCd8MkTH9aZKRg_D_3coGI8W8jyV0l80kk';
+    const payload = {
+      message: 'Distribución de equipos',
+      imageBase64
+    };
 
-    const res = await fetch(webhookUrl, { method: 'POST', body: form });
+    const res = await fetch(`${API_BASE}/send-planner-to-discord`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-api-key': API_KEY },
+      body: JSON.stringify(payload)
+    });
+
     if (!res.ok) {
       const txt = await res.text();
-      throw new Error(`Discord webhook failed: ${res.status} ${txt}`);
+      throw new Error(`API request failed: ${res.status} ${txt}`);
     }
 
-    showToast('Enviado a Discord correctamente.', 'success', 3000);
+    const json = await res.json();
+    if (json && json.code && json.code >= 200 && json.code < 300) {
+      showToast('Enviado a Discord correctamente.', 'success', 3000);
+    } else {
+      const msg = (json && json.message) ? json.message : 'Respuesta inesperada del servidor';
+      throw new Error(msg);
+    }
   } catch (err) {
     console.error(err);
     showToast('Error al enviar a Discord: ' + (err.message || err), 'error', 4000);
