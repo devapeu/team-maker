@@ -140,11 +140,6 @@ import ShuffleIcon from './components/ShuffleIcon.vue'
 import DiscordIcon from './components/DiscordIcon.vue'
 import MapSelector from './components/MapSelector.vue';
 
-
-// Toasts (non-blocking notifications)
-const API_BASE = 'https://comix.fluffygangcomic.com/aomstats';
-const API_KEY = '1e7a2a92-83c2-43e0-b092-f63b39e33da0';
-
 // Composables
 import { useToast } from './composables/useToast.js'
 import { usePlayerData } from './composables/usePlayerData.js'

@@ -1,9 +1,8 @@
 import html2canvas from 'html2canvas'
 
 // You may want to move these to a config file if used elsewhere
-const API_BASE = 'https://comix.fluffygangcomic.com/aomstats';
-//const API_BASE = 'http://localhost:3000';
-const API_KEY = '1e7a2a92-83c2-43e0-b092-f63b39e33da0';
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
+const API_KEY = import.meta.env.VITE_API_KEY;
 
 export function useDiscord(team1Ref, team2Ref, showToast) {
   async function sendPlannerToDiscord() {
