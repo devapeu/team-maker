@@ -73,7 +73,8 @@
       </template>
 
       <template v-if="activePlayerPartners?.length">
-        <h2 class="player-section-title">Mejores Compañeros</h2>
+          <h2 class="player-section-title">Mejores Compañeros</h2>
+          <p class="player-section-subtitle">Porcentaje de victorias de {{ playerDetailsActive?.name }} al jugar con cada jugador.</p>
         <table class="player-table">
           <thead>
             <tr>
@@ -85,6 +86,42 @@
           </thead>
           <tbody>
             <tr v-for="player in activePlayerPartners" :key="player[0]">
+              <td>
+                {{ getPlayerName(player[0]) }}
+              </td>
+              <td>
+                {{ player[1].wins }}
+              </td>
+              <td>
+                {{ player[1].total }}
+              </td>
+              <td :class="getPercentColor((player[1].wins / player[1].total) * 100)">
+                {{ ((player[1].wins / player[1].total) * 100).toFixed() }}%
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </template>
+      <template v-else>
+        <div class="empty-state">
+          No se han encontrado compañeros de equipo para este jugador.
+        </div>
+      </template>
+
+      <template v-if="activePlayerRivals?.length">
+        <h2 class="player-section-title">Oponentes</h2>
+        <p class="player-section-subtitle">Porcentaje de victorias contra {{ playerDetailsActive?.name }}.</p>
+        <table class="player-table">
+          <thead>
+            <tr>
+              <th>Jugador</th>
+              <th>Ganadas</th>
+              <th>Total</th>
+              <th>Winrate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="player in activePlayerRivals" :key="player[0]">
               <td>
                 {{ getPlayerName(player[0]) }}
               </td>
@@ -155,6 +192,7 @@ const drawerActive = computed({
 })
 
 const activePlayerPartners = ref([]);
+const activePlayerRivals = ref([]);
 const activePlayerGods = ref({});
 const activePlayerWinstreak = ref();
 const timestampFilter = ref('2-week');
@@ -212,6 +250,14 @@ async function fetchWinstreak(profileId) {
   activePlayerWinstreak.value = data.winstreak;
 }
 
+function sortPlayers(array) {
+  return Object.entries(array)
+    .sort((a, b) => {
+      if (b[1].wins !== a[1].wins) return b[1].wins - a[1].wins;
+      return b[1].total - a[1].total;
+    });
+}
+
 async function fetchPartners(profileId, after = 0) {
   if (!profileId) return;
   const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/partners/${profileId}?after=${after}`);
@@ -221,13 +267,20 @@ async function fetchPartners(profileId, after = 0) {
     activePlayerPartners.value = [];
     return;
   }
-  // Sort by wins descending, then by total descending
-  const sortedPlayers = Object.entries(data.players)
-    .sort((a, b) => {
-      if (b[1].wins !== a[1].wins) return b[1].wins - a[1].wins;
-      return b[1].total - a[1].total;
-    });
-  activePlayerPartners.value = sortedPlayers;
+  activePlayerPartners.value = sortPlayers(data.players);
+}
+
+async function fetchRivals(profileId, after = 0) {
+  if (!profileId) return;
+  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/rivals/${profileId}?after=${after}`);
+  const data = await res.json();
+
+  if (!data.players) {
+    activePlayerRivals.value = [];
+    return;
+  }
+
+  activePlayerRivals.value = sortPlayers(data.players);
 }
 
 function getGodIcon(name) {
@@ -252,6 +305,7 @@ function closeDrawer() {
 function fetchData() {
   fetchGods(props.playerDetailsActive.profile_id, timestampValue.value);
   fetchPartners(props.playerDetailsActive.profile_id, timestampValue.value);
+  fetchRivals(props.playerDetailsActive.profile_id, timestampValue.value);
   fetchWinstreak(props.playerDetailsActive.profile_id);
 }
 
@@ -316,6 +370,10 @@ watch(
   margin-top: 20px
   margin-bottom: 0
   font-size: 18px
+
+.player-section-subtitle
+  font-style: italic
+  opacity: 0.75
 
 .close-drawer
   position: absolute
