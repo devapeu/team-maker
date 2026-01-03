@@ -77,11 +77,13 @@
         
         <div class="teams__team">
           <div class="teams__header teams__header--inverse">
-            <h2 class="teams__name">{{ team2Label }}
+            <h2 class="teams__name">
               <span v-if="teamWinPercent !== null"
-                    :class="['win-prob', teamWinPercent < 50 ? 'win-prob--green' : teamWinPercent > 50 ? 'win-prob--red' : 'win-prob--green']">
+                    :class="['win-prob', teamWinPercent < 50 ? 'win-prob--green' : teamWinPercent > 50 ? 'win-prob--red' : 'win-prob--green']"
+                    style="margin-right:8px;">
                 {{ (100 - teamWinPercent).toFixed(2) }}%
               </span>
+              {{ team2Label }}
             </h2>
             <div
               class="teams__header-side"
