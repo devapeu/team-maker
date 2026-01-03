@@ -4,6 +4,8 @@ import { COLORS } from '../data/colors.js'
 export function useTeams(autobalanceRef) {
   const team1 = ref([])
   const team2 = ref([])
+  // Win probability percent for Team 1
+  const teamWinPercent = ref(null)
 
   // Win Rate stuff
   const teamWinRate = ref(null)
@@ -88,7 +90,7 @@ export function useTeams(autobalanceRef) {
   })
 
   // Autobalance method
-  function autoBalanceTeams() {
+  async function autoBalanceTeams() {
     const playerPool = [...team1.value, ...team2.value, ...autobalanceRef.value]
     const scores = playerPool.map(player => player.score)
 
@@ -153,6 +155,28 @@ export function useTeams(autobalanceRef) {
     team1.value = randomTeam.team1.sort((a, b) => b.score - a.score)
     team2.value = randomTeam.team2.sort((a, b) => b.score - a.score)
     autobalanceRef.value = []
+
+    // --- Fetch win probability for Team 1 ---
+    teamWinPercent.value = null
+    const ids1 = team1.value.map(p => p.profile_id)
+    const ids2 = team2.value.map(p => p.profile_id)
+    if (ids1.length && ids2.length) {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/team-odds`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ team1: ids1, team2: ids2 })
+        })
+        if (res.ok) {
+          const data = await res.json()
+          if (data && typeof data.percent === 'number') {
+            teamWinPercent.value = data.percent
+          }
+        }
+      } catch (e) {
+        teamWinPercent.value = null
+      }
+    }
   }
 
   return {
@@ -167,6 +191,7 @@ export function useTeams(autobalanceRef) {
     team2Id,
     winrateIsHovered,
     autoBalanceTeams,
-    resetTeamIds
+    resetTeamIds,
+    teamWinPercent
   }
 }

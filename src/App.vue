@@ -44,7 +44,12 @@
       <div class="teams__wrapper">
         <div class="teams__team">
           <div class="teams__header">
-            <h2 class="teams__name">{{ team1Label }}</h2>
+            <h2 class="teams__name">{{ team1Label }}
+              <span v-if="teamWinPercent !== null"
+                    :class="['win-prob', teamWinPercent > 50 ? 'win-prob--green' : teamWinPercent < 50 ? 'win-prob--red' : 'win-prob--green']">
+                {{ teamWinPercent.toFixed(2) }}%
+              </span>
+            </h2>
             <div
               class="teams__header-side"
               @mouseenter="winrateIsHovered = true"
@@ -72,7 +77,12 @@
         
         <div class="teams__team">
           <div class="teams__header teams__header--inverse">
-            <h2 class="teams__name">{{ team2Label }}</h2>
+            <h2 class="teams__name">{{ team2Label }}
+              <span v-if="teamWinPercent !== null"
+                    :class="['win-prob', teamWinPercent < 50 ? 'win-prob--green' : teamWinPercent > 50 ? 'win-prob--red' : 'win-prob--green']">
+                {{ (100 - teamWinPercent).toFixed(2) }}%
+              </span>
+            </h2>
             <div
               class="teams__header-side"
               @mouseenter="winrateIsHovered = true"
@@ -173,7 +183,8 @@ const {
   team1Id,
   team2Id,
   winrateIsHovered,
-  autoBalanceTeams
+  autoBalanceTeams,
+  teamWinPercent
 } = useTeams(autobalance)
 
 // Wrapper functions for reset actions
@@ -342,4 +353,17 @@ const allPlayersPresent = computed(() => players.value.length === 0 && autobalan
   to
     transform: translateX(0)
     opacity: 1
+
+.win-prob
+  font-weight: bold
+  padding: 2px 8px
+  border-radius: 8px
+  font-size: 15px
+  margin-left: 8px
+  &--green
+    background: #28a745
+    color: #fff
+  &--red
+    background: #e74c3c
+    color: #fff
 </style>
