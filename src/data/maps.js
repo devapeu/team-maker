@@ -9,7 +9,7 @@ export const MAPS_ARRAY = [
   { id: "rm_ghost_lake", name: "Ghost Lake" },
   { id: "rm_giza", name: "Giza" },
   { id: "rm_gold_rush", name: "Gold Rush" },
-  { id: "rm_highland", name: "Highland" },
+  // { id: "rm_highland", name: "Highland" },
   { id: "rm_marsh", name: "Marsh" },
   { id: "rm_megalopolis", name: "Megalopolis" },
   // { id: "rm_midgard", name: "Midgard" },

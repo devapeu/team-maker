@@ -2,14 +2,18 @@ import { ref, computed, watch } from 'vue'
 import { COLORS } from '../data/colors.js'
 
 export function useTeams(autobalanceRef) {
-  const team1 = ref([]);
-  const team2 = ref([]);
+  const team1 = ref([])
+  const team2 = ref([])
 
-  const matchup = ref(null);
+  const matchup = ref(null)
 
-  const team1Id = ref('')
-  const team2Id = ref('')
-  const winrateIsHovered = ref(false)
+  // Compute team keys directly from team arrays
+  const team1Key = computed(() =>
+    team1.value.map(p => String(p.profile_id)).sort().join(',')
+  )
+  const team2Key = computed(() =>
+    team2.value.map(p => String(p.profile_id)).sort().join(',')
+  )
 
   // Local cache for team winrate
   const teamsCache = ref({})
@@ -27,26 +31,12 @@ export function useTeams(autobalanceRef) {
     "1074203172,1074849746,1074910820": "Oops! All Zeus",
   }
 
-  // Team Labels
-  const team1Label = computed(() => {
-    const teamId = team1.value.map(p => String(p.profile_id)).sort().join(",")
-    return teamNames[teamId] ? teamNames[teamId] : "Equipo 1"
-  })
-
-  const team2Label = computed(() => {
-    const teamId = team2.value.map(p => String(p.profile_id)).sort().join(",")
-    return teamNames[teamId] ? teamNames[teamId] : "Equipo 2"
-  })
+  const team1Label = computed(() => teamNames[team1Key.value] || 'Equipo 1')
+  const team2Label = computed(() => teamNames[team2Key.value] || 'Equipo 2')
 
   // Calculate score for Team 1 and Team 2
   const team1Score = computed(() => team1.value.reduce((sum, player) => sum + player.score, 0))
   const team2Score = computed(() => team2.value.reduce((sum, player) => sum + player.score, 0))
-
-  function resetTeamIds() {
-    team1Id.value = null
-    team2Id.value = null
-    matchup.value = null
-  }
 
   function isValidMatchup(data) {
     // Must be an object
@@ -66,15 +56,14 @@ export function useTeams(autobalanceRef) {
       // probability must be a number between 0 and 100
       return (
         Number.isInteger(wins) &&
-        wins >=0 &&
+        wins >= 0 &&
         typeof probability === 'number' &&
         probability >= 0 &&
-        probability <= 100 
+        probability <= 100
       )
     })
   }
 
-  // Watch teams for winrate fetching
   watch([team1, team2], async ([newTeam1, newTeam2]) => {
     const t1 = newTeam1.map(p => String(p.profile_id)).sort()
     const t2 = newTeam2.map(p => String(p.profile_id)).sort()
@@ -82,25 +71,18 @@ export function useTeams(autobalanceRef) {
     const teamId = sortedTeams.map(t => t.join(',')).join(' vs ')
 
     if (!teamId || teamId === ' vs ') {
-      resetTeamIds()
+      matchup.value = null;
       return
     }
 
     // Use cache if available
     if (teamsCache.value[teamId]) {
-      const data = teamsCache.value[teamId]
-      if (data.teams === null) {
-        resetTeamIds()
-        return
-      }
-      team1Id.value = t1
-      team2Id.value = t2
-      matchup.value = data
+      matchup.value = teamsCache.value[teamId]
       return
     }
 
     matchup.value = null
-    
+
     if (t1.length && t2.length) {
       try {
         const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/matchup`, {
@@ -110,28 +92,23 @@ export function useTeams(autobalanceRef) {
         })
         if (res.ok) {
           const { data } = await res.json()
-
           if (isValidMatchup(data)) {
-            matchup.value = data;
-            teamsCache.value[teamId] = data;
+            matchup.value = data
+            teamsCache.value[teamId] = data
           } else {
-            matchup.value = null;
-            teamsCache.value[teamId] = null;
+            matchup.value = null
+            teamsCache.value[teamId] = null
           }
         }
-      } catch (e) {
+      } catch {
         matchup.value = null
       }
     }
-
-    team1Id.value = t1
-    team2Id.value = t2
   })
 
-  // Autobalance method
   async function autoBalanceTeams() {
     const playerPool = [...team1.value, ...team2.value, ...autobalanceRef.value]
-    const scores = playerPool.map(player => player.score)
+    const scores = playerPool.map(p => p.score)
 
     const combinations = []
     const total = scores.length
@@ -171,22 +148,8 @@ export function useTeams(autobalanceRef) {
     const top = combinations.slice(0, 5)
     const randomTeam = top[Math.floor(Math.random() * top.length)]
 
-    // Assign unique random colors from COLORS to players in the selected teams.
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]]
-      }
-      return array
-    }
-
-    const totalPlayersSelected = randomTeam.team1.length + randomTeam.team2.length
-    let colorPool = shuffle(COLORS.slice())
-    while (colorPool.length < totalPlayersSelected) {
-      colorPool = colorPool.concat(shuffle(COLORS.slice()))
-    }
-
-    // Assign colors sequentially from the pool so no two players share the same color
+    let colorPool = [...COLORS]
+    while (colorPool.length < randomTeam.team1.length + randomTeam.team2.length) colorPool.push(...COLORS)
     let colorIndex = 0
     randomTeam.team1.forEach(p => { p.color = colorPool[colorIndex++] })
     randomTeam.team2.forEach(p => { p.color = colorPool[colorIndex++] })
@@ -203,11 +166,9 @@ export function useTeams(autobalanceRef) {
     team2Label,
     team1Score,
     team2Score,
-    team1Id,
-    team2Id,
-    winrateIsHovered,
+    team1Key,
+    team2Key,
     autoBalanceTeams,
-    resetTeamIds,
-    matchup,
+    matchup
   }
 }
