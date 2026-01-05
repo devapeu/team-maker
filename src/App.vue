@@ -49,9 +49,9 @@
                 v-if="matchup !== null"
                 :class="[
                   'win-prob', 
-                  matchup[team1Id]?.probability > 50 ? 'win-prob--green' : 'win-prob--red']"
+                  matchup[team1Key]?.probability > 50 ? 'win-prob--green' : 'win-prob--red']"
                 style="margin-right:8px;">
-                {{ matchup[team1Id]?.probability.toFixed() }}%
+                {{ matchup[team1Key]?.probability.toFixed() }}%
               </span>
             </h2>
             <div
@@ -59,9 +59,9 @@
               @mouseenter="winrateIsHovered = true"
               @mouseleave="winrateIsHovered = false">
               <p
-                v-if="matchup !== null && !winrateIsHovered"
+                v-if="showWins"
                 class="teams__winrate">
-                Wins: <span>{{ matchup[team1Id]?.wins }}</span>
+                Wins: <span>{{ matchup[team1Key]?.wins }}</span>
               </p>
               <p
                 v-else
@@ -86,9 +86,9 @@
                 v-if="matchup !== null"
                 :class="[
                   'win-prob', 
-                  matchup[team2Id]?.probability > 50 ? 'win-prob--green' : 'win-prob--red']"
+                  matchup[team2Key]?.probability > 50 ? 'win-prob--green' : 'win-prob--red']"
                 style="margin-right:8px;">
-                {{ matchup[team2Id]?.probability.toFixed() }}%
+                {{ matchup[team2Key]?.probability.toFixed() }}%
               </span>
               {{ team2Label }}
             </h2>
@@ -97,9 +97,9 @@
               @mouseenter="winrateIsHovered = true"
               @mouseleave="winrateIsHovered = false">
               <p
-                v-if="matchup !== null && !winrateIsHovered"
+                v-if="showWins"
                 class="teams__winrate">
-                Wins: <span>{{ matchup[team2Id]?.wins }}</span>
+                Wins: <span>{{ matchup[team2Key]?.wins }}</span>
               </p>
               <p
                 v-else
@@ -151,7 +151,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import draggable from "vuedraggable/dist/vuedraggable.common";
 import PlayerBadge from './components/PlayerBadge.vue';
 import PlayerDrawer from './components/PlayerDrawer.vue';
@@ -188,12 +188,21 @@ const {
   team2Label,
   team1Score,
   team2Score,
-  team1Id,
-  team2Id,
+  team1Key,
+  team2Key,
   matchup,
-  winrateIsHovered,
   autoBalanceTeams,
 } = useTeams(autobalance)
+
+const winrateIsHovered = ref(false)
+const showWins = computed(() => {
+  if (!matchup.value || !team1Key.value || !team2Key.value) return false
+
+  const team1Wins = matchup.value[team1Key.value]?.wins ?? 0
+  const team2Wins = matchup.value[team2Key.value]?.wins ?? 0
+
+  return !winrateIsHovered.value && (team1Wins > 0 || team2Wins > 0)
+})
 
 // Wrapper functions for reset actions
 const reset = () => resetPlayerData(team1, team2)
