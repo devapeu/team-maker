@@ -45,9 +45,13 @@
         <div class="teams__team">
           <div class="teams__header">
             <h2 class="teams__name">{{ team1Label }}
-              <span v-if="teamWinPercent !== null"
-                    :class="['win-prob', teamWinPercent > 50 ? 'win-prob--green' : teamWinPercent < 50 ? 'win-prob--red' : 'win-prob--green']">
-                {{ teamWinPercent.toFixed(2) }}%
+              <span 
+                v-if="matchup !== null"
+                :class="[
+                  'win-prob', 
+                  matchup[team1Id]?.probability > 50 ? 'win-prob--green' : 'win-prob--red']"
+                style="margin-right:8px;">
+                {{ matchup[team1Id]?.probability.toFixed() }}%
               </span>
             </h2>
             <div
@@ -55,9 +59,9 @@
               @mouseenter="winrateIsHovered = true"
               @mouseleave="winrateIsHovered = false">
               <p
-                v-if="teamWinRate !== null && !winrateIsHovered"
+                v-if="matchup !== null && !winrateIsHovered"
                 class="teams__winrate">
-                Wins: <span>{{ teamWinRate[team1Id] }}</span>
+                Wins: <span>{{ matchup[team1Id]?.wins }}</span>
               </p>
               <p
                 v-else
@@ -78,10 +82,13 @@
         <div class="teams__team">
           <div class="teams__header teams__header--inverse">
             <h2 class="teams__name">
-              <span v-if="teamWinPercent !== null"
-                    :class="['win-prob', teamWinPercent < 50 ? 'win-prob--green' : teamWinPercent > 50 ? 'win-prob--red' : 'win-prob--green']"
-                    style="margin-right:8px;">
-                {{ (100 - teamWinPercent).toFixed(2) }}%
+              <span 
+                v-if="matchup !== null"
+                :class="[
+                  'win-prob', 
+                  matchup[team2Id]?.probability > 50 ? 'win-prob--green' : 'win-prob--red']"
+                style="margin-right:8px;">
+                {{ matchup[team2Id]?.probability.toFixed() }}%
               </span>
               {{ team2Label }}
             </h2>
@@ -90,9 +97,9 @@
               @mouseenter="winrateIsHovered = true"
               @mouseleave="winrateIsHovered = false">
               <p
-                v-if="teamWinRate !== null && !winrateIsHovered"
+                v-if="matchup !== null && !winrateIsHovered"
                 class="teams__winrate">
-                Wins: <span>{{ teamWinRate[team2Id] }}</span>
+                Wins: <span>{{ matchup[team2Id]?.wins }}</span>
               </p>
               <p
                 v-else
@@ -181,12 +188,11 @@ const {
   team2Label,
   team1Score,
   team2Score,
-  teamWinRate,
   team1Id,
   team2Id,
+  matchup,
   winrateIsHovered,
   autoBalanceTeams,
-  teamWinPercent
 } = useTeams(autobalance)
 
 // Wrapper functions for reset actions
@@ -357,9 +363,10 @@ const allPlayersPresent = computed(() => players.value.length === 0 && autobalan
     opacity: 1
 
 .win-prob
+  display: inline-block
   font-weight: bold
-  padding: 2px 8px
-  border-radius: 8px
+  padding: 0px 5px
+  border-radius: 6px
   font-size: 15px
   margin-left: 8px
   &--green
