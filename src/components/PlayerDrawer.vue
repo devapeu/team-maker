@@ -212,6 +212,9 @@ const timestampValue = computed(() => {
     case '2-month':
       today.setMonth(today.getMonth() - 2);
       return Math.round(today.getTime() / 1000);
+    case '6-month':
+      today.setMonth(today.getMonth() - 6);
+      return Math.round(today.getTime() / 1000);
     default:
       return 0;
   }
