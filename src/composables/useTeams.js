@@ -2,11 +2,11 @@ import { ref, computed, watch } from 'vue'
 import { COLORS } from '../data/colors.js'
 
 export function useTeams(autobalanceRef) {
-  const team1 = ref([])
-  const team2 = ref([])
+  const team1 = ref([]);
+  const team2 = ref([]);
 
-  // Win Rate stuff
-  const teamWinRate = ref(null)
+  const matchup = ref(null);
+
   const team1Id = ref('')
   const team2Id = ref('')
   const winrateIsHovered = ref(false)
@@ -45,7 +45,33 @@ export function useTeams(autobalanceRef) {
   function resetTeamIds() {
     team1Id.value = null
     team2Id.value = null
-    teamWinRate.value = null
+    matchup.value = null
+  }
+
+  function isValidMatchup(data) {
+    // Must be an object
+    if (!data || typeof data != 'object') return false;
+
+    // Must have only two entries, i.e. Team 1 and Team 2
+    const entries = Object.entries(data);
+    if (entries.length !== 2) return false;
+
+    return entries.every(([key, value]) => {
+      if (typeof key !== 'string' || !key.length) return false;
+      if (!value || typeof value !== 'object') return false;
+
+      const { wins, probability } = value;
+
+      // win must be a positive number
+      // probability must be a number between 0 and 100
+      return (
+        Number.isInteger(wins) &&
+        wins >=0 &&
+        typeof probability === 'number' &&
+        probability >= 0 &&
+        probability <= 100 
+      )
+    })
   }
 
   // Watch teams for winrate fetching
@@ -69,26 +95,41 @@ export function useTeams(autobalanceRef) {
       }
       team1Id.value = t1
       team2Id.value = t2
-      teamWinRate.value = data
+      matchup.value = data
       return
     }
 
-    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/teams/${teamId}`)
-    const data = await res.json()
-    teamsCache.value[teamId] = data
+    matchup.value = null
+    
+    if (t1.length && t2.length) {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/matchup`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ team1: t1, team2: t2 })
+        })
+        if (res.ok) {
+          const { data } = await res.json()
 
-    if (data.teams === null) {
-      resetTeamIds()
-      return
+          if (isValidMatchup(data)) {
+            matchup.value = data;
+            teamsCache.value[teamId] = data;
+          } else {
+            matchup.value = null;
+            teamsCache.value[teamId] = null;
+          }
+        }
+      } catch (e) {
+        matchup.value = null
+      }
     }
 
     team1Id.value = t1
     team2Id.value = t2
-    teamWinRate.value = data
   })
 
   // Autobalance method
-  function autoBalanceTeams() {
+  async function autoBalanceTeams() {
     const playerPool = [...team1.value, ...team2.value, ...autobalanceRef.value]
     const scores = playerPool.map(player => player.score)
 
@@ -162,11 +203,11 @@ export function useTeams(autobalanceRef) {
     team2Label,
     team1Score,
     team2Score,
-    teamWinRate,
     team1Id,
     team2Id,
     winrateIsHovered,
     autoBalanceTeams,
-    resetTeamIds
+    resetTeamIds,
+    matchup,
   }
 }
