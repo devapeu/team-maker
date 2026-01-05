@@ -4,17 +4,12 @@ import html2canvas from 'html2canvas'
 const API_BASE = import.meta.env.VITE_API_BASE_URL;
 const API_KEY = import.meta.env.VITE_API_KEY;
 
-export function useDiscord(team1Ref, team2Ref, showToast) {
-  async function sendPlannerToDiscord() {
+export function useDiscord(showToast) {
+  async function sendPlannerToDiscord(teamData) {
     try {
       const el = document.querySelector('.teams__wrapper')
       if (!el) {
         showToast('No se encontró el elemento de equipos.', 'error', 3000)
-        return
-      }
-
-      if (team1Ref.value.length === 0 || team2Ref.value.length === 0) {
-        showToast('Pon al menos un jugador en cada equipo.', 'error', 3000)
         return
       }
 
@@ -28,7 +23,7 @@ export function useDiscord(team1Ref, team2Ref, showToast) {
       if (!imageBase64) throw new Error('No se pudo extraer base64 de la imagen')
 
       const payload = {
-        message: 'Distribución de equipos',
+        message: `**Equipo 1:** ${teamData.team1Score}\n**Equipo 2:** ${teamData.team2Score}`,
         imageBase64
       }
 

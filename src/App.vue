@@ -127,7 +127,7 @@
           <ShuffleIcon class="teams__button__icon" aria-hidden="true"/>
           Auto Balance
         </button>
-        <button class="teams__button" @click="sendPlannerToDiscord" title="Enviar a Discord">
+        <button class="teams__button" @click="handleSendToDiscord" title="Enviar a Discord">
           <DiscordIcon class="teams__button__icon" aria-hidden="true"/>
           Enviar a Discord
         </button>
@@ -212,7 +212,20 @@ const resetAvailable = () => resetAvailablePlayerData(team1, team2)
 const { active, playerDetailsActive, openPlayerDetails } = usePlayerDrawer(playersMap)
 
 // Discord integration
-const { sendPlannerToDiscord } = useDiscord(team1, team2, showToast)
+const { sendPlannerToDiscord } = useDiscord(showToast)
+
+const handleSendToDiscord = () => {
+  if (team1.value.length === 0 || team2.value.length === 0) {
+    showToast('Pon al menos un jugador en cada equipo.', 'error', 3000)
+    return
+  }
+
+  sendPlannerToDiscord({
+    team1Score: team1Score.value,
+    team2Score: team2Score.value,
+    matchup: matchup.value,
+  });
+}
 
 // Computed properties
 const allPlayersPresent = computed(() => players.value.length === 0 && autobalance.value.length === 0)
