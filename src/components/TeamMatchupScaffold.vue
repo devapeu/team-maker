@@ -130,6 +130,7 @@ const props = defineProps({
     width: 100%
     min-width: unset
     padding: 2px
+    margin-top: 0
     gap: 2px
   .teams__score
     font-size: 10px

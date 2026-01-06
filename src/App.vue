@@ -27,36 +27,39 @@
     <!-- Teams -->
     <div class="teams">
       <div>
-        <div class="section-header">
-          <h2 class="draggable-label">Equipos</h2>
-          <button class="sm-button" @click="resetAvailable">Reestablecer</button>
+        <div>
+          <div class="teams__labels">
+            <span>{{ team1Label }}</span>
+            <span>{{ team2Label }}</span>
+          </div>
+          <div
+            v-if="matchup !== null"
+            class="teams__probability">
+            <div 
+              class="teams__probability-item" 
+              :style="{ 
+                width: (matchup && matchup[team1Key] ? matchup[team1Key].probability : 0) + '%',
+                backgroundColor: (matchup && matchup[team1Key] && matchup[team1Key].probability > 50) ? '#10b981' : '#ef4444'
+              }">
+              {{ (matchup && matchup[team1Key] ? matchup[team1Key].probability.toFixed() : 0) }}%
+            </div>
+            <div 
+              class="teams__probability-item left" 
+              :style="{ 
+                width: (matchup && matchup[team2Key] ? matchup[team2Key].probability : 0) + '%',
+                backgroundColor: (matchup && matchup[team2Key] && matchup[team2Key].probability > 50) ? '#10b981' : '#ef4444'
+              }">
+              {{ (matchup && matchup[team2Key] ? matchup[team2Key].probability.toFixed() : 0) }}%
+            </div>
+          </div>
         </div>
         <div class="teams__wrapper">
           <div class="teams__team">
             <div class="teams__header">
-              <h2 class="teams__name">{{ team1Label }}
-                <span 
-                  v-if="matchup !== null"
-                  :class="[
-                    'win-prob', 
-                    matchup[team1Key]?.probability > 50 ? 'win-prob--green' : 'win-prob--red']"
-                  style="margin-right:8px;">
-                  {{ matchup[team1Key]?.probability.toFixed() }}%
-                </span>
-              </h2>
-              <div
-                class="teams__header-side"
-                @mouseenter="winrateIsHovered = true"
-                @mouseleave="winrateIsHovered = false">
-                <p
-                  v-if="showWins"
-                  class="teams__winrate">
+              <h2 class="teams__score">{{ team1Score }}</h2>
+              <div v-if="matchup !== null" class="teams__header-side">
+                <p class="teams__winrate">
                   Wins: <span>{{ matchup[team1Key]?.wins }}</span>
-                </p>
-                <p
-                  v-else
-                  class="teams__score">
-                  {{ team1Score }}
                 </p>
               </div>
             </div>
@@ -71,30 +74,12 @@
           
           <div class="teams__team">
             <div class="teams__header teams__header--inverse">
-              <h2 class="teams__name">
-                <span 
-                  v-if="matchup !== null"
-                  :class="[
-                    'win-prob', 
-                    matchup[team2Key]?.probability > 50 ? 'win-prob--green' : 'win-prob--red']"
-                  style="margin-right:8px;">
-                  {{ matchup[team2Key]?.probability.toFixed() }}%
-                </span>
-                {{ team2Label }}
+              <h2 class="teams__score">
+                {{ team2Score }}
               </h2>
-              <div
-                class="teams__header-side"
-                @mouseenter="winrateIsHovered = true"
-                @mouseleave="winrateIsHovered = false">
-                <p
-                  v-if="showWins"
-                  class="teams__winrate">
+              <div v-if="matchup !== null" class="teams__header-side">
+                <p class="teams__winrate">
                   Wins: <span>{{ matchup[team2Key]?.wins }}</span>
-                </p>
-                <p
-                  v-else
-                  class="teams__score">
-                  {{ team2Score }}
                 </p>
               </div>
             </div>
@@ -197,8 +182,7 @@ const {
   playersMap,
   averages,
   reset: resetPlayerData,
-  resetAvailable: resetAvailablePlayerData,
-  moveToAvailable
+  moveToAvailable: moveToAvailableFunction
 } = usePlayerData()
 
 // Teams management
@@ -227,7 +211,7 @@ const showWins = computed(() => {
 
 // Wrapper functions for reset actions
 const reset = () => resetPlayerData(team1, team2)
-const resetAvailable = () => resetAvailablePlayerData(team1, team2)
+const moveToAvailable = (id) => moveToAvailableFunction(id, team1, team2)
 
 // Player drawer
 const { active, playerDetailsActive, openPlayerDetails } = usePlayerDrawer(playersMap)
