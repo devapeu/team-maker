@@ -99,7 +99,6 @@ const props = defineProps({
       display: block
       background: red
       font-size: 4px
-      padding-top: 1px
       padding-left: 2px
       &.left
         text-align: right

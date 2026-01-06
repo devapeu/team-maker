@@ -7,7 +7,7 @@ const API_KEY = import.meta.env.VITE_API_KEY;
 export function useDiscord(showToast) {
   async function sendPlannerToDiscord(teamData) {
     try {
-      const el = document.querySelector('.saved-configurations')
+      const el = document.querySelector('#saved-configurations')
       if (!el) {
         showToast('No se encontró el elemento de equipos.', 'error', 3000)
         return
@@ -50,6 +50,8 @@ export function useDiscord(showToast) {
     } catch (err) {
       console.error(err)
       showToast('Error al enviar a Discord: ' + (err.message || err), 'error', 4000)
+    } finally {
+      el.style.opacity = 0.5
     }
   }
 

@@ -127,30 +127,39 @@
           <ShuffleIcon class="teams__button__icon" aria-hidden="true"/>
           Auto Balance
         </button>
-        <button class="teams__button" @click="handleSendToDiscord" title="Enviar a Discord">
-          <DiscordIcon class="teams__button__icon" aria-hidden="true"/>
-          Enviar a Discord
-        </button>
         <button class="teams__button" @click="saveConfiguration">
           Guardar
         </button>
       </div>
-      <ul id="saved-configurations" class="saved-configurations">
-        <div 
-          v-for="(item, key, index) in savedConfigurations"
-          :key="key"
-          class="saved-configurations__item">
-          <div class="saved-configurations__label">
-            {{ index + 1 }}
-          </div>
-          <TeamMatchupScaffold 
-            class="saved-configurations__team"
-            :team1="item.team1"
-            :team2="item.team2"
-            thumbnail
-            @click="removeConfiguration(key)" />
+      <div 
+        v-if="Object.keys(savedConfigurations).length > 0"
+        class="saved-configurations">
+        <div class="saved-configurations__header">
+          Opciones guardadas
+          <button 
+            class="saved-configurations__send-button"
+            @click="handleSendToDiscord" title="Enviar a Discord">
+            <DiscordIcon aria-hidden="true"/>
+            Enviar a Discord
+          </button>
         </div>
-      </ul>
+        <ul id="saved-configurations" class="saved-configurations__container">
+          <li 
+            v-for="(item, key, index) in savedConfigurations"
+            :key="key"
+            class="saved-configurations__item">
+            <div class="saved-configurations__label">
+              {{ index + 1 }}
+            </div>
+            <TeamMatchupScaffold 
+              class="saved-configurations__team"
+              :team1="item.team1"
+              :team2="item.team2"
+              thumbnail
+              @click="removeConfiguration(key)" />
+          </li>
+        </ul>
+      </div>
       <MapSelector />
     </div>
   </main>
