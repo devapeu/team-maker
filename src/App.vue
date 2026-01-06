@@ -135,23 +135,24 @@
           Guardar
         </button>
       </div>
+      <ul id="saved-configurations" class="saved-configurations">
+        <div 
+          v-for="(item, key, index) in savedConfigurations"
+          :key="key"
+          class="saved-configurations__item">
+          <div class="saved-configurations__label">
+            {{ index + 1 }}
+          </div>
+          <TeamMatchupScaffold 
+            class="saved-configurations__team"
+            :team1="item.team1"
+            :team2="item.team2"
+            thumbnail/>
+        </div>
+      </ul>
       <MapSelector />
     </div>
   </main>
-  <ul id="saved-configurations" class="saved-configurations">
-    <div 
-      v-for="(item, key, index) in savedConfigurations"
-      :key="key"
-      class="saved-configurations__item">
-      <div class="saved-configurations__label">
-        {{ index + 1 }}
-      </div>
-      <TeamMatchupScaffold 
-        class="saved-configurations__team"
-        :team1="item.team1"
-        :team2="item.team2"/>
-    </div>
-  </ul>
   <PlayerDrawer
     v-model:active="active"
     :playerDetailsActive="playerDetailsActive"

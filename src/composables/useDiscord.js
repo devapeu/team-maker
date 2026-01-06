@@ -7,14 +7,16 @@ const API_KEY = import.meta.env.VITE_API_KEY;
 export function useDiscord(showToast) {
   async function sendPlannerToDiscord(teamData) {
     try {
-      const el = document.querySelector('.teams__wrapper')
+      const el = document.querySelector('.saved-configurations')
       if (!el) {
         showToast('No se encontró el elemento de equipos.', 'error', 3000)
         return
       }
 
+      el.style.opacity = 1;
+
       // Increase scale for acceptable resolution (but watch file size)
-      const canvas = await html2canvas(el, { backgroundColor: '#0f0f0f', scale: 2 })
+      const canvas = await html2canvas(el, { backgroundColor: '#0f0f0f', scale: 5 })
       const dataUrl = canvas.toDataURL('image/png')
       if (!dataUrl) throw new Error('No se pudo generar la imagen')
 
