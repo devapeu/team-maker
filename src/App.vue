@@ -147,7 +147,8 @@
             class="saved-configurations__team"
             :team1="item.team1"
             :team2="item.team2"
-            thumbnail/>
+            thumbnail
+            @click="removeConfiguration(key)" />
         </div>
       </ul>
       <MapSelector />
@@ -247,6 +248,10 @@ const handleSendToDiscord = () => {
 }
 
 const savedConfigurations = ref({})
+
+const removeConfiguration = (key) => {
+  delete savedConfigurations.value[key];
+}
 
 const saveConfiguration = () => {
   if (team1.value.length === 0 || team2.value.length === 0) {
