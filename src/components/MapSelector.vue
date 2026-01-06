@@ -1,13 +1,16 @@
 <template>
-  <div class="map-selector">
-    <template v-if="hasDisplayedMap">
-      <img class="map-selector__image" :src="mapIcon"/>
-      <p>{{ mapName }}</p>
-      <button class="map-button map-selector__button" @click="chooseMap">Otro mapa</button>
-    </template>
-    <template v-else>
-      <button class="map-button first-map-button" @click="chooseMap">Mapa aleatorio</button>
-    </template>
+  <div>
+    <div class="draggable-label">Selección de Mapa</div>
+    <div class="map-selector">
+      <template v-if="hasDisplayedMap">
+        <img class="map-selector__image" :src="mapIcon"/>
+        <p>{{ mapName }}</p>
+        <button class="map-button map-selector__button" @click="chooseMap">Otro mapa</button>
+      </template>
+      <template v-else>
+        <button class="map-button first-map-button" @click="chooseMap">Mapa aleatorio</button>
+      </template>
+    </div>
   </div>
 </template>
 <script setup>
@@ -35,7 +38,7 @@ function chooseMap() {
 <style lang="sass" scoped>
 
 .map-selector
-  margin-top: 10px
+  margin-top: 4px
   display: flex
   align-items: center
   gap: 16px
