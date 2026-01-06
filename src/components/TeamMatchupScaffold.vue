@@ -150,6 +150,8 @@ const props = defineProps({
     min-width: 50px
     overflow: hidden
     text-overflow: ellipsis
+    @media (max-width: 480px)
+      max-width: unset
   :deep(.player__icon)
     border-width: 3px
   .team-box
