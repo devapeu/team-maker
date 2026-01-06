@@ -131,10 +131,27 @@
           <DiscordIcon class="teams__button__icon" aria-hidden="true"/>
           Enviar a Discord
         </button>
+        <button class="teams__button" @click="saveConfiguration">
+          Guardar
+        </button>
       </div>
       <MapSelector />
     </div>
   </main>
+  <ul id="saved-configurations" class="saved-configurations">
+    <div 
+      v-for="(item, key, index) in savedConfigurations"
+      :key="key"
+      class="saved-configurations__item">
+      <div class="saved-configurations__label">
+        {{ index + 1 }}
+      </div>
+      <TeamMatchupScaffold 
+        class="saved-configurations__team"
+        :team1="item.team1"
+        :team2="item.team2"/>
+    </div>
+  </ul>
   <PlayerDrawer
     v-model:active="active"
     :playerDetailsActive="playerDetailsActive"
@@ -158,6 +175,7 @@ import PlayerDrawer from './components/PlayerDrawer.vue';
 import ShuffleIcon from './components/ShuffleIcon.vue'
 import DiscordIcon from './components/DiscordIcon.vue'
 import MapSelector from './components/MapSelector.vue';
+import TeamMatchupScaffold from './components/TeamMatchupScaffold.vue';
 
 // Composables
 import { useToast } from './composables/useToast.js'
@@ -225,6 +243,45 @@ const handleSendToDiscord = () => {
     team2Score: team2Score.value,
     matchup: matchup.value,
   });
+}
+
+const savedConfigurations = ref({})
+
+const saveConfiguration = () => {
+  if (team1.value.length === 0 || team2.value.length === 0) {
+    showToast('Pon al menos un jugador en cada equipo.', 'error', 3000)
+    return
+  }
+
+  const sortedTeams = [team1Key.value, team2Key.value].sort((a, b) => a.localeCompare(b))
+  const teamMatchId = sortedTeams.join(" vs ");
+
+  if (savedConfigurations.value[teamMatchId]) {
+    showToast('Ya has guardado esa configuración.', 'error', 3000)
+    return
+  }
+
+  if (Object.keys(savedConfigurations.value).length === 4) {
+    showToast('Solo puedes preparar 4 configuraciones.', 'error', 3000)
+    return
+  }
+
+  savedConfigurations.value[teamMatchId] = {
+    team1: {
+      label: team1Label.value,
+      score: team1Score.value,
+      players: [...team1.value],
+      probability: matchup.value[team1Key.value]?.probability ?? 0,
+      wins: matchup.value[team1Key.value]?.wins ?? 0,
+    },
+    team2: {
+      label: team2Label.value,
+      score: team2Score.value,
+      players: [...team2.value],
+      probability: matchup.value[team2Key.value]?.probability ?? 0,
+      wins: matchup.value[team2Key.value]?.wins ?? 0,
+    },
+  };
 }
 
 // Computed properties
