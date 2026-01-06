@@ -16,7 +16,7 @@ export function useDiscord(showToast) {
       el.style.opacity = 1;
 
       // Increase scale for acceptable resolution (but watch file size)
-      const canvas = await html2canvas(el, { backgroundColor: '#0f0f0f', scale: 5 })
+      const canvas = await html2canvas(el, { backgroundColor: '#0f0f0f', scale: 3 })
       const dataUrl = canvas.toDataURL('image/png')
       if (!dataUrl) throw new Error('No se pudo generar la imagen')
 
