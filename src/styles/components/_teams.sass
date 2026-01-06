@@ -1,10 +1,12 @@
 @use "../abstracts/variables" as *
 
 .teams
-  display: flex
-  flex-direction: column
-  gap: 4px
+  display: grid
+  grid-template-columns: 1fr 1fr
+  gap: 24px
   margin-bottom: 24px
+  @media (max-width: 1120px)
+    grid-template-columns: 1fr
   &__header
     display: flex
     justify-content: space-between

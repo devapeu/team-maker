@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import PlayerBadge from './PlayerBadge.vue';
 
 
@@ -136,7 +136,7 @@ const props = defineProps({
   :deep(.player)
     height: 21px
     font-size: 8px
-    min-width: 100px
+    min-width: unset
     margin: 1px
   :deep(.player)
     pointer-events: none
@@ -145,6 +145,10 @@ const props = defineProps({
     font-size: 9px
   :deep(.player__name)
     padding: 6px 8px
+    max-width: 75px
+    min-width: 50px
+    overflow: hidden
+    text-overflow: ellipsis
   :deep(.player__icon)
     border-width: 3px
   .team-box

@@ -5,11 +5,8 @@
   width: 100%
   max-width: 640px
   margin: 0 auto
-  @media (min-width: 1024px)
-    max-width: 1024px
-    display: grid
-    grid-template-columns: 45% 55%
-    gap: 48px
+  @media (min-width: 1120px)
+    max-width: 1120px
 
 .section-header
   display: flex
@@ -48,6 +45,11 @@
   background-color: #161005
   min-height: 50px
   transition: 100ms ease-out all
+  align-content: flex-start
+  @media (min-width: 1024px)
+    min-height: 148px
+    padding-left: 48px
+    padding-right: 48px
   @media (pointer: fine)
     &:hover
       box-shadow: 0 0 5px rgba(241,194,50, 0.25)

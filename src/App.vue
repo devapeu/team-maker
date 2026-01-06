@@ -22,145 +22,138 @@
           </template>
         </draggable>
       </div>
-
-      <div class="auto-balance">
-        <h2 class="draggable-label">Jugadores disponibles</h2>
-        <draggable v-model="autobalance" item-key="name" group="players" class="player-pool">
-          <template #item="{ element, index }">
-            <PlayerBadge 
-              :player="element"
-              @click-profile="openPlayerDetails" />
-          </template>
-        </draggable>
-      </div>
     </div>
     
     <!-- Teams -->
     <div class="teams">
-      <div class="section-header">
-        <h2 class="draggable-label">Equipos</h2>
-        <button class="sm-button" @click="resetAvailable">Reestablecer</button>
-      </div>
-      <div class="teams__wrapper">
-        <div class="teams__team">
-          <div class="teams__header">
-            <h2 class="teams__name">{{ team1Label }}
-              <span 
-                v-if="matchup !== null"
-                :class="[
-                  'win-prob', 
-                  matchup[team1Key]?.probability > 50 ? 'win-prob--green' : 'win-prob--red']"
-                style="margin-right:8px;">
-                {{ matchup[team1Key]?.probability.toFixed() }}%
-              </span>
-            </h2>
-            <div
-              class="teams__header-side"
-              @mouseenter="winrateIsHovered = true"
-              @mouseleave="winrateIsHovered = false">
-              <p
-                v-if="showWins"
-                class="teams__winrate">
-                Wins: <span>{{ matchup[team1Key]?.wins }}</span>
-              </p>
-              <p
-                v-else
-                class="teams__score">
-                {{ team1Score }}
-              </p>
-            </div>
-          </div>
-          <draggable v-model="team1" item-key="name" group="players" class="team-box">
-            <template #item="{ element }">
-              <PlayerBadge 
-                :player="element" 
-                @click-profile="openPlayerDetails" />
-            </template>
-          </draggable>
+      <div>
+        <div class="section-header">
+          <h2 class="draggable-label">Equipos</h2>
+          <button class="sm-button" @click="resetAvailable">Reestablecer</button>
         </div>
-        
-        <div class="teams__team">
-          <div class="teams__header teams__header--inverse">
-            <h2 class="teams__name">
-              <span 
-                v-if="matchup !== null"
-                :class="[
-                  'win-prob', 
-                  matchup[team2Key]?.probability > 50 ? 'win-prob--green' : 'win-prob--red']"
-                style="margin-right:8px;">
-                {{ matchup[team2Key]?.probability.toFixed() }}%
-              </span>
-              {{ team2Label }}
-            </h2>
-            <div
-              class="teams__header-side"
-              @mouseenter="winrateIsHovered = true"
-              @mouseleave="winrateIsHovered = false">
-              <p
-                v-if="showWins"
-                class="teams__winrate">
-                Wins: <span>{{ matchup[team2Key]?.wins }}</span>
-              </p>
-              <p
-                v-else
-                class="teams__score">
-                {{ team2Score }}
-              </p>
+        <div class="teams__wrapper">
+          <div class="teams__team">
+            <div class="teams__header">
+              <h2 class="teams__name">{{ team1Label }}
+                <span 
+                  v-if="matchup !== null"
+                  :class="[
+                    'win-prob', 
+                    matchup[team1Key]?.probability > 50 ? 'win-prob--green' : 'win-prob--red']"
+                  style="margin-right:8px;">
+                  {{ matchup[team1Key]?.probability.toFixed() }}%
+                </span>
+              </h2>
+              <div
+                class="teams__header-side"
+                @mouseenter="winrateIsHovered = true"
+                @mouseleave="winrateIsHovered = false">
+                <p
+                  v-if="showWins"
+                  class="teams__winrate">
+                  Wins: <span>{{ matchup[team1Key]?.wins }}</span>
+                </p>
+                <p
+                  v-else
+                  class="teams__score">
+                  {{ team1Score }}
+                </p>
+              </div>
             </div>
+            <draggable v-model="team1" item-key="name" group="players" class="team-box">
+              <template #item="{ element }">
+                <PlayerBadge 
+                  :player="element" 
+                  @click-profile="openPlayerDetails" />
+              </template>
+            </draggable>
           </div>
-          <draggable v-model="team2" item-key="name" group="players" class="team-box">
-            <template #item="{ element }">
-              <PlayerBadge 
-                :player="element" 
-                @click-profile="openPlayerDetails" />
-            </template>
-          </draggable>
+          
+          <div class="teams__team">
+            <div class="teams__header teams__header--inverse">
+              <h2 class="teams__name">
+                <span 
+                  v-if="matchup !== null"
+                  :class="[
+                    'win-prob', 
+                    matchup[team2Key]?.probability > 50 ? 'win-prob--green' : 'win-prob--red']"
+                  style="margin-right:8px;">
+                  {{ matchup[team2Key]?.probability.toFixed() }}%
+                </span>
+                {{ team2Label }}
+              </h2>
+              <div
+                class="teams__header-side"
+                @mouseenter="winrateIsHovered = true"
+                @mouseleave="winrateIsHovered = false">
+                <p
+                  v-if="showWins"
+                  class="teams__winrate">
+                  Wins: <span>{{ matchup[team2Key]?.wins }}</span>
+                </p>
+                <p
+                  v-else
+                  class="teams__score">
+                  {{ team2Score }}
+                </p>
+              </div>
+            </div>
+            <draggable v-model="team2" item-key="name" group="players" class="team-box">
+              <template #item="{ element }">
+                <PlayerBadge 
+                  :player="element" 
+                  @click-profile="openPlayerDetails" />
+              </template>
+            </draggable>
+          </div>
         </div>
-      </div>
-      <div 
-        v-if="allPlayersPresent"
-        class="all-players-present">
-        gogogogogogogogo
-      </div>
-      <div class="teams__controls">
-        <button class="teams__button" @click="autoBalanceTeams">
-          <ShuffleIcon class="teams__button__icon" aria-hidden="true"/>
-          Auto Balance
-        </button>
-        <button class="teams__button" @click="saveConfiguration">
-          Guardar
-        </button>
-      </div>
-      <div 
-        v-if="Object.keys(savedConfigurations).length > 0"
-        class="saved-configurations">
-        <div class="saved-configurations__header">
-          Opciones guardadas
-          <button 
-            class="saved-configurations__send-button"
-            @click="handleSendToDiscord" title="Enviar a Discord">
-            <DiscordIcon aria-hidden="true"/>
-            Enviar a Discord
+        <div 
+          v-if="allPlayersPresent"
+          class="all-players-present">
+          gogogogogogogogo
+        </div>
+        <div class="teams__controls">
+          <button class="teams__button" @click="autoBalanceTeams">
+            <ShuffleIcon class="teams__button__icon" aria-hidden="true"/>
+            Auto Balance
+          </button>
+          <button class="teams__button" @click="saveConfiguration">
+            Guardar
           </button>
         </div>
-        <ul id="saved-configurations" class="saved-configurations__container">
-          <li 
-            v-for="(item, key, index) in savedConfigurations"
-            :key="key"
-            class="saved-configurations__item">
-            <div class="saved-configurations__label">
-              {{ index + 1 }}
-            </div>
-            <TeamMatchupScaffold 
-              class="saved-configurations__team"
-              :team1="item.team1"
-              :team2="item.team2"
-              thumbnail
-              @click="removeConfiguration(key)" />
-          </li>
-        </ul>
       </div>
-      <MapSelector />
+      <div>
+        <MapSelector />
+        <div 
+          v-if="Object.keys(savedConfigurations).length > 0"
+          class="saved-configurations">
+          <div class="saved-configurations__header">
+            Opciones guardadas
+            <button 
+              class="saved-configurations__send-button"
+              @click="handleSendToDiscord" title="Enviar a Discord">
+              <DiscordIcon aria-hidden="true"/>
+              Enviar a Discord
+            </button>
+          </div>
+          <ul id="saved-configurations" class="saved-configurations__container">
+            <li 
+              v-for="(item, key, index) in savedConfigurations"
+              :key="key"
+              class="saved-configurations__item">
+              <div class="saved-configurations__label">
+                {{ index + 1 }}
+              </div>
+              <TeamMatchupScaffold 
+                class="saved-configurations__team"
+                :team1="item.team1"
+                :team2="item.team2"
+                thumbnail
+                @click="removeConfiguration(key)" />
+            </li>
+          </ul>
+        </div>
+      </div>
     </div>
   </main>
   <PlayerDrawer
@@ -201,7 +194,6 @@ const { toasts, showToast } = useToast()
 // Player data management
 const {
   players,
-  autobalance,
   playersMap,
   averages,
   reset: resetPlayerData,
@@ -221,7 +213,7 @@ const {
   team2Key,
   matchup,
   autoBalanceTeams,
-} = useTeams(autobalance)
+} = useTeams()
 
 const winrateIsHovered = ref(false)
 const showWins = computed(() => {
@@ -300,5 +292,5 @@ const saveConfiguration = () => {
 }
 
 // Computed properties
-const allPlayersPresent = computed(() => players.value.length === 0 && autobalance.value.length === 0)
+const allPlayersPresent = computed(() => players.value.length === 0)
 </script>
