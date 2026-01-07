@@ -35,25 +35,23 @@
     text-align: center
     margin: 0
     font-family: $font-sans
-  &__header-side
-    height: 32px
-    flex: 1
-    display: flex
-    align-items: center
-    justify-content: flex-end
   &__score
     font-size: 20px
     font-weight: bold
     color: $gold-500
     margin: 0 
     font-family: $font-serif
-  &__winrate
-    color: grey
-    span
-      font-weight: bold
-      font-size: 18px
-      color: $gold-500
-      font-family: $font-serif
+  &__wins
+    height: 32px
+    width: 32px
+    background: #161005
+    display: flex
+    align-items: center
+    justify-content: center
+    border-radius: 4px
+    border: 1px solid #666
+    &--no-matches
+      color: #888
   &__wrapper
     display: flex
     justify-content: center

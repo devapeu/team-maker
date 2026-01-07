@@ -60,10 +60,16 @@
           <div class="teams__team">
             <div class="teams__header">
               <h2 class="teams__score">{{ team1Score }}</h2>
-              <div v-if="matchup !== null" class="teams__header-side">
-                <p class="teams__winrate">
-                  Wins: <span>{{ matchup[team1Key]?.wins }}</span>
-                </p>
+              <div 
+                v-if="matchup !== null" 
+                class="teams__wins"
+                :class="hasNoMatches ? 'teams__wins--no-matches' : ''">
+                <template v-if="hasNoMatches">
+                  -
+                </template>
+                <template v-else>
+                  {{ matchup[team1Key]?.wins }}
+                </template>
               </div>
             </div>
             <draggable v-model="team1" item-key="name" group="players" class="team-box">
@@ -80,10 +86,16 @@
               <h2 class="teams__score">
                 {{ team2Score }}
               </h2>
-              <div v-if="matchup !== null" class="teams__header-side">
-                <p class="teams__winrate">
-                  Wins: <span>{{ matchup[team2Key]?.wins }}</span>
-                </p>
+              <div 
+                v-if="matchup !== null" 
+                class="teams__wins"
+                :class="hasNoMatches ? 'teams__wins--no-matches' : ''">
+                <template v-if="hasNoMatches">
+                  -
+                </template>
+                <template v-else>
+                  {{ matchup[team2Key]?.wins }}
+                </template>
               </div>
             </div>
             <draggable v-model="team2" item-key="name" group="players" class="team-box">
@@ -279,4 +291,5 @@ const saveConfiguration = () => {
 
 // Computed properties
 const allPlayersPresent = computed(() => players.value.length === 0)
+const hasNoMatches = computed(() => matchup?.value[team1Key.value]?.wins === 0 && matchup?.value[team2Key.value]?.wins === 0)
 </script>
