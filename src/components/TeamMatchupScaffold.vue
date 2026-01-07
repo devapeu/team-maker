@@ -36,7 +36,7 @@ const hasNoMatches = computed(() => props.team1?.wins === 0 && props.team2?.wins
           class="team-matchup__probability-item" 
           :style="{ 
             width: team1.probability + '%',
-            backgroundColor: team1.probability > 50 ? '#10b981' : '#ef4444'
+            backgroundColor: team1.probability > 50 ? '#246a4c' : '#763132'
           }">
           {{ team1.probability }}%
         </div>
@@ -44,7 +44,7 @@ const hasNoMatches = computed(() => props.team1?.wins === 0 && props.team2?.wins
           class="team-matchup__probability-item left" 
           :style="{ 
             width: team2.probability + '%',
-            backgroundColor: team2.probability > 50 ? '#10b981' : '#ef4444'
+            backgroundColor: team2.probability > 50 ? '#246a4c' : '#763132'
           }">
           {{ team2.probability }}%
         </div>

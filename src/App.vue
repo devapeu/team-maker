@@ -42,7 +42,7 @@
               class="teams__probability-item" 
               :style="{ 
                 width: (matchup && matchup[team1Key] ? matchup[team1Key].probability : 0) + '%',
-                backgroundColor: (matchup && matchup[team1Key] && matchup[team1Key].probability > 50) ? '#10b981' : '#ef4444'
+                backgroundColor: (matchup && matchup[team1Key] && matchup[team1Key].probability > 50) ? '#246a4c' : '#763132'
               }">
               {{ (matchup && matchup[team1Key] ? matchup[team1Key].probability.toFixed() : 0) }}%
             </div>
@@ -50,7 +50,7 @@
               class="teams__probability-item left" 
               :style="{ 
                 width: (matchup && matchup[team2Key] ? matchup[team2Key].probability : 0) + '%',
-                backgroundColor: (matchup && matchup[team2Key] && matchup[team2Key].probability > 50) ? '#10b981' : '#ef4444'
+                backgroundColor: (matchup && matchup[team2Key] && matchup[team2Key].probability > 50) ? '#246a4c' : '#763132'
               }">
               {{ (matchup && matchup[team2Key] ? matchup[team2Key].probability.toFixed() : 0) }}%
             </div>
@@ -61,7 +61,6 @@
             <div class="teams__header">
               <h2 class="teams__score">{{ team1Score }}</h2>
               <div 
-                v-if="matchup !== null" 
                 class="teams__wins"
                 :class="hasNoMatches ? 'teams__wins--no-matches' : ''">
                 <template v-if="hasNoMatches">
@@ -87,7 +86,6 @@
                 {{ team2Score }}
               </h2>
               <div 
-                v-if="matchup !== null" 
                 class="teams__wins"
                 :class="hasNoMatches ? 'teams__wins--no-matches' : ''">
                 <template v-if="hasNoMatches">
@@ -213,16 +211,6 @@ const {
   autoBalanceTeams,
 } = useTeams()
 
-const winrateIsHovered = ref(false)
-const showWins = computed(() => {
-  if (!matchup.value || !team1Key.value || !team2Key.value) return false
-
-  const team1Wins = matchup.value[team1Key.value]?.wins ?? 0
-  const team2Wins = matchup.value[team2Key.value]?.wins ?? 0
-
-  return !winrateIsHovered.value && (team1Wins > 0 || team2Wins > 0)
-})
-
 // Wrapper functions for reset actions
 const reset = () => resetPlayerData(team1, team2)
 const moveToAvailable = (id) => moveToAvailableFunction(id, team1, team2)
@@ -291,5 +279,7 @@ const saveConfiguration = () => {
 
 // Computed properties
 const allPlayersPresent = computed(() => players.value.length === 0)
-const hasNoMatches = computed(() => matchup?.value[team1Key.value]?.wins === 0 && matchup?.value[team2Key.value]?.wins === 0)
+const hasNoMatches = computed(() => {
+  return matchup?.value === null || (matchup?.value[team1Key.value]?.wins === 0 && matchup?.value[team2Key.value]?.wins === 0)
+})
 </script>
