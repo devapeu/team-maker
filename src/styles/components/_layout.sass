@@ -5,8 +5,11 @@
   width: 100%
   max-width: 640px
   margin: 0 auto
+  display: grid
+  gap: 32px
   @media (min-width: 1120px)
     max-width: 1120px
+    grid-template-columns: repeat(2, 1fr)
 
 .section-header
   display: flex
@@ -47,7 +50,7 @@
   transition: 100ms ease-out all
   align-content: flex-start
   @media (min-width: 1024px)
-    min-height: 148px
+    min-height: 240px
     padding-left: 48px
     padding-right: 48px
   @media (pointer: fine)

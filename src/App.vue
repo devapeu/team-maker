@@ -6,27 +6,30 @@
   </header>
   
   <main class="team-builder">
-    <!-- Player List -->
-    <div class="players">
-      <div class="all-players">
-        <div class="section-header">
-          <h2 class="draggable-label">Todos los jugadores</h2>
-          <button class="sm-button" @click="reset">Reestablecer todos</button>
+    <div>
+      <!-- Player List -->
+      <div class="players">
+        <div class="all-players">
+          <div class="section-header">
+            <h2 class="draggable-label">Todos los jugadores</h2>
+            <button class="sm-button" @click="reset">Reestablecer todos</button>
+          </div>
+          <draggable v-model="players" item-key="name" group="players" class="player-pool">
+            <template #item="{ element, index }">
+              <PlayerBadge 
+                :player="element" 
+                @click-score="moveToAvailable(element.id)"
+                @click-profile="openPlayerDetails"/>
+            </template>
+          </draggable>
         </div>
-        <draggable v-model="players" item-key="name" group="players" class="player-pool">
-          <template #item="{ element, index }">
-            <PlayerBadge 
-              :player="element" 
-              @click-score="moveToAvailable(element.id)"
-              @click-profile="openPlayerDetails"/>
-          </template>
-        </draggable>
       </div>
+      <!-- Random Map Box -->
+      <MapSelector />
     </div>
-    
     <!-- Teams -->
-    <div class="teams">
-      <div>
+    <div>
+      <div class="teams">
         <div>
           <div class="teams__labels">
             <span>{{ team1Label }}</span>
@@ -108,7 +111,6 @@
         </div>
       </div>
       <div>
-        <MapSelector />
         <div 
           v-if="Object.keys(savedConfigurations).length > 0"
           class="saved-configurations">

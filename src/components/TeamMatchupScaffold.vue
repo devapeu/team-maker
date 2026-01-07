@@ -1,4 +1,5 @@
 <script setup>
+import { computed } from 'vue';
 import PlayerBadge from './PlayerBadge.vue';
 
 
@@ -16,6 +17,8 @@ const props = defineProps({
     required: false,
   }
 });
+
+const hasNoMatches = computed(() => props.team1?.wins === 0 && props.team2?.wins === 0);
 
 </script>
 
@@ -52,7 +55,16 @@ const props = defineProps({
         <div class="teams__header">
           <div class="teams__score">{{ team1.score }}</div>
           <div class="teams__header-side">
-            <div class="wins">{{ team1.wins }}</div>
+            <div 
+              class="wins"
+              :class="hasNoMatches? 'wins--no-matches' : '' ">
+              <template v-if="hasNoMatches">
+                -
+              </template>
+              <template v-else>
+                {{ team1.wins }}
+              </template>
+            </div>
           </div>
         </div>
         <div class="team-box">
@@ -66,7 +78,16 @@ const props = defineProps({
         <div class="teams__header teams__header--inverse">
           <div class="teams__score">{{ team2.score }}</div>
           <div class="teams__header-side">
-            <div class="wins">{{ team2.wins }}</div>
+            <div 
+              class="wins"
+              :class="hasNoMatches? 'wins--no-matches' : '' ">
+              <template v-if="hasNoMatches">
+                -
+              </template>
+              <template v-else>
+                {{ team2.wins }}
+              </template>
+            </div>
           </div>
         </div>
         <div class="team-box">
@@ -117,6 +138,8 @@ const props = defineProps({
   justify-content: center
   border-radius: 2px
   border: 0.5px solid #666
+  &--no-matches
+    color: #777
 .thumbnail
   &.teams__wrapper
     padding: 6px
