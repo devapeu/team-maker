@@ -26,7 +26,9 @@ const props = defineProps({
         <span>{{ team1.label }}</span>
         <span>{{ team2.label }}</span>
       </div>
-      <div class="team-matchup__probability">
+      <div
+        v-if="false"
+        class="team-matchup__probability">
         <div 
           class="team-matchup__probability-item" 
           :style="{ 
@@ -79,6 +81,7 @@ const props = defineProps({
 </template>
 
 <style lang="sass" scoped>
+@use "../styles/abstracts/_variables" as *
 
 .team-matchup
   &__header
@@ -89,6 +92,7 @@ const props = defineProps({
     display: flex
     font-size: 10px
     justify-content: space-between
+    color: #666
   &__probability
     width: 100%
     display: flex
@@ -112,6 +116,7 @@ const props = defineProps({
   align-items: center
   justify-content: center
   border-radius: 2px
+  border: 0.5px solid #666
 .thumbnail
   &.teams__wrapper
     padding: 6px
@@ -132,8 +137,13 @@ const props = defineProps({
     padding: 2px
     margin-top: 0
     gap: 2px
+    border-width: 0.5px
+    border-color: #666
   .teams__score
     font-size: 10px
+  .team-box
+    border-width: 0.5px
+    border-color: #666
   :deep(.player)
     height: 21px
     font-size: 8px
@@ -153,7 +163,7 @@ const props = defineProps({
     @media (max-width: 480px)
       max-width: unset
   :deep(.player__icon)
-    border-width: 3px
+    border-width: 2px
   .team-box
     min-height: 100px
 </style>
