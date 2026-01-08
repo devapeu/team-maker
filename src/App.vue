@@ -139,7 +139,7 @@
               :key="key"
               class="saved-configurations__item">
               <div class="saved-configurations__label">
-                {{ index + 1 }}
+                {{ String.fromCharCode(65 + index ) }}
               </div>
               <TeamMatchupScaffold 
                 class="saved-configurations__team"
