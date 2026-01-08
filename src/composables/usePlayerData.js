@@ -33,36 +33,30 @@ export function usePlayerData() {
   })()
 
   const players = ref(playersMap)
-  const autobalance = ref([])
 
   function reset(team1Ref, team2Ref) {
     players.value = [...playersMap]
-    autobalance.value = []
     team1Ref.value = []
     team2Ref.value = []
   }
 
-  function resetAvailable(team1Ref, team2Ref) {
-    autobalance.value = [...autobalance.value, ...team1Ref.value, ...team2Ref.value]
-    team1Ref.value = []
-    team2Ref.value = []
-  }
-
-  function moveToAvailable(id) {
+  function moveToAvailable(id, team1Ref, team2Ref) {
     const player = players.value.find(player => player.id === id)
     if (player) {
-      autobalance.value.push(player)
+      if (team1Ref.value.length > team2Ref.value.length) {
+        team2Ref.value.push(player)
+      } else {
+        team1Ref.value.push(player)
+      }
       players.value = players.value.filter(player => player.id !== id)
     }
   }
 
   return {
     players,
-    autobalance,
     playersMap,
     averages,
     reset,
-    resetAvailable,
     moveToAvailable
   }
 }

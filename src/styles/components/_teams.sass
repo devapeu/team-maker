@@ -1,10 +1,25 @@
 @use "../abstracts/variables" as *
 
 .teams
-  display: flex
-  flex-direction: column
-  gap: 4px
-  margin-bottom: 24px
+  &__labels
+    display: flex
+    justify-content: space-between
+    @media (min-width 480px)
+      font-size: 20px
+  &__probability
+    width: 100%
+    display: flex
+    margin-top: 2px
+    border-radius: 4px
+    overflow: hidden
+    &-item
+      display: block
+      background: red
+      font-size: 8px
+      padding-left: 4px
+      &.left
+        text-align: right
+        padding-right: 4px
   &__header
     display: flex
     justify-content: space-between
@@ -20,43 +35,44 @@
     text-align: center
     margin: 0
     font-family: $font-sans
-  &__header-side
-    height: 32px
-    flex: 1
-    display: flex
-    align-items: center
-    justify-content: flex-end
   &__score
     font-size: 20px
     font-weight: bold
     color: $gold-500
     margin: 0 
     font-family: $font-serif
-  &__winrate
-    color: grey
-    span
-      font-weight: bold
-      font-size: 18px
-      color: $gold-500
-      font-family: $font-serif
+  &__wins
+    height: 32px
+    width: 32px
+    background: #161005
+    display: flex
+    align-items: center
+    justify-content: center
+    border-radius: 4px
+    border: 1px solid #666
+    &--no-matches
+      color: #888
   &__wrapper
     display: flex
     justify-content: center
     gap: 8px
     margin-bottom: 16px
   &__team
+    margin-top: 8px
     padding: 4px
     border: 1px solid #948772
     border-radius: 3px
-    width: 200px
+    min-width: 200px
+    width: 100%
     display: flex
     flex-direction: column
     gap: 4px
+    @media (max-width: 480px)
+      min-width: unset
   &__controls
     display: flex
     justify-content: center
     gap: 12px
-    margin-top: 14px
   &__button
     margin: 0
     min-width: 140px
@@ -103,7 +119,7 @@
   @media (min-width: 1024px)
     font-size: 18px
     &__team
-      width: 250px
+      width: 100%
     &__header
       padding: 8px
     &__name

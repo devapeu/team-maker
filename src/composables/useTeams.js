@@ -1,7 +1,7 @@
 import { ref, computed, watch } from 'vue'
 import { COLORS } from '../data/colors.js'
 
-export function useTeams(autobalanceRef) {
+export function useTeams() {
   const team1 = ref([])
   const team2 = ref([])
 
@@ -107,7 +107,7 @@ export function useTeams(autobalanceRef) {
   })
 
   async function autoBalanceTeams() {
-    const playerPool = [...team1.value, ...team2.value, ...autobalanceRef.value]
+    const playerPool = [...team1.value, ...team2.value]
     const scores = playerPool.map(p => p.score)
 
     const combinations = []
@@ -156,7 +156,6 @@ export function useTeams(autobalanceRef) {
 
     team1.value = randomTeam.team1.sort((a, b) => b.score - a.score)
     team2.value = randomTeam.team2.sort((a, b) => b.score - a.score)
-    autobalanceRef.value = []
   }
 
   return {
