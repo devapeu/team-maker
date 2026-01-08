@@ -22,7 +22,7 @@ export function useDiscord(showToast) {
       if (!imageBase64) throw new Error('No se pudo extraer base64 de la imagen')
 
       const payload = {
-        message: `**Equipo 1:** ${teamData.team1Score}\n**Equipo 2:** ${teamData.team2Score}`,
+        message: ``,
         imageBase64
       }
 
