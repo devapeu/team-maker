@@ -42,7 +42,7 @@
               class="teams__probability-item" 
               :style="{ 
                 width: (matchup && matchup[team1Key] ? matchup[team1Key].probability : 0) + '%',
-                backgroundColor: (matchup && matchup[team1Key] && matchup[team1Key].probability > 50) ? '#246a4c' : '#763132'
+                backgroundColor: (matchup && matchup[team1Key] && matchup[team1Key].probability > 50) ? '#246a4c' : '#333'
               }">
               {{ (matchup && matchup[team1Key] ? matchup[team1Key].probability.toFixed() : 0) }}%
             </div>
@@ -50,7 +50,7 @@
               class="teams__probability-item left" 
               :style="{ 
                 width: (matchup && matchup[team2Key] ? matchup[team2Key].probability : 0) + '%',
-                backgroundColor: (matchup && matchup[team2Key] && matchup[team2Key].probability > 50) ? '#246a4c' : '#763132'
+                backgroundColor: (matchup && matchup[team2Key] && matchup[team2Key].probability > 50) ? '#246a4c' : '#333'
               }">
               {{ (matchup && matchup[team2Key] ? matchup[team2Key].probability.toFixed() : 0) }}%
             </div>
