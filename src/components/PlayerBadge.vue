@@ -23,13 +23,16 @@ function clickScore() {
 </script>
 <template>
   <div class="player">
-    <img 
-      class="player__icon" 
-      :src="getGodIcon(player.main)"
+    <div 
+      class="player__icon"
       tabindex="0"
       role="button"
       :style="{ borderLeftColor: player.color }"
-      @click="clickProfile"/>
+      @click="clickProfile">
+      <img 
+        class="player__avatar" 
+        :src="getGodIcon(player.main)"/>
+    </div>
     <div class="player__name">{{ player.name }} </div>
     <span 
       class="player__score"

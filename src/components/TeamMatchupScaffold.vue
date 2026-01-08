@@ -187,6 +187,8 @@ const hasNoMatches = computed(() => props.team1?.wins === 0 && props.team2?.wins
       max-width: unset
   :deep(.player__icon)
     border-width: 2px
+  :deep(.player__avatar)
+    opacity: 0.66
   .team-box
     min-height: 100px
 </style>
