@@ -264,15 +264,15 @@ const saveConfiguration = () => {
       label: team1Label.value,
       score: team1Score.value,
       players: [...team1.value],
-      probability: matchup.value[team1Key.value]?.probability ?? 0,
-      wins: matchup.value[team1Key.value]?.wins ?? 0,
+      probability: matchup.value != null ? matchup.value[team1Key.value]?.probability ?? 0 : 0,
+      wins: matchup.value != null ? matchup.value[team1Key.value]?.wins ?? 0 : 0,
     },
     team2: {
       label: team2Label.value,
       score: team2Score.value,
       players: [...team2.value],
-      probability: matchup.value[team2Key.value]?.probability ?? 0,
-      wins: matchup.value[team2Key.value]?.wins ?? 0,
+      probability: matchup.value != null ? matchup.value[team2Key.value]?.probability ?? 0 : 0,
+      wins: matchup.value != null ? matchup.value[team2Key.value]?.wins ?? 0 : 0,
     },
   };
 }
