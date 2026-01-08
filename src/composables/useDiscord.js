@@ -13,10 +13,7 @@ export function useDiscord(showToast) {
         return
       }
 
-      el.style.opacity = 1;
-      el.style.padding = "10 px";
-
-      const canvas = await html2canvas(el, { backgroundColor: '#0f0f0f' })
+      const canvas = await html2canvas(el, { backgroundColor: '#0f0f0f', scale: 2.5 })
       const dataUrl = canvas.toDataURL('image/png')
       if (!dataUrl) throw new Error('No se pudo generar la imagen')
 
@@ -50,8 +47,6 @@ export function useDiscord(showToast) {
     } catch (err) {
       console.error(err)
       showToast('Error al enviar a Discord: ' + (err.message || err), 'error', 4000)
-    } finally {
-      el.style = "";
     }
   }
 
