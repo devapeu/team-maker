@@ -278,7 +278,7 @@ const saveConfiguration = () => {
 }
 
 // Computed properties
-const allPlayersPresent = computed(() => players.value.length === 0)
+const allPlayersPresent = computed(() => team1.value.length === 6 && team2.value.length === 6)
 const hasNoMatches = computed(() => {
   return matchup?.value === null || (matchup?.value[team1Key.value]?.wins === 0 && matchup?.value[team2Key.value]?.wins === 0)
 })
