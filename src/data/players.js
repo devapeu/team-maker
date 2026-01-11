@@ -1,7 +1,7 @@
 export const PLAYERS_ARRAY = [
   {
     id: 1,
-    name: "Ayax",
+    name: "Bill",
     scores: {
       attack: 85,
       defense: 80,
@@ -16,7 +16,7 @@ export const PLAYERS_ARRAY = [
   },
   {
     id: 2,
-    name: "Diego",
+    name: "Elliot",
     scores: {
       attack: 75,
       defense: 95,
@@ -31,7 +31,7 @@ export const PLAYERS_ARRAY = [
   },
   {
     id: 3,
-    name: "Piero",
+    name: "Tom",
     scores: {
       attack: 90,
       defense: 75,
@@ -46,7 +46,7 @@ export const PLAYERS_ARRAY = [
   },
   {
     id: 5,
-    name: "Jaume",
+    name: "Jesse",
     scores: {
       attack: 80,
       defense: 90,
@@ -61,7 +61,7 @@ export const PLAYERS_ARRAY = [
   },
   {
     id: 6,
-    name: "Sebastian",
+    name: "Robert",
     scores: {
       attack: 45,
       defense: 40,
@@ -76,7 +76,7 @@ export const PLAYERS_ARRAY = [
   },
   {
     id: 7,
-    name: "Renato",
+    name: "Fernando",
     scores: {
       attack: 50,
       defense: 55,
@@ -91,7 +91,7 @@ export const PLAYERS_ARRAY = [
   },
   {
     id: 8,
-    name: "Hector",
+    name: "Bruce",
     scores: {
       attack: 65,
       defense: 65,
@@ -106,7 +106,7 @@ export const PLAYERS_ARRAY = [
   },
   {
     id: 9,
-    name: "Jardani",
+    name: "Kevin",
     scores: {
       attack: 60,
       defense: 70,
@@ -121,7 +121,7 @@ export const PLAYERS_ARRAY = [
   },
   {
     id: 10,
-    name: "Christian",
+    name: "Vicente",
     scores: {
       attack: 60,
       defense: 60,
@@ -136,7 +136,7 @@ export const PLAYERS_ARRAY = [
   },
   {
     id: 11,
-    name: "Almeyda",
+    name: "Toby",
     scores: {
       attack: 15,
       defense: 30,
@@ -151,7 +151,7 @@ export const PLAYERS_ARRAY = [
   },
   {
     id: 12,
-    name: "André",
+    name: "Trevor",
     scores: {
       attack: 20,
       defense: 20,
@@ -166,7 +166,7 @@ export const PLAYERS_ARRAY = [
   },
   {
     id: 13,
-    name: "Fabri",
+    name: "Joel",
     scores: {
       attack: 5,
       defense: 5,
@@ -181,7 +181,7 @@ export const PLAYERS_ARRAY = [
   },
   {
     id: 14,
-    name: "Jair",
+    name: "Dominic",
     scores: {
       attack: 30,
       defense: 40,
