@@ -3,8 +3,10 @@
     <div class="draggable-label">Selección de Mapa</div>
     <div class="map-selector">
       <template v-if="hasDisplayedMap">
-        <img class="map-selector__image" :src="mapIcon"/>
-        <p>{{ mapName }}</p>
+        <img
+          class="map-selector__image"
+          :src="`/img/maps/${map.id}.webp`"/>
+        <p>{{ map.name }}</p>
         <button class="map-button map-selector__button" @click="chooseMap">Otro mapa</button>
       </template>
       <template v-else>
@@ -15,25 +17,15 @@
 </template>
 <script setup>
 import { MAPS_ARRAY } from '../data/maps.js'
-import { ref, computed, watch } from 'vue'
+import { ref } from 'vue'
 
-const mapIcon = ref();
-const mapName = ref();
-
+const map = ref({});
 const hasDisplayedMap = ref(false);
-
-function getMapIcon(name) {
-  return new URL(`../assets/maps/${name}.webp`, import.meta.url).href;
-}
 
 function chooseMap() {
   if (hasDisplayedMap.value === false) hasDisplayedMap.value = true;
-  const map = MAPS_ARRAY[Math.floor(Math.random() * MAPS_ARRAY.length)];
-  mapIcon.value =  getMapIcon(map.id);
-  mapName.value = map.name;
+  map.value = MAPS_ARRAY[Math.floor(Math.random() * MAPS_ARRAY.length)];
 }
-
-
 </script>
 <style lang="sass" scoped>
 
@@ -60,6 +52,7 @@ function chooseMap() {
   box-shadow: inset 0 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 5px rgba(0, 0, 0, 0.5)
   transition: 150ms ease-out all
   cursor: pointer
+  font-family: "DM Sans"
   @media (pointer: fine)
     &:hover
       background: linear-gradient(to bottom, #5c4727, #0f0b03)
