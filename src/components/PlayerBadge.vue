@@ -8,10 +8,6 @@ const props = defineProps({
   },
 });
 
-function getGodIcon(name) {
-  return new URL(`../assets/gods/${name}_icon.avif`, import.meta.url).href;
-}
-
 function clickProfile() {
   emit('click-profile', props.player.id);
 }
@@ -31,7 +27,7 @@ function clickScore() {
       @click="clickProfile">
       <img 
         class="player__avatar" 
-        :src="getGodIcon(player.main)"/>
+        :src="`/img/gods/${player.main}_icon.avif`"/>
     </div>
     <div class="player__name">{{ player.name }} </div>
     <span 

@@ -8,7 +8,7 @@
       <div class="player-info">
         <img 
           class="player-info__image" 
-          :src="getGodIcon(playerDetailsActive.main)"
+          :src="`/img/gods/${playerDetailsActive.main}_icon.avif`"
           :style="{ borderColor: playerDetailsActive.color }"/>
         <h2 class="player-info__name">
         {{ playerDetailsActive.name }}
@@ -60,7 +60,9 @@
               :key="row.name">
               <td>
                 <div class="player-table__item">
-                  <img width="32" :src="getGodIcon(row.name)" />
+                  <img 
+                    width="32" 
+                    :src="`/img/gods/${row.name}_icon.avif`" />
                   {{ row.name }}
                 </div>
               </td>
@@ -298,10 +300,6 @@ async function fetchRivals(profileId, after = 0) {
   activePlayerRivals.value = sortPlayers(data.players);
 }
 
-function getGodIcon(name) {
-  return new URL(`../assets/gods/${name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")}_icon.avif`, import.meta.url).href;
-}
-
 function getPercentColor(number) {
   if (number > 70) return 'percent-teal'
   else if (number > 50) return 'percent-green'
@@ -354,22 +352,6 @@ watch(
   color: #aaa
   text-align: center
   border: 1px solid #948772
-
-.player-table
-  width: 100%
-  border-collapse: collapse
-  th
-    color: #aaa
-    font-weight: normal
-  td, th
-    text-align: left
-    padding: 8px
-    border-bottom: 1px solid #948772
-  &__item
-    display: flex
-    align-items: center
-    gap: 8px
-    text-transform: capitalize
 
 .player-controls
   display: flex
