@@ -55,6 +55,7 @@ const maps = ref([]);
 const elo = ref([]);
 
 onMounted(async () => {
+  const PLAYERS_BY_ID = Object.fromEntries(PLAYERS_ARRAY.map(p => [p.profile_id, p]));
   try {
     const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/stats`);
     if (res) {
@@ -63,10 +64,19 @@ onMounted(async () => {
 
       const playersElo = data.elo.map(row => ({
         elo: row.elo,
-        name: PLAYERS_ARRAY.find(p => p.profile_id == row.profile_id)?.name
+        name: PLAYERS_BY_ID[row.profile_id]?.name,
       }));
 
       elo.value = playersElo;
+
+      const matchupsList = data.matchups.map(row => ({
+        team_match_id: row.team_match_id,
+        count: row.count,
+        team1: row.team1.map(p => PLAYERS_BY_ID[p]?.name),
+        team2: row.team2.map(p => PLAYERS_BY_ID[p]?.name)
+      }))
+
+      console.log(matchupsList);
     }
   } catch {
 
