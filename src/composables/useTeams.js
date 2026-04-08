@@ -35,8 +35,8 @@ export function useTeams() {
   const team2Label = computed(() => teamNames[team2Key.value] || 'Equipo 2')
 
   // Calculate score for Team 1 and Team 2
-  const team1Score = computed(() => team1.value.reduce((sum, player) => sum + player.score, 0))
-  const team2Score = computed(() => team2.value.reduce((sum, player) => sum + player.score, 0))
+  const team1Score = computed(() => team1.value.reduce((sum, player) => sum + player.elo, 0))
+  const team2Score = computed(() => team2.value.reduce((sum, player) => sum + player.elo, 0))
 
   function isValidMatchup(data) {
     // Must be an object
@@ -108,7 +108,7 @@ export function useTeams() {
 
   async function autoBalanceTeams() {
     const playerPool = [...team1.value, ...team2.value]
-    const scores = playerPool.map(p => p.score)
+    const scores = playerPool.map(p => p.elo)
 
     const combinations = []
     const total = scores.length
@@ -121,10 +121,10 @@ export function useTeams() {
       for (let j = 0; j < total; j++) {
         if ((i & (1 << j)) !== 0) {
           t1.push(playerPool[j])
-          score1 += playerPool[j].score
+          score1 += playerPool[j].elo
         } else {
           t2.push(playerPool[j])
-          score2 += playerPool[j].score
+          score2 += playerPool[j].elo
         }
       }
 
@@ -154,8 +154,8 @@ export function useTeams() {
     randomTeam.team1.forEach(p => { p.color = colorPool[colorIndex++] })
     randomTeam.team2.forEach(p => { p.color = colorPool[colorIndex++] })
 
-    team1.value = randomTeam.team1.sort((a, b) => b.score - a.score)
-    team2.value = randomTeam.team2.sort((a, b) => b.score - a.score)
+    team1.value = randomTeam.team1.sort((a, b) => b.elo - a.elo)
+    team2.value = randomTeam.team2.sort((a, b) => b.elo - a.elo)
   }
 
   return {

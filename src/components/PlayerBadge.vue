@@ -35,7 +35,7 @@ function clickScore() {
       tabindex="0"
       role="button"
       @click="clickScore">
-      {{ player.score }}
+      {{ player.elo }}
     </span>
   </div>
 </template>

@@ -2,6 +2,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 1,
     name: "Ayax",
+    elo: 89,
     scores: {
       attack: 85,
       defense: 80,
@@ -17,6 +18,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 2,
     name: "Diego",
+    elo: 106,
     scores: {
       attack: 75,
       defense: 95,
@@ -32,6 +34,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 3,
     name: "Piero",
+    elo: 86,
     scores: {
       attack: 90,
       defense: 75,
@@ -47,6 +50,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 5,
     name: "Jaume",
+    elo: 90,
     scores: {
       attack: 80,
       defense: 90,
@@ -62,6 +66,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 6,
     name: "Sebastian",
+    elo: 58,
     scores: {
       attack: 45,
       defense: 40,
@@ -77,6 +82,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 7,
     name: "Renato",
+    elo: 71,
     scores: {
       attack: 50,
       defense: 55,
@@ -92,6 +98,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 8,
     name: "Hector",
+    elo: 63,
     scores: {
       attack: 65,
       defense: 65,
@@ -107,6 +114,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 9,
     name: "Jardani",
+    elo: 69,
     scores: {
       attack: 60,
       defense: 70,
@@ -122,6 +130,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 10,
     name: "Christian",
+    elo: 56,
     scores: {
       attack: 60,
       defense: 60,
@@ -137,6 +146,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 11,
     name: "Almeyda",
+    elo: 25,
     scores: {
       attack: 15,
       defense: 30,
@@ -152,6 +162,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 12,
     name: "André",
+    elo: 25,
     scores: {
       attack: 20,
       defense: 20,
@@ -167,6 +178,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 13,
     name: "Fabri",
+    elo: 10,
     scores: {
       attack: 5,
       defense: 5,
@@ -182,6 +194,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 14,
     name: "Jair",
+    elo: 35,
     scores: {
       attack: 30,
       defense: 40,
@@ -197,6 +210,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 15,
     name: "Jean Paul",
+    elo: 35,
     scores: {
       attack: 30,
       defense: 30,
