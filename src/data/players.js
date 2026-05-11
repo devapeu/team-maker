@@ -2,7 +2,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 1,
     name: "Ayax",
-    elo: 89,
+    elo: 82,
     scores: {
       attack: 85,
       defense: 80,
@@ -18,7 +18,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 2,
     name: "Diego",
-    elo: 106,
+    elo: 95,
     scores: {
       attack: 75,
       defense: 95,
@@ -34,7 +34,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 3,
     name: "Piero",
-    elo: 86,
+    elo: 82,
     scores: {
       attack: 90,
       defense: 75,
@@ -50,7 +50,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 5,
     name: "Jaume",
-    elo: 90,
+    elo: 83,
     scores: {
       attack: 80,
       defense: 90,
@@ -66,7 +66,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 6,
     name: "Sebastian",
-    elo: 58,
+    elo: 56,
     scores: {
       attack: 45,
       defense: 40,
@@ -82,7 +82,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 7,
     name: "Renato",
-    elo: 71,
+    elo: 67,
     scores: {
       attack: 50,
       defense: 55,
@@ -98,7 +98,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 8,
     name: "Hector",
-    elo: 63,
+    elo: 61,
     scores: {
       attack: 65,
       defense: 65,
@@ -114,7 +114,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 9,
     name: "Jardani",
-    elo: 69,
+    elo: 63,
     scores: {
       attack: 60,
       defense: 70,
@@ -130,7 +130,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 10,
     name: "Christian",
-    elo: 56,
+    elo: 55,
     scores: {
       attack: 60,
       defense: 60,
@@ -146,7 +146,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 11,
     name: "Almeyda",
-    elo: 25,
+    elo: 40,
     scores: {
       attack: 15,
       defense: 30,
@@ -162,7 +162,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 12,
     name: "André",
-    elo: 25,
+    elo: 49,
     scores: {
       attack: 20,
       defense: 20,
