@@ -34,7 +34,7 @@ export const PLAYERS_ARRAY = [
   {
     id: 3,
     name: "Piero",
-    elo: 82,
+    elo: 63,
     scores: {
       attack: 90,
       defense: 75,
