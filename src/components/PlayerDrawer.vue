@@ -29,10 +29,6 @@
         &times;
       </button>
 
-      <template v-if="activePlayerElo">
-        Elo: {{ activePlayerElo }}
-      </template>
-
       <div class="player-controls">  
         <label>Filtrar desde: </label>
         <select v-model="timestampFilter">
@@ -201,7 +197,6 @@ const activePlayerPartners = ref([]);
 const activePlayerRivals = ref([]);
 const activePlayerGods = ref({});
 const activePlayerWinstreak = ref();
-const activePlayerElo = ref(0);
 const timestampFilter = ref('2-week');
 const timestampValue = computed(() => {
   const today = new Date();
@@ -260,13 +255,6 @@ async function fetchWinstreak(profileId) {
   activePlayerWinstreak.value = data.winstreak;
 }
 
-async function fetchElo(profileId) {
-  if (!profileId) return;
-  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/elo/${profileId}`);
-  const data = await res.json();
-  activePlayerElo.value = Math.round(data.elo);
-}
-
 function sortPlayers(array) {
   return Object.entries(array)
     .sort((a, b) => {
@@ -320,7 +308,6 @@ function fetchData() {
   fetchPartners(props.playerDetailsActive.profile_id, timestampValue.value);
   fetchRivals(props.playerDetailsActive.profile_id, timestampValue.value);
   fetchWinstreak(props.playerDetailsActive.profile_id);
-  fetchElo(props.playerDetailsActive.profile_id);
 }
 
 watch(

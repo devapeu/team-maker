@@ -163,7 +163,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import draggable from "vuedraggable/dist/vuedraggable.common";
 import PlayerBadge from '../components/PlayerBadge.vue';
 import PlayerDrawer from '../components/PlayerDrawer.vue';
@@ -275,5 +275,23 @@ const saveConfiguration = () => {
 const allPlayersPresent = computed(() => team1.value.length === 6 && team2.value.length === 6)
 const hasNoMatches = computed(() => {
   return matchup?.value === null || (matchup?.value[team1Key.value]?.wins === 0 && matchup?.value[team2Key.value]?.wins === 0)
+})
+
+onMounted(async () => {
+  await Promise.all(
+      players.value.map(async player => {
+        try {
+          const res = await fetch(
+              `${import.meta.env.VITE_API_BASE_URL}/elo/${player.profile_id}`
+          )
+
+          const data = await res.json()
+
+          player.elo = Math.round(data.elo)
+        } catch (err) {
+          console.error(`Failed to fetch elo for ${player.profile_id}`, err)
+        }
+      })
+  )
 })
 </script>
