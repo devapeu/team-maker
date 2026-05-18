@@ -93,7 +93,7 @@
           <tbody>
             <tr v-for="player in activePlayerPartners" :key="player[0]">
               <td>
-                {{ getPlayerName(player[0]) }}
+                {{ getPlayerName(player[1].profile_id) }}
               </td>
               <td>
                 {{ player[1].wins }}
@@ -129,7 +129,7 @@
           <tbody>
             <tr v-for="player in activePlayerRivals" :key="player[0]">
               <td>
-                {{ getPlayerName(player[0]) }}
+                {{ getPlayerName(player[1].profile_id) }}
               </td>
               <td>
                 {{ player[1].wins }}
@@ -264,7 +264,7 @@ async function fetchElo(profileId) {
   if (!profileId) return;
   const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/elo/${profileId}`);
   const data = await res.json();
-  activePlayerElo.value = data.elo;
+  activePlayerElo.value = Math.round(data.elo);
 }
 
 function sortPlayers(array) {

@@ -65,10 +65,13 @@ export function useTeams() {
   }
 
   watch([team1, team2], async ([newTeam1, newTeam2]) => {
-    const t1 = newTeam1.map(p => String(p.profile_id)).sort()
-    const t2 = newTeam2.map(p => String(p.profile_id)).sort()
-    const sortedTeams = [t1, t2].sort((a, b) => a.join(',').localeCompare(b.join(',')))
-    const teamId = sortedTeams.map(t => t.join(',')).join(' vs ')
+    const normalized = normalizeTeams([newTeam1, newTeam2]);
+
+    const t1 = normalized.teams[0].players;
+    const t2 = normalized.teams[1].players;
+    const teamId = normalized.matchupKey;
+
+    console.log(t1, t2)
 
     if (!teamId || teamId === ' vs ') {
       matchup.value = null;
@@ -156,6 +159,37 @@ export function useTeams() {
 
     team1.value = randomTeam.team1.sort((a, b) => b.elo - a.elo)
     team2.value = randomTeam.team2.sort((a, b) => b.elo - a.elo)
+  }
+
+  function normalizeTeams(teams) {
+    // sort players inside each team
+    if (teams[0].length === 0 || teams[1].length === 0) return;
+
+    const sortedTeams = teams.map(team => {
+      const players = [...team].sort(
+          (a, b) => a.profile_id - b.profile_id
+      );
+
+      return {
+        ...team,
+        players,
+      };
+    });
+
+    // sort teams by first profile_id
+    sortedTeams.sort(
+        (a, b) => a.players[0].profile_id - b.players[0].profile_id
+    );
+
+    // build deterministic matchup key
+    const matchupKey = sortedTeams
+        .map(team => team.players.map(p => p.profile_id).join(","))
+        .join(" vs ");
+
+    return {
+      teams: sortedTeams,
+      matchupKey,
+    };
   }
 
   return {
