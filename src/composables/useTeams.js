@@ -67,11 +67,11 @@ export function useTeams() {
   watch([team1, team2], async ([newTeam1, newTeam2]) => {
     const normalized = normalizeTeams([newTeam1, newTeam2]);
 
+    if (!normalized) return;
+
     const t1 = normalized.teams[0].players;
     const t2 = normalized.teams[1].players;
     const teamId = normalized.matchupKey;
-
-    console.log(t1, t2)
 
     if (!teamId || teamId === ' vs ') {
       matchup.value = null;
