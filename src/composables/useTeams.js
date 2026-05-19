@@ -96,7 +96,7 @@ export function useTeams() {
         if (res.ok) {
           const { data } = await res.json()
           if (isValidMatchup(data)) {
-            const newValue = { ...data.teams, history }
+            const newValue = { ...data.teams, history: data.history }
             matchup.value = newValue;
             teamsCache.value[teamId] = newValue
           } else {
