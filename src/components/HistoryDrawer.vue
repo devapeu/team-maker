@@ -25,6 +25,36 @@ function formatDate(timestamp) {
   return formatter.format(date);
 }
 
+function getRelativeTime(timestamp) {
+  const ahora = Date.now();
+  const diffMs = ahora - timestamp * 1000;
+
+  const segundos = Math.floor(diffMs / 1000);
+  const minutos = Math.floor(segundos / 60);
+  const hours = Math.floor(minutos / 60);
+  const days = Math.floor(hours / 24);
+  const months = Math.floor(days / 30);
+  const years = Math.floor(days / 365);
+
+  if (years > 0) {
+    return `Hace ${years} año${years > 1 ? "s" : ""}`;
+  }
+
+  if (months > 0) {
+    return `Hace ${months} mes${months > 1 ? "es" : ""}`;
+  }
+
+  if (days > 0) {
+    return `Hace ${days} día${days > 1 ? "s" : ""}`;
+  }
+
+  if (hours > 0) {
+    return `Hace ${hours} hora${hours > 1 ? "s" : ""}`;
+  }
+
+  return "Hace un momento";
+}
+
 </script>
 
 <template>
@@ -42,12 +72,10 @@ function formatDate(timestamp) {
           <div>
               <img
                   :src="`/img/maps/${match.mapname}.webp`"
-                  style="width: 80px; display: block;"/>
-            <p>
-              {{ getMapName(match.mapname) }}
-
-            </p>
-            {{ formatDate(match.startgametime) }}
+                  style="width: 80px; display: block; margin-bottom: 4px"/>
+            <p>{{ getMapName(match.mapname) }}</p>
+            <p class="history__time-relative">{{ getRelativeTime(match.startgametime) }}</p>
+            <p class="history__time-numeric">{{ formatDate(match.startgametime) }}</p>
           </div>
           <div>
             <ul>
@@ -97,6 +125,12 @@ function formatDate(timestamp) {
     border-bottom: 1px solid grey
     &:last-child
       border: none
+  &__time-relative
+    color: #aaa
+    font-size: 14px
+  &__time-numeric
+    font-size: 13px
+    color: #aaa
 .player-list
   &__item
     list-style: none
