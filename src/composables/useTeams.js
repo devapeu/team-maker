@@ -43,7 +43,7 @@ export function useTeams() {
     if (!data || typeof data != 'object') return false;
 
     // Must have only two entries, i.e. Team 1 and Team 2
-    const entries = Object.entries(data);
+    const entries = Object.entries(data.teams);
     if (entries.length !== 2) return false;
 
     return entries.every(([key, value]) => {
@@ -96,8 +96,9 @@ export function useTeams() {
         if (res.ok) {
           const { data } = await res.json()
           if (isValidMatchup(data)) {
-            matchup.value = data
-            teamsCache.value[teamId] = data
+            const newValue = { ...data.teams, history }
+            matchup.value = newValue;
+            teamsCache.value[teamId] = newValue
           } else {
             matchup.value = null
             teamsCache.value[teamId] = null
