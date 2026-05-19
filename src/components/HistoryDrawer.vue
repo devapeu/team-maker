@@ -34,7 +34,7 @@ function formatDate(timestamp) {
       placement="right"
       :auto-focus="false">
     <n-drawer-content>
-      <h2>Partidas Anteriores</h2>
+      <h2 class="drawer-title">Partidas Anteriores</h2>
       <ul>
         <li
             v-for="match in history"
@@ -80,6 +80,13 @@ function formatDate(timestamp) {
 </template>
 
 <style scoped lang="sass">
+.drawer-title
+  display: flex
+  gap: 12px
+  align-items: center
+  padding-bottom: 12px
+  margin-bottom: 16px
+  border-bottom: 1px solid #948772
 .history
   &__item
     display: grid
