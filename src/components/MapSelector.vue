@@ -16,15 +16,17 @@
   </div>
 </template>
 <script setup>
-import { MAPS_ARRAY } from '../data/maps.js'
+import { getValidMaps } from '../data/maps.js'
 import { ref } from 'vue'
 
 const map = ref({});
 const hasDisplayedMap = ref(false);
 
+const maps = getValidMaps();
+
 function chooseMap() {
   if (hasDisplayedMap.value === false) hasDisplayedMap.value = true;
-  map.value = MAPS_ARRAY[Math.floor(Math.random() * MAPS_ARRAY.length)];
+  map.value = maps[Math.floor(Math.random() * maps.length)];
 }
 </script>
 <style lang="sass" scoped>

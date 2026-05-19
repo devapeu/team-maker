@@ -31,7 +31,8 @@
           </div>
           <div
             v-if="matchup !== null"
-            class="teams__probability">
+            class="teams__probability"
+            @click="openHistoryDrawer">
             <div 
               class="teams__probability-item" 
               :style="{ 
@@ -151,6 +152,9 @@
     v-model:active="active"
     :playerDetailsActive="playerDetailsActive"
     :averages="averages" />
+  <HistoryDrawer
+    v-model:active="historyDrawerActive"
+    :history="history" />
   <div class="toast-container" aria-live="polite">
     <div
       v-for="t in toasts"
@@ -178,6 +182,7 @@ import { usePlayerData } from '../composables/usePlayerData.js'
 import { useTeams } from '../composables/useTeams.js'
 import { usePlayerDrawer } from '../composables/usePlayerDrawer.js'
 import { useDiscord } from '../composables/useDiscord.js'
+import HistoryDrawer from "@/components/HistoryDrawer.vue";
 
 // Toast notifications
 const { toasts, showToast } = useToast()
@@ -276,6 +281,14 @@ const allPlayersPresent = computed(() => team1.value.length === 6 && team2.value
 const hasNoMatches = computed(() => {
   return matchup?.value === null || (matchup?.value[team1Key.value]?.wins === 0 && matchup?.value[team2Key.value]?.wins === 0)
 })
+
+const historyDrawerActive = ref(false)
+const history = ref(null);
+
+function openHistoryDrawer() {
+  historyDrawerActive.value = true;
+  history.value = matchup?.value.history;
+}
 
 onMounted(async () => {
   await Promise.all(
