@@ -360,21 +360,6 @@ watch(
   font-style: italic
   opacity: 0.75
 
-.close-drawer
-  position: absolute
-  top: 20px
-  right: 30px
-  width: 32px
-  height: 32px
-  font-size: 24px
-  background: none
-  border: none
-  color: #ccc
-  font-weight: 100
-  border-radius: 5px
-  &:focus
-    outline: none
-
 .percent
   &-teal
     color: #31e1bb

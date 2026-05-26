@@ -55,16 +55,26 @@ function getRelativeTime(timestamp) {
   return "Hace un momento";
 }
 
+function closeDrawer() {
+  props.active.value = false;
+}
+
 </script>
 
 <template>
   <n-drawer
-      v-model:show="drawerActive"
+      v-model:show="active"
       width="100%"
       placement="right"
       :auto-focus="false">
     <n-drawer-content>
       <h2 class="drawer-title">Partidas Anteriores</h2>
+      <button
+          key="close-btn"
+          class="close-drawer"
+          @click="closeDrawer">
+        &times;
+      </button>
       <ul>
         <li
             v-for="match in history"
