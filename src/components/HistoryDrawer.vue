@@ -56,14 +56,14 @@ function getRelativeTime(timestamp) {
 }
 
 function closeDrawer() {
-  props.active.value = false;
+  drawerActive.value = false;
 }
 
 </script>
 
 <template>
   <n-drawer
-      v-model:show="active"
+      v-model:show="drawerActive"
       width="100%"
       placement="right"
       :auto-focus="false">
