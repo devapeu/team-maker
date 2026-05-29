@@ -8,7 +8,7 @@
       <div class="player-info">
         <img 
           class="player-info__image" 
-          :src="`/img/gods/${playerDetailsActive.main}_icon.avif`"
+          :src="`/img/gods/${playerDetailsActive.god}_icon.avif`"
           :style="{ borderColor: playerDetailsActive.color }"/>
         <h2 class="player-info__name">
         {{ playerDetailsActive.name }}
@@ -183,7 +183,7 @@ ChartJS.register(
 const props = defineProps({
   active: Boolean,
   averages: Array,
-  playerDetailsActive: Object,
+  playerDetailsActive: Object | Boolean,
 })
 
 const emit = defineEmits(['update:active'])

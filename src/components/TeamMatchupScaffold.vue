@@ -5,11 +5,11 @@ import PlayerBadge from './PlayerBadge.vue';
 
 const props = defineProps({
   team1: {
-    type: Array,
+    type: Object,
     required: true
   },
   team2: {
-    type: Array,
+    type: Object,
     required: true,
   },
   thumbnail: {

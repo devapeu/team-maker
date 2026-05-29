@@ -12,7 +12,7 @@ export const PLAYERS_ARRAY = [
       micro: 80,
     },
     profile_id: 1074827715,
-    main: "kronos",
+    god: "kronos",
     color: "#36ff32",
   },
   {
@@ -28,7 +28,7 @@ export const PLAYERS_ARRAY = [
       micro: 95,
     },
     profile_id: 1074199836,
-    main: "ra",
+    god: "ra",
     color: "#ff0000",
   },
   {
@@ -44,7 +44,7 @@ export const PLAYERS_ARRAY = [
       micro: 70,
     },
     profile_id: 1073862520,
-    main: "odin",
+    god: "odin",
     color: "#8e1942",
   },
   {
@@ -60,7 +60,7 @@ export const PLAYERS_ARRAY = [
       micro: 80,
     },
     profile_id: 1074196830,
-    main: "gaia",
+    god: "gaia",
     color: "#900cfc",
   },
   {
@@ -76,7 +76,7 @@ export const PLAYERS_ARRAY = [
       micro: 50,
     },
     profile_id: 1074910820,
-    main: "poseidon",
+    god: "poseidon",
     color: "#ff9721",
   },
   {
@@ -92,7 +92,7 @@ export const PLAYERS_ARRAY = [
       micro: 50,
     },
     profile_id: 1075027222,
-    main: "thor",
+    god: "thor",
     color: "#32edff",
   },
   {
@@ -108,7 +108,7 @@ export const PLAYERS_ARRAY = [
       micro: 35,
     },
     profile_id: 1074849746,
-    main: "zeus",
+    god: "zeus",
     color: "#ff00ff",
   },
   {
@@ -124,7 +124,7 @@ export const PLAYERS_ARRAY = [
       micro: 60,
     },
     profile_id: 1074203172,
-    main: "zeus",
+    god: "zeus",
     color: "#00bc7a",
   },
   {
@@ -140,7 +140,7 @@ export const PLAYERS_ARRAY = [
       micro: 65,
     },
     profile_id: 1074839111,
-    main: "kronos",
+    god: "kronos",
     color: "#3232ff",
   },
   {
@@ -156,7 +156,7 @@ export const PLAYERS_ARRAY = [
       micro: 15,
     },
     profile_id: 1075268390,
-    main: "amaterasu",
+    god: "amaterasu",
     color: "grey",
   },
   {
@@ -172,7 +172,7 @@ export const PLAYERS_ARRAY = [
       micro: 20,
     },
     profile_id: 1075636768,
-    main: "susanoo",
+    god: "susanoo",
     color: "red",
   },
   {
@@ -188,7 +188,7 @@ export const PLAYERS_ARRAY = [
       micro: 5,
     },
     profile_id: 1076751409,
-    main: "kronos",
+    god: "kronos",
     color: "#ff9721",
   },
   {
@@ -204,7 +204,7 @@ export const PLAYERS_ARRAY = [
       micro: 30,
     },
     profile_id: 1074875183,
-    main: "gaia",
+    god: "gaia",
     color: "#ffff19",
   },
   {
@@ -220,7 +220,7 @@ export const PLAYERS_ARRAY = [
       micro: 30,
     },
     profile_id: 1074842985,
-    main: "loki",
+    god: "loki",
     color: "#900cfc",
   },
 ];

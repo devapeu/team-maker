@@ -13,6 +13,7 @@
               <PlayerBadge 
                 :player="element" 
                 @click-score="moveToAvailable(element.id)"
+                @change-god="handleGodChange"
                 @click-profile="openPlayerDetails"/>
             </template>
           </draggable>
@@ -69,7 +70,8 @@
             <draggable v-model="team1" item-key="name" group="players" class="team-box">
               <template #item="{ element }">
                 <PlayerBadge 
-                  :player="element" 
+                  :player="element"
+                  @change-god="handleGodChange"
                   @click-profile="openPlayerDetails" />
               </template>
             </draggable>
@@ -94,7 +96,8 @@
             <draggable v-model="team2" item-key="name" group="players" class="team-box">
               <template #item="{ element }">
                 <PlayerBadge 
-                  :player="element" 
+                  :player="element"
+                  @change-god="handleGodChange"
                   @click-profile="openPlayerDetails" />
               </template>
             </draggable>
@@ -167,7 +170,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, toRaw } from 'vue'
 import draggable from "vuedraggable/dist/vuedraggable.common";
 import PlayerBadge from '../components/PlayerBadge.vue';
 import PlayerDrawer from '../components/PlayerDrawer.vue';
@@ -208,12 +211,33 @@ const {
   team2Key,
   matchup,
   autoBalanceTeams,
+  normalizeTeams
 } = useTeams()
 
 // Wrapper functions for reset actions
 const reset = () => resetPlayerData(team1, team2)
 const moveToAvailable = (id) => moveToAvailableFunction(id, team1, team2)
 
+const handleGodChange = (data) => {
+  const refs = [players, team1, team2];
+
+  for (const ref of refs) {
+    const player = ref.value.find(p => p.id === data.id);
+
+    if (!player) continue;
+
+    const newGod = player.eloData.gods.find(
+        g => g.key === data.god
+    );
+
+    if (newGod) {
+      player.elo = Math.round(newGod.elo);
+      player.god = newGod.god;
+    }
+
+    break;
+  }
+};
 // Player drawer
 const { active, playerDetailsActive, openPlayerDetails } = usePlayerDrawer(playersMap)
 
@@ -245,8 +269,7 @@ const saveConfiguration = () => {
     return
   }
 
-  const sortedTeams = [team1Key.value, team2Key.value].sort((a, b) => a.localeCompare(b))
-  const teamMatchId = sortedTeams.join(" vs ");
+  const { matchupKey: teamMatchId } = normalizeTeams([team1.value, team2.value]);
 
   if (savedConfigurations.value[teamMatchId]) {
     showToast('Ya has guardado esa configuración.', 'error', 3000)
@@ -258,18 +281,21 @@ const saveConfiguration = () => {
     return
   }
 
+  const clonePlayers = (players) =>
+      players.map(player => structuredClone(toRaw(player)))
+
   savedConfigurations.value[teamMatchId] = {
     team1: {
       label: team1Label.value,
       score: team1Score.value,
-      players: [...team1.value],
+      players: clonePlayers(team1.value),
       probability: matchup.value != null ? matchup.value[team1Key.value]?.probability ?? 0 : 0,
       wins: matchup.value != null ? matchup.value[team1Key.value]?.wins ?? 0 : 0,
     },
     team2: {
       label: team2Label.value,
       score: team2Score.value,
-      players: [...team2.value],
+      players: clonePlayers(team2.value),
       probability: matchup.value != null ? matchup.value[team2Key.value]?.probability ?? 0 : 0,
       wins: matchup.value != null ? matchup.value[team2Key.value]?.wins ?? 0 : 0,
     },
@@ -294,13 +320,28 @@ onMounted(async () => {
   await Promise.all(
       players.value.map(async player => {
         try {
-          const res = await fetch(
-              `${import.meta.env.VITE_API_BASE_URL}/elo/${player.profile_id}`
-          )
+          const { elos } = await fetch(
+              `${import.meta.env.VITE_API_BASE_URL}/elos/${player.profile_id}`
+          ).then(r => r.json());
 
-          const data = await res.json()
+          if (!elos) {
+            console.warn(`${player.name} has no Elo data yet. Play some more games!`);
+            return;
+          }
 
-          player.elo = Math.round(data.elo)
+          const playerElo = {
+            global: elos.find(e => e.god === "")?.elo,
+            gods: elos.filter(e => e.god !== "").map((g) => ({...g, key: g.god})),
+          }
+
+          const topResult = playerElo.gods[0];
+
+          if (topResult) {
+            player.elo = Math.round(topResult.elo)
+            player.god = topResult.god;
+            player.eloData = playerElo;
+          }
+
         } catch (err) {
           console.error(`Failed to fetch elo for ${player.profile_id}`, err)
         }

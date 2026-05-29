@@ -108,7 +108,7 @@ export function useTeams() {
         matchup.value = null
       }
     }
-  })
+  },{ deep: true })
 
   async function autoBalanceTeams() {
     const playerPool = [...team1.value, ...team2.value]
@@ -184,7 +184,7 @@ export function useTeams() {
 
     // build deterministic matchup key
     const matchupKey = sortedTeams
-        .map(team => team.players.map(p => p.profile_id).join(","))
+        .map(team => team.players.map(p => `${p.profile_id}[${p.god}]`).join(","))
         .join(" vs ");
 
     return {
@@ -203,6 +203,7 @@ export function useTeams() {
     team1Key,
     team2Key,
     autoBalanceTeams,
+    normalizeTeams,
     matchup
   }
 }
