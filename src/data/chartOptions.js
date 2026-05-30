@@ -1,4 +1,4 @@
-export const chartOptions = { 
+export const skillChartOptions = {
   responsive: true, 
   maintainAspectRatio: true, 
   plugins: {
@@ -34,4 +34,42 @@ export const chartOptions = {
     padding: 20,
   },
   backgroundColor: 'rgba(0,0,0,0.1)', 
+}
+
+export const eloChartOptions = {
+  parsing: {
+    xAxisKey: 'startgametime',
+    yAxisKey: 'elo'
+  },
+
+  responsive: true,
+  maintainAspectRatio: false,
+
+  plugins: {
+    tooltip: {
+      callbacks: {
+        title(items) {
+          const date = new Date(items[0].parsed.x)
+
+          return date.toLocaleDateString('es-ES', {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric'
+          })
+        }
+      }
+    }
+  },
+  scales: {
+    x: {
+      type: 'time',
+      time: {
+        unit: 'day',
+        tooltipFormat: 'yyyy-MM-dd HH:mm',
+        displayFormats: {
+          day: 'MMM d',
+        },
+      },
+    },
+  },
 }

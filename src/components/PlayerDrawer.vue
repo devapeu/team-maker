@@ -145,39 +145,44 @@
           No se han encontrado compañeros de equipo para este jugador.
         </div>
       </template>
-
-      <Radar
-        id="my-chart-id"
-        :options="chartOptions"
-        :data="activePlayerData"
-      />
+      <h2 class="player-section-title">Historial</h2>
+      <div class="chart">
+        <Line
+            :data="eloChartData"
+            :options="eloChartOptions"/>
+      </div>
     </n-drawer-content>
   </n-drawer>
 </template>
 
 <script setup>
 import { PLAYERS_ARRAY } from '../data/players.js'
-import { onMounted, computed, ref, watch } from 'vue'
-import { Radar } from 'vue-chartjs'
-import { chartOptions } from '../data/chartOptions.js'
+import { computed, ref, watch } from 'vue'
+import { Line } from 'vue-chartjs'
 import { NDrawer, NDrawerContent } from "naive-ui"
+import { eloChartOptions } from "@/data/chartOptions.js";
+import { getGodColor } from "@/data/colors.js";
 import {
   Chart as ChartJS,
-  RadialLinearScale,
-  PointElement,
   LineElement,
-  Filler,
+  PointElement,
+  LinearScale,
+  TimeScale,
   Tooltip,
-  Legend
-} from 'chart.js'
+  Legend,
+  CategoryScale,
+} from "chart.js"
+
+import 'chartjs-adapter-date-fns'
 
 ChartJS.register(
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend
+    LineElement,
+    PointElement,
+    LinearScale,
+    TimeScale,
+    Tooltip,
+    Legend,
+    CategoryScale,
 )
 
 const props = defineProps({
@@ -197,6 +202,8 @@ const activePlayerPartners = ref([]);
 const activePlayerRivals = ref([]);
 const activePlayerGods = ref({});
 const activePlayerWinstreak = ref();
+const activePlayerEloHistory = ref();
+
 const timestampFilter = ref('2-week');
 const timestampValue = computed(() => {
   const today = new Date();
@@ -221,23 +228,10 @@ const timestampValue = computed(() => {
       return 0;
   }
 });
-const activePlayerData = computed(() => {
-  const labels = Object.keys(props.playerDetailsActive.scores);
-  const data = Object.values(props.playerDetailsActive.scores);
+
+const eloChartData = computed(() => {
   return {
-    labels: labels,
-    datasets: [ 
-      { 
-        label: props.playerDetailsActive.name, 
-        borderColor: 'orange',
-        data : data 
-      },
-      { 
-        label: "Promedio", 
-        borderColor: "grey",
-        data : props.averages
-      },
-    ],
+    datasets: activePlayerEloHistory.value ?? [],
   }
 })
 
@@ -288,6 +282,28 @@ async function fetchRivals(profileId, after = 0) {
   activePlayerRivals.value = sortPlayers(data.players);
 }
 
+async function fetchEloHistory(profileId) {
+  if (!profileId) return;
+  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/elo-history/${profileId}`);
+  const data = await res.json();
+  if (!data.rows) {
+    activePlayerEloHistory.value = [];
+    return
+  }
+  activePlayerEloHistory.value = Object.entries(data.rows).map(([label, data]) => {
+    const color = getGodColor(label);
+    return {
+      label,
+      data,
+      stepped: true,
+      borderColor: color?.border,
+      backgroundColor: color?.background,
+      pointBorderColor: color?.border,
+      pointBackgroundColor: color?.background,
+    }
+  });
+}
+
 function getPercentColor(number) {
   if (number > 70) return 'percent-teal'
   else if (number > 50) return 'percent-green'
@@ -308,6 +324,7 @@ function fetchData() {
   fetchPartners(props.playerDetailsActive.profile_id, timestampValue.value);
   fetchRivals(props.playerDetailsActive.profile_id, timestampValue.value);
   fetchWinstreak(props.playerDetailsActive.profile_id);
+  fetchEloHistory(props.playerDetailsActive.profile_id);
 }
 
 watch(
@@ -369,4 +386,7 @@ watch(
     color: #ffde7e
   &-red
     color: #f47a7a
+
+.chart
+  height: 450px
 </style>

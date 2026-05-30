@@ -28,6 +28,57 @@ export const COLORS = [
   '#808080',
 ];
 
+export function getGodColor(god) {
+  if (['zeus', 'hades', 'poseidon', 'demeter'].includes(god)) {
+    return {
+      border: '#67b0f9',
+      background: '#258bdd'
+    }
+  }
+
+  if (['ra', 'set', 'isis'].includes(god)) {
+    return {
+      border: '#e38422',
+      background: '#df6920'
+    }
+  }
+
+  if (['thor', 'odin', 'loki', 'freyr'].includes(god)) {
+    return {
+      border: '#dd5353',
+      background: '#a55353'
+    }
+  }
+
+  if (['kronos', 'oranos', 'gaia'].includes(god)) {
+    return {
+      border: '#4fcf91',
+      background: '#16833a'
+    }
+  }
+
+  if (['fuxi', 'shennong', 'nüwa'].includes(god)) {
+    return {
+      border: '#8e1e1e',
+      background: '#591b1b'
+    }
+  }
+
+  if (['amaterasu', 'susanoo', 'tsukuyomi'].includes(god)) {
+    return {
+      border: '#f87ec0',
+      background: '#af2e78'
+    }
+  }
+
+  if (['quetzalcoatl', 'huitzilopochtli', 'tezcatlipoca'].includes(god)) {
+    return {
+      border: '#b2ea53',
+      background: '#8cc31e'
+    }
+  }
+}
+
 export function randomColor() {
 	return COLORS[Math.floor(Math.random() * COLORS.length)];
 }
