@@ -145,6 +145,38 @@
           No se han encontrado compañeros de equipo para este jugador.
         </div>
       </template>
+      <template v-if="activePlayerMaps?.length">
+        <h2 class="player-section-title">Victorias por Mapa</h2>
+        <table class="player-table">
+          <thead>
+          <tr>
+            <th>Mapa</th>
+            <th>Partidas</th>
+            <th>Winrate</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr
+              v-for="row in visibleMaps"
+              :key="row.name">
+            <td>{{ row.name }}</td>
+            <td>{{ row.total_games }}</td>
+            <td :class="getPercentColor(row.winrate_percent)">{{ row.winrate_percent.toFixed() }}%</td>
+          </tr>
+          </tbody>
+        </table>
+        <button
+          v-if="activePlayerMaps.length > 10"
+          class="toggle-maps-btn"
+          @click="showAllMaps = !showAllMaps">
+          {{ showAllMaps ? 'Ver menos' : `Ver ${activePlayerMaps.length - 10} más` }}
+        </button>
+      </template>
+      <template v-else>
+        <div class="empty-state">
+          No hay datos de mapas en ese intervalo de tiempo.
+        </div>
+      </template>
       <h2 class="player-section-title">Historial</h2>
       <div class="chart">
         <Line
@@ -201,6 +233,9 @@ const drawerActive = computed({
 const activePlayerPartners = ref([]);
 const activePlayerRivals = ref([]);
 const activePlayerGods = ref({});
+const activePlayerMaps = ref([]);
+const showAllMaps = ref(false);
+const visibleMaps = computed(() => showAllMaps.value ? activePlayerMaps.value : activePlayerMaps.value.slice(0, 10));
 const activePlayerWinstreak = ref();
 const activePlayerEloHistory = ref();
 
@@ -282,6 +317,14 @@ async function fetchRivals(profileId, after = 0) {
   activePlayerRivals.value = sortPlayers(data.players);
 }
 
+async function fetchMaps(profileId, after = 0) {
+  if (!profileId) return;
+  showAllMaps.value = false;
+  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/maps/${profileId}?after=${after}`);
+  const data = await res.json();
+  activePlayerMaps.value = data.maps ?? [];
+}
+
 async function fetchEloHistory(profileId) {
   if (!profileId) return;
   const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/elo-history/${profileId}`);
@@ -321,6 +364,7 @@ function closeDrawer() {
 
 function fetchData() {
   fetchGods(props.playerDetailsActive.profile_id, timestampValue.value);
+  fetchMaps(props.playerDetailsActive.profile_id, timestampValue.value);
   fetchPartners(props.playerDetailsActive.profile_id, timestampValue.value);
   fetchRivals(props.playerDetailsActive.profile_id, timestampValue.value);
   fetchWinstreak(props.playerDetailsActive.profile_id);
@@ -372,6 +416,18 @@ watch(
   margin-top: 20px
   margin-bottom: 0
   font-size: 18px
+
+.toggle-maps-btn
+  margin-top: 8px
+  width: 100%
+  padding: 6px
+  background: none
+  border: 1px solid #948772
+  color: #bbb
+  cursor: pointer
+  &:hover
+    border-color: #c4a96d
+    color: #eee
 
 .player-section-subtitle
   font-style: italic
