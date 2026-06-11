@@ -30,23 +30,22 @@ const hasNoMatches = computed(() => props.team1?.wins === 0 && props.team2?.wins
         <span>{{ team2.label }}</span>
       </div>
       <div
-        v-if="false"
         class="team-matchup__probability">
         <div 
           class="team-matchup__probability-item" 
           :style="{ 
             width: team1.probability + '%',
-            backgroundColor: team1.probability > 50 ? '#246a4c' : '#763132'
+            backgroundColor: team1.probability > 50 ? '#246a4c' : '#333'
           }">
-          {{ team1.probability }}%
+          {{ Math.round(team1.probability) }}%
         </div>
         <div 
           class="team-matchup__probability-item left" 
           :style="{ 
             width: team2.probability + '%',
-            backgroundColor: team2.probability > 50 ? '#246a4c' : '#763132'
+            backgroundColor: team2.probability > 50 ? '#246a4c' : '#333'
           }">
-          {{ team2.probability }}%
+          {{ Math.round(team2.probability) }}%
         </div>
       </div>
     </div>
