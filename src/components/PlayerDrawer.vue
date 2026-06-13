@@ -325,9 +325,9 @@ async function fetchMaps(profileId, after = 0) {
   activePlayerMaps.value = data.maps ?? [];
 }
 
-async function fetchEloHistory(profileId) {
+async function fetchEloHistory(profileId, after = 0) {
   if (!profileId) return;
-  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/elo-history/${profileId}`);
+  const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/elo-history/${profileId}?after=${after}`);
   const data = await res.json();
   if (!data.rows) {
     activePlayerEloHistory.value = [];
@@ -368,7 +368,7 @@ function fetchData() {
   fetchPartners(props.playerDetailsActive.profile_id, timestampValue.value);
   fetchRivals(props.playerDetailsActive.profile_id, timestampValue.value);
   fetchWinstreak(props.playerDetailsActive.profile_id);
-  fetchEloHistory(props.playerDetailsActive.profile_id);
+  fetchEloHistory(props.playerDetailsActive.profile_id, timestampValue.value);
 }
 
 watch(
