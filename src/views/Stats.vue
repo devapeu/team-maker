@@ -2,7 +2,7 @@
   <main class="stats">
     <h1>Stats</h1>
     <div class="stats-dashboard">
-      <div class="stats-card">
+      <div class="stats-card ">
         <h2>Mapas más jugados</h2>
         <table v-if="maps.length" class="player-table">
           <thead>
@@ -49,7 +49,7 @@
         <div v-else class="empty-state">No hay datos de enfrentamientos.</div>
       </div>
 
-      <div class="stats-card stats-card--full">
+      <div class="stats-card">
         <div class="stats-card__header">
           <h2>Mayores sorpresas</h2>
           <select v-model="upsetsFilter" class="stats-select">
@@ -59,40 +59,37 @@
             <option value="all">Todo</option>
           </select>
         </div>
-        <p class="stats-card__subtitle">Partidas en las que el equipo con menos Elo ganó.</p>
         <ul v-if="upsets.length" class="match-list">
           <li v-for="upset in upsets" :key="upset.match_id" class="match-card">
             <div class="match-card__info">
               <img
                 :src="`/img/maps/${upset.mapname}.webp`"
                 class="match-card__map-image"/>
-              <p>{{ getMapName(upset.mapname) }}</p>
+              <p class="match-card__map-name">{{ getMapName(upset.mapname) }}</p>
               <p class="match-card__meta">{{ formatDate(upset.startgametime) }}</p>
               <p class="match-card__meta">{{ formatDuration(upset.duration) }}</p>
               <p class="match-card__elo-diff">Sorpresa de {{ Math.round(upset.elo_diff) }} Elo</p>
             </div>
             <div class="match-card__team">
               <p class="match-card__team-title">
-                Ganadores
-                <span class="match-card__avg-elo">Elo {{ Math.round(upset.winner_avg_elo) }}</span>
+                🏆 Ganadores
               </p>
               <ul class="player-list">
                 <li v-for="p in upset.winners" :key="p.profile_id" class="player-list__item">
                   <img width="32" :src="`/img/gods/${p.god}_icon.avif`" />
-                  {{ p.name }} ✅
+                  {{ p.name }}
                   <span class="player-list__elo">{{ Math.round(p.elo) }}</span>
                 </li>
               </ul>
             </div>
             <div class="match-card__team">
               <p class="match-card__team-title">
-                Perdedores
-                <span class="match-card__avg-elo">Elo {{ Math.round(upset.loser_avg_elo) }}</span>
+                &nbsp;
               </p>
               <ul class="player-list">
                 <li v-for="p in upset.losers" :key="p.profile_id" class="player-list__item">
                   <img width="32" :src="`/img/gods/${p.god}_icon.avif`" />
-                  {{ p.name }} ❌
+                  {{ p.name }}
                   <span class="player-list__elo">{{ Math.round(p.elo) }}</span>
                 </li>
               </ul>
@@ -116,34 +113,32 @@
               <img
                 :src="`/img/maps/${match.mapname}.webp`"
                 class="match-card__map-image"/>
-              <p>{{ getMapName(match.mapname) }}</p>
+              <p class="match-card__map-name">{{ getMapName(match.mapname) }}</p>
               <p class="match-card__meta">{{ formatDate(match.startgametime) }}</p>
               <p class="match-card__meta">{{ formatDuration(match.duration) }}</p>
             </div>
             <div class="match-card__team">
-              <p class="match-card__team-title">Ganadores</p>
+              <p class="match-card__team-title">🏆 Ganadores</p>
               <ul class="player-list">
                 <li v-for="p in match.winners" :key="p.profile_id" class="player-list__item">
                   <img width="32" :src="`/img/gods/${p.god}_icon.avif`" />
-                  {{ p.name }} ✅
+                  {{ p.name }}
                 </li>
               </ul>
             </div>
             <div class="match-card__team">
-              <p class="match-card__team-title">Perdedores</p>
+              <p class="match-card__team-title">&nbsp;</p>
               <ul class="player-list">
                 <li v-for="p in match.losers" :key="p.profile_id" class="player-list__item">
                   <img width="32" :src="`/img/gods/${p.god}_icon.avif`" />
-                  {{ p.name }} ❌
+                  {{ p.name }}
                 </li>
               </ul>
             </div>
           </li>
         </ul>
         <div v-else class="empty-state">No hay datos de duración.</div>
-      </div>
 
-      <div class="stats-card">
         <div class="stats-card__header">
           <h2>Partidas más largas</h2>
           <label class="toggle-control">
@@ -157,25 +152,25 @@
               <img
                 :src="`/img/maps/${match.mapname}.webp`"
                 class="match-card__map-image"/>
-              <p>{{ getMapName(match.mapname) }}</p>
+              <p class="match-card__map-name">{{ getMapName(match.mapname) }}</p>
               <p class="match-card__meta">{{ formatDate(match.startgametime) }}</p>
               <p class="match-card__meta">{{ formatDuration(match.duration) }}</p>
             </div>
             <div class="match-card__team">
-              <p class="match-card__team-title">Ganadores</p>
+              <p class="match-card__team-title">🏆 Ganadores</p>
               <ul class="player-list">
                 <li v-for="p in match.winners" :key="p.profile_id" class="player-list__item">
                   <img width="32" :src="`/img/gods/${p.god}_icon.avif`" />
-                  {{ p.name }} ✅
+                  {{ p.name }}
                 </li>
               </ul>
             </div>
             <div class="match-card__team">
-              <p class="match-card__team-title">Perdedores</p>
+              <p class="match-card__team-title">&nbsp;</p>
               <ul class="player-list">
                 <li v-for="p in match.losers" :key="p.profile_id" class="player-list__item">
                   <img width="32" :src="`/img/gods/${p.god}_icon.avif`" />
-                  {{ p.name }} ❌
+                  {{ p.name }}
                 </li>
               </ul>
             </div>
@@ -315,7 +310,7 @@ onMounted(() => {
 .stats-dashboard
   margin-top: 16px
   display: grid
-  gap: 32px
+  gap: 36px
   grid-template-columns: 1fr 1fr
   padding-bottom: 48px
   @media (max-width: 768px)
@@ -336,6 +331,7 @@ onMounted(() => {
     justify-content: space-between
     align-items: center
     gap: 12px
+    margin-bottom: 10px
     h2
       margin-bottom: 0
 
@@ -368,6 +364,7 @@ onMounted(() => {
   display: flex
   flex-direction: column
   gap: 16px
+  margin-bottom: 16px
 
 .match-card
   display: grid
@@ -379,6 +376,10 @@ onMounted(() => {
   border-radius: 5px
   @media (max-width: 600px)
     grid-template-columns: 1fr
+  &__map-name
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
   &__map-image
     width: 80px
     display: block
@@ -400,7 +401,7 @@ onMounted(() => {
     justify-content: space-between
     align-items: center
     color: #aaa
-    margin-bottom: 6px
+    margin-bottom: 8px
   &__avg-elo
     font-family: $font-serif
     color: $gold-500
