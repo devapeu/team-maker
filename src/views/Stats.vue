@@ -50,7 +50,15 @@
       </div>
 
       <div class="stats-card stats-card--full">
-        <h2>Mayores sorpresas</h2>
+        <div class="stats-card__header">
+          <h2>Mayores sorpresas</h2>
+          <select v-model="upsetsFilter" class="stats-select">
+            <option value="1-month">Último mes</option>
+            <option value="2-month">Últimos 2 meses</option>
+            <option value="6-month">Últimos 6 meses</option>
+            <option value="all">Todo</option>
+          </select>
+        </div>
         <p class="stats-card__subtitle">Partidas en las que el equipo con menos Elo ganó.</p>
         <ul v-if="upsets.length" class="match-list">
           <li v-for="upset in upsets" :key="upset.match_id" class="match-card">
@@ -180,7 +188,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { PLAYERS_ARRAY } from '../data/players';
 import { getMapName } from '../data/maps';
 
@@ -190,6 +198,25 @@ const upsets = ref([]);
 const shortestMatches = ref([]);
 const longestMatches = ref([]);
 const teamGamesOnly = ref(false);
+const upsetsFilter = ref('all');
+
+const upsetsAfter = computed(() => {
+  const today = new Date();
+
+  switch (upsetsFilter.value) {
+    case '1-month':
+      today.setMonth(today.getMonth() - 1);
+      return Math.round(today.getTime() / 1000);
+    case '2-month':
+      today.setMonth(today.getMonth() - 2);
+      return Math.round(today.getTime() / 1000);
+    case '6-month':
+      today.setMonth(today.getMonth() - 6);
+      return Math.round(today.getTime() / 1000);
+    default:
+      return 0;
+  }
+});
 
 const PLAYERS_BY_ID = Object.fromEntries(PLAYERS_ARRAY.map(p => [p.profile_id, p]));
 
@@ -245,7 +272,7 @@ async function fetchMatchups() {
 
 async function fetchUpsets() {
   try {
-    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/upsets`);
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/upsets?after=${upsetsAfter.value}`);
     const data = await res.json();
     upsets.value = data.upsets ?? [];
   } catch {
@@ -267,6 +294,7 @@ async function fetchMatchDuration() {
 }
 
 watch(teamGamesOnly, fetchMatchDuration);
+watch(upsetsFilter, fetchUpsets);
 
 onMounted(() => {
   fetchMaps();
@@ -321,6 +349,12 @@ onMounted(() => {
   white-space: nowrap
   input
     cursor: pointer
+
+.stats-select
+  padding: 2px 10px
+  background: $color-background
+  color: white
+  border: 1px solid #948772
 
 .empty-state
   margin-top: 10px
