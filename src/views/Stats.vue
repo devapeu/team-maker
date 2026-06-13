@@ -339,11 +339,10 @@ onMounted(() => {
   display: grid
   grid-template-columns: 140px 1fr 1fr
   gap: 20px
-  padding-bottom: 16px
-  border-bottom: 1px solid #948772
-  &:last-child
-    border-bottom: none
-    padding-bottom: 0
+  padding: 16px
+  background: $background-light
+  border: 1px solid #4d4841
+  border-radius: 5px
   @media (max-width: 600px)
     grid-template-columns: 1fr
   &__map-image

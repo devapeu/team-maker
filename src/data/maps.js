@@ -3,6 +3,7 @@ export const MAPS_ARRAY = [
   { id: "rm_alfheim", name: "Alfheim", active: true },
   { id: "rm_anatolia", name: "Anatolia", active: false },
   { id: "rm_arena", name: "Arena", active: true },
+  { id: "rm_blue_lagoon", name: "Blue Lagoon", active: true },
   { id: "rm_bamboo_grove", name: "Bamboo Grove", active: true },
   { id: "rm_black_sea", name: "Black Sea", active: false },
   { id: "rm_erebus", name: "Erebus", active: true },
