@@ -35,6 +35,7 @@
             <tr>
               <th>Equipo 1</th>
               <th>Equipo 2</th>
+              <th>Resultado</th>
               <th>Partidas</th>
             </tr>
           </thead>
@@ -42,6 +43,7 @@
             <tr v-for="matchup in matchups" :key="matchup.team_match_id">
               <td>{{ matchup.team1.join(', ') }}</td>
               <td>{{ matchup.team2.join(', ') }}</td>
+              <td>{{ matchup.score[0] }} - {{ matchup.score[1] }}</td>
               <td>{{ matchup.count }}</td>
             </tr>
           </tbody>
@@ -407,6 +409,9 @@ onMounted(() => {
     color: $gold-500
 
 .player-list
+  background: #1c1b14
+  padding: 8px
+  border-radius: 4px
   list-style: none
   &__item
     display: flex
