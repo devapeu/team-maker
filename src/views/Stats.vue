@@ -33,18 +33,16 @@
         <table v-if="matchups.length" class="player-table">
           <thead>
             <tr>
-              <th>Equipo 1</th>
+              <th style="text-align: right">Equipo 1</th>
+              <th></th>
               <th>Equipo 2</th>
-              <th>Resultado</th>
-              <th>Partidas</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="matchup in matchups" :key="matchup.team_match_id">
-              <td>{{ matchup.team1.join(', ') }}</td>
-              <td>{{ matchup.team2.join(', ') }}</td>
+              <td style="text-align: right">{{ matchup.team1.join(', ') }}</td>
               <td>{{ matchup.score[0] }} - {{ matchup.score[1] }}</td>
-              <td>{{ matchup.count }}</td>
+              <td>{{ matchup.team2.join(', ') }}</td>
             </tr>
           </tbody>
         </table>
