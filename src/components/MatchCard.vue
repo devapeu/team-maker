@@ -7,7 +7,7 @@
         @error="onMapImageError"/>
       <p class="match-card__map-name">{{ getMapName(match.mapname) }}</p>
       <p class="match-card__meta">{{ formatDate(match.startgametime) }}</p>
-      <p class="match-card__meta">{{ formatDuration(match.duration) }}</p>
+      <p v-if="match.duration != null" class="match-card__meta">{{ formatDuration(match.duration) }}</p>
       <p v-if="eloDiff !== null" class="match-card__elo-diff">Sorpresa de {{ Math.round(eloDiff) }} Elo</p>
     </div>
     <div class="match-card__team">
