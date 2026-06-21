@@ -17,17 +17,44 @@
 </template>
 <script setup>
 import { getValidMaps } from '../data/maps.js'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 
 const map = ref({});
 const hasDisplayedMap = ref(false);
+const mapCounts = ref({});
 
 const maps = getValidMaps();
 
+async function fetchMapCounts() {
+  try {
+    const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/maps?limit=100`);
+    const data = await res.json();
+    mapCounts.value = Object.fromEntries((data.maps ?? []).map(m => [m.mapname, m.count]));
+  } catch {
+    mapCounts.value = {};
+  }
+}
+
+function pickWeightedMap() {
+  // less-picked maps get proportionally higher odds
+  const weights = maps.map(m => 1 / ((mapCounts.value[m.id] ?? 0) + 1));
+  const total = weights.reduce((sum, w) => sum + w, 0);
+
+  let roll = Math.random() * total;
+  for (let i = 0; i < maps.length; i++) {
+    roll -= weights[i];
+    if (roll <= 0) return maps[i];
+  }
+
+  return maps[maps.length - 1];
+}
+
 function chooseMap() {
   if (hasDisplayedMap.value === false) hasDisplayedMap.value = true;
-  map.value = maps[Math.floor(Math.random() * maps.length)];
+  map.value = pickWeightedMap();
 }
+
+onMounted(fetchMapCounts);
 </script>
 <style lang="sass" scoped>
 
