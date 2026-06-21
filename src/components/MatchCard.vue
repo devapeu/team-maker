@@ -72,7 +72,9 @@ function formatDuration(seconds) {
   border: 1px solid #4d4841
   border-radius: 5px
   @media (max-width: 600px)
-    grid-template-columns: 1fr
+    grid-template-columns: 1fr 1fr
+    &__info
+      grid-column: 1 / -1
   &__map-name
     white-space: nowrap
     overflow: hidden
