@@ -60,41 +60,14 @@
           </select>
         </div>
         <ul v-if="upsets.length" class="match-list">
-          <li v-for="upset in upsets" :key="upset.match_id" class="match-card">
-            <div class="match-card__info">
-              <img
-                :src="`/img/maps/${upset.mapname}.webp`"
-                class="match-card__map-image"/>
-              <p class="match-card__map-name">{{ getMapName(upset.mapname) }}</p>
-              <p class="match-card__meta">{{ formatDate(upset.startgametime) }}</p>
-              <p class="match-card__meta">{{ formatDuration(upset.duration) }}</p>
-              <p class="match-card__elo-diff">Sorpresa de {{ Math.round(upset.elo_diff) }} Elo</p>
-            </div>
-            <div class="match-card__team">
-              <p class="match-card__team-title">
-                🏆 Ganadores
-              </p>
-              <ul class="player-list">
-                <li v-for="p in upset.winners" :key="p.profile_id" class="player-list__item">
-                  <img width="32" :src="`/img/gods/${p.god}_icon.avif`" />
-                  {{ p.name }}
-                  <span class="player-list__elo">{{ Math.round(p.elo) }}</span>
-                </li>
-              </ul>
-            </div>
-            <div class="match-card__team">
-              <p class="match-card__team-title">
-                &nbsp;
-              </p>
-              <ul class="player-list">
-                <li v-for="p in upset.losers" :key="p.profile_id" class="player-list__item">
-                  <img width="32" :src="`/img/gods/${p.god}_icon.avif`" />
-                  {{ p.name }}
-                  <span class="player-list__elo">{{ Math.round(p.elo) }}</span>
-                </li>
-              </ul>
-            </div>
-          </li>
+          <MatchCard
+            v-for="upset in upsets"
+            :key="upset.match_id"
+            :match="upset"
+            :winners="upset.winners"
+            :losers="upset.losers"
+            :elo-diff="upset.elo_diff"
+            show-elo/>
         </ul>
         <div v-else class="empty-state">No hay datos de sorpresas.</div>
       </div>
@@ -108,34 +81,12 @@
           </label>
         </div>
         <ul v-if="shortestMatches.length" class="match-list">
-          <li v-for="match in shortestMatches" :key="match.match_id" class="match-card">
-            <div class="match-card__info">
-              <img
-                :src="`/img/maps/${match.mapname}.webp`"
-                class="match-card__map-image"/>
-              <p class="match-card__map-name">{{ getMapName(match.mapname) }}</p>
-              <p class="match-card__meta">{{ formatDate(match.startgametime) }}</p>
-              <p class="match-card__meta">{{ formatDuration(match.duration) }}</p>
-            </div>
-            <div class="match-card__team">
-              <p class="match-card__team-title">🏆 Ganadores</p>
-              <ul class="player-list">
-                <li v-for="p in match.winners" :key="p.profile_id" class="player-list__item">
-                  <img width="32" :src="`/img/gods/${p.god}_icon.avif`" />
-                  {{ p.name }}
-                </li>
-              </ul>
-            </div>
-            <div class="match-card__team">
-              <p class="match-card__team-title">&nbsp;</p>
-              <ul class="player-list">
-                <li v-for="p in match.losers" :key="p.profile_id" class="player-list__item">
-                  <img width="32" :src="`/img/gods/${p.god}_icon.avif`" />
-                  {{ p.name }}
-                </li>
-              </ul>
-            </div>
-          </li>
+          <MatchCard
+            v-for="match in shortestMatches"
+            :key="match.match_id"
+            :match="match"
+            :winners="match.winners"
+            :losers="match.losers"/>
         </ul>
         <div v-else class="empty-state">No hay datos de duración.</div>
 
@@ -147,34 +98,12 @@
           </label>
         </div>
         <ul v-if="longestMatches.length" class="match-list">
-          <li v-for="match in longestMatches" :key="match.match_id" class="match-card">
-            <div class="match-card__info">
-              <img
-                :src="`/img/maps/${match.mapname}.webp`"
-                class="match-card__map-image"/>
-              <p class="match-card__map-name">{{ getMapName(match.mapname) }}</p>
-              <p class="match-card__meta">{{ formatDate(match.startgametime) }}</p>
-              <p class="match-card__meta">{{ formatDuration(match.duration) }}</p>
-            </div>
-            <div class="match-card__team">
-              <p class="match-card__team-title">🏆 Ganadores</p>
-              <ul class="player-list">
-                <li v-for="p in match.winners" :key="p.profile_id" class="player-list__item">
-                  <img width="32" :src="`/img/gods/${p.god}_icon.avif`" />
-                  {{ p.name }}
-                </li>
-              </ul>
-            </div>
-            <div class="match-card__team">
-              <p class="match-card__team-title">&nbsp;</p>
-              <ul class="player-list">
-                <li v-for="p in match.losers" :key="p.profile_id" class="player-list__item">
-                  <img width="32" :src="`/img/gods/${p.god}_icon.avif`" />
-                  {{ p.name }}
-                </li>
-              </ul>
-            </div>
-          </li>
+          <MatchCard
+            v-for="match in longestMatches"
+            :key="match.match_id"
+            :match="match"
+            :winners="match.winners"
+            :losers="match.losers"/>
         </ul>
         <div v-else class="empty-state">No hay datos de duración.</div>
       </div>
@@ -186,6 +115,7 @@
 import { computed, onMounted, ref, watch } from 'vue';
 import { PLAYERS_ARRAY } from '../data/players';
 import { getMapName } from '../data/maps';
+import MatchCard from '../components/MatchCard.vue';
 
 const maps = ref([]);
 const matchups = ref([]);
@@ -217,21 +147,6 @@ const PLAYERS_BY_ID = Object.fromEntries(PLAYERS_ARRAY.map(p => [p.profile_id, p
 
 function getPlayerName(profileId) {
   return PLAYERS_BY_ID[profileId]?.name ?? profileId;
-}
-
-function formatDate(timestamp) {
-  const date = new Date(timestamp * 1000);
-  return new Intl.DateTimeFormat('es-ES', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  }).format(date);
-}
-
-function formatDuration(seconds) {
-  const minutes = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${minutes}:${secs.toString().padStart(2, '0')}`;
 }
 
 function splitByResult(players) {
@@ -365,59 +280,4 @@ onMounted(() => {
   flex-direction: column
   gap: 16px
   margin-bottom: 16px
-
-.match-card
-  display: grid
-  grid-template-columns: 140px 1fr 1fr
-  gap: 20px
-  padding: 16px
-  background: $background-light
-  border: 1px solid #4d4841
-  border-radius: 5px
-  @media (max-width: 600px)
-    grid-template-columns: 1fr
-  &__map-name
-    white-space: nowrap
-    overflow: hidden
-    text-overflow: ellipsis
-  &__map-image
-    width: 80px
-    display: block
-    margin-bottom: 4px
-  &__meta
-    color: #aaa
-    font-size: 13px
-  &__elo-diff
-    display: inline-block
-    margin-top: 6px
-    padding: 2px 8px
-    background: $gold-600
-    color: $gold-950
-    font-size: 12px
-    font-weight: bold
-    border-radius: 4px
-  &__team-title
-    display: flex
-    justify-content: space-between
-    align-items: center
-    color: #aaa
-    margin-bottom: 8px
-  &__avg-elo
-    font-family: $font-serif
-    color: $gold-500
-
-.player-list
-  background: #1c1b14
-  padding: 8px
-  border-radius: 4px
-  list-style: none
-  &__item
-    display: flex
-    align-items: center
-    gap: 8px
-    margin-bottom: 2px
-  &__elo
-    margin-left: auto
-    font-family: $font-serif
-    color: $gold-500
 </style>

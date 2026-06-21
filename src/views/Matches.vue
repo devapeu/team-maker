@@ -23,34 +23,12 @@
     </div>
 
     <ul v-if="matches.length" class="match-list">
-      <li v-for="match in matches" :key="match.match_id" class="match-card">
-        <div class="match-card__info">
-          <img
-            :src="`/img/maps/${match.mapname}.webp`"
-            class="match-card__map-image"/>
-          <p class="match-card__map-name">{{ getMapName(match.mapname) }}</p>
-          <p class="match-card__meta">{{ formatDate(match.startgametime) }}</p>
-          <p class="match-card__meta">{{ formatDuration(match.duration) }}</p>
-        </div>
-        <div class="match-card__team">
-          <p class="match-card__team-title">🏆 Ganadores</p>
-          <ul class="player-list">
-            <li v-for="p in match.winners" :key="p.profile_id" class="player-list__item">
-              <img width="32" :src="`/img/gods/${p.god}_icon.avif`" />
-              {{ p.name }}
-            </li>
-          </ul>
-        </div>
-        <div class="match-card__team">
-          <p class="match-card__team-title">&nbsp;</p>
-          <ul class="player-list">
-            <li v-for="p in match.losers" :key="p.profile_id" class="player-list__item">
-              <img width="32" :src="`/img/gods/${p.god}_icon.avif`" />
-              {{ p.name }}
-            </li>
-          </ul>
-        </div>
-      </li>
+      <MatchCard
+        v-for="match in matches"
+        :key="match.match_id"
+        :match="match"
+        :winners="match.winners"
+        :losers="match.losers"/>
     </ul>
     <div v-else-if="!loading" class="empty-state">No hay partidas.</div>
 
@@ -64,7 +42,8 @@
 
 <script setup>
 import { onMounted, ref, watch } from 'vue';
-import { getMapName, getValidMaps } from '../data/maps';
+import { getValidMaps } from '../data/maps';
+import MatchCard from '../components/MatchCard.vue';
 
 const matches = ref([]);
 const loading = ref(false);
@@ -75,21 +54,6 @@ const teamGamesOnly = ref(false);
 
 const maps = getValidMaps();
 const PAGE_SIZE = 20;
-
-function formatDate(timestamp) {
-  const date = new Date(timestamp * 1000);
-  return new Intl.DateTimeFormat('es-ES', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  }).format(date);
-}
-
-function formatDuration(seconds) {
-  const minutes = Math.floor(seconds / 60);
-  const secs = Math.floor(seconds % 60);
-  return `${minutes}:${secs.toString().padStart(2, '0')}`;
-}
 
 function splitByResult(players) {
   return {
@@ -191,45 +155,6 @@ onMounted(() => fetchMatches({ reset: true }));
   flex-direction: column
   gap: 16px
   padding-bottom: 16px
-
-.match-card
-  display: grid
-  grid-template-columns: 140px 1fr 1fr
-  gap: 20px
-  padding: 16px
-  background: $background-light
-  border: 1px solid #4d4841
-  border-radius: 5px
-  @media (max-width: 600px)
-    grid-template-columns: 1fr
-  &__map-name
-    white-space: nowrap
-    overflow: hidden
-    text-overflow: ellipsis
-  &__map-image
-    width: 80px
-    display: block
-    margin-bottom: 4px
-  &__meta
-    color: #aaa
-    font-size: 13px
-  &__team-title
-    display: flex
-    justify-content: space-between
-    align-items: center
-    color: #aaa
-    margin-bottom: 8px
-
-.player-list
-  background: #1c1b14
-  padding: 8px
-  border-radius: 4px
-  list-style: none
-  &__item
-    display: flex
-    align-items: center
-    gap: 8px
-    margin-bottom: 2px
 
 .map-button
   border: 1px solid #948772
