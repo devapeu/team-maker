@@ -122,7 +122,7 @@ const matchups = ref([]);
 const upsets = ref([]);
 const shortestMatches = ref([]);
 const longestMatches = ref([]);
-const teamGamesOnly = ref(false);
+const teamGamesOnly = ref(true);
 const upsetsFilter = ref('all');
 
 const upsetsAfter = computed(() => {

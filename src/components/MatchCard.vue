@@ -3,7 +3,8 @@
     <div class="match-card__info">
       <img
         :src="`/img/maps/${match.mapname}.webp`"
-        class="match-card__map-image"/>
+        class="match-card__map-image"
+        @error="onMapImageError"/>
       <p class="match-card__map-name">{{ getMapName(match.mapname) }}</p>
       <p class="match-card__meta">{{ formatDate(match.startgametime) }}</p>
       <p class="match-card__meta">{{ formatDuration(match.duration) }}</p>
@@ -35,6 +36,8 @@
 <script setup>
 import { getMapName } from '../data/maps';
 
+const FALLBACK_MAP_IMAGE = '/img/maps/rm_the_unknown.webp';
+
 defineProps({
   match: { type: Object, required: true },
   winners: { type: Array, default: () => [] },
@@ -57,6 +60,11 @@ function formatDuration(seconds) {
   const minutes = Math.floor(seconds / 60);
   const secs = Math.floor(seconds % 60);
   return `${minutes}:${secs.toString().padStart(2, '0')}`;
+}
+
+function onMapImageError(event) {
+  if (event.target.src.endsWith(FALLBACK_MAP_IMAGE)) return;
+  event.target.src = FALLBACK_MAP_IMAGE;
 }
 </script>
 
