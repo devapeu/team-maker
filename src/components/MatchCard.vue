@@ -1,5 +1,5 @@
 <template>
-  <li class="match-card">
+  <li class="match-card" :class="{ 'match-card--large': size === 'large' }">
     <div class="match-card__info">
       <img
         :src="`/img/maps/${match.mapname}.webp`"
@@ -13,7 +13,7 @@
       <p class="match-card__team-title">🏆 Ganadores</p>
       <ul class="player-list">
         <li v-for="p in winners" :key="p.profile_id" class="player-list__item">
-          <img width="32" :src="`/img/gods/${p.god}_icon.avif`" />
+          <img class="player-list__god-image" :src="`/img/gods/${p.god}_icon.avif`" />
           {{ p.name }}
           <span v-if="showElo" class="player-list__elo">{{ Math.round(p.elo) }}</span>
         </li>
@@ -23,7 +23,7 @@
       <p class="match-card__team-title">&nbsp;</p>
       <ul class="player-list">
         <li v-for="p in losers" :key="p.profile_id" class="player-list__item">
-          <img width="32" :src="`/img/gods/${p.god}_icon.avif`" />
+          <img class="player-list__god-image" :src="`/img/gods/${p.god}_icon.avif`" />
           {{ p.name }}
           <span v-if="showElo" class="player-list__elo">{{ Math.round(p.elo) }}</span>
         </li>
@@ -41,6 +41,7 @@ defineProps({
   losers: { type: Array, default: () => [] },
   eloDiff: { type: Number, default: null },
   showElo: { type: Boolean, default: false },
+  size: { type: String, default: 'default', validator: v => ['default', 'large'].includes(v) },
 });
 
 function formatDate(timestamp) {
@@ -98,6 +99,13 @@ function formatDuration(seconds) {
     align-items: center
     color: #aaa
     margin-bottom: 8px
+  &--large
+    .match-card__map-image
+      width: 128px
+    .player-list
+      font-size: 16px
+      &__god-image
+        width: 36px
 
 .player-list
   background: #1c1b14
@@ -109,6 +117,8 @@ function formatDuration(seconds) {
     align-items: center
     gap: 8px
     margin-bottom: 2px
+  &__god-image
+    width: 32px
   &__elo
     margin-left: auto
     font-family: $font-serif
