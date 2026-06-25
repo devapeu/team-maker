@@ -168,6 +168,7 @@ import { usePlayerDrawer } from '../composables/usePlayerDrawer.js'
 import { useAdminAuth } from '../composables/useAdminAuth.js'
 import { syncGodChange } from '../composables/usePlayerGodSync.js'
 import { fetchPlayerElos } from '../composables/usePlayerElo.js'
+import { ALL_GODS } from '../data/gods.js'
 
 const router = useRouter()
 const { logout, getToken } = useAdminAuth()
@@ -302,8 +303,12 @@ async function handleSave() {
   }
 }
 
-onMounted(() => {
-  fetchPlayerElos(players)
+onMounted(async () => {
+  await fetchPlayerElos(players)
+  players.value.forEach(p => {
+    if (!p.eloData) p.eloData = {}
+    p.eloData.gods = ALL_GODS
+  })
   fetchLatestMatches()
 })
 </script>

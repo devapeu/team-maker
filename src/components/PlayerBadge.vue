@@ -20,26 +20,19 @@ function clickScore(e) {
 }
 
 function renderGodDropdownLabel(option) {
-  return h('span', { class: 'god-dropdown-option' }, [
+  const children = [
     h('img', {
       src: `/img/gods/${option.god}_icon.avif`,
       alt: option.god,
       class: 'god-dropdown-option__icon',
-      style: {
-        width: '28px',
-        height: '28px',
-        verticalAlign: 'middle',
-      },
+      style: { width: '28px', height: '28px', verticalAlign: 'middle' },
     }),
-    h('span', {
-      class: 'god-dropdown-option__name',
-      innerHTML: option.god
-    }),
-    h('span', {
-      class: "god-dropdown-option__elo",
-      innerHTML: Math.round(option.elo)
-    })
-  ]);
+    h('span', { class: 'god-dropdown-option__name', innerHTML: option.god }),
+  ]
+  if (option.elo != null) {
+    children.push(h('span', { class: 'god-dropdown-option__elo', innerHTML: Math.round(option.elo) }))
+  }
+  return h('span', { class: 'god-dropdown-option' }, children)
 }
 function handleGodSelection(key) {
   emit('change-god', {

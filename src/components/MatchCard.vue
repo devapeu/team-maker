@@ -1,6 +1,7 @@
 <template>
   <li class="match-card" :class="{ 'match-card--large': size === 'large' }">
     <div class="match-card__info">
+      <p class="match-card__match-id">#{{ match.match_id }}</p>
       <img
         :src="`/img/maps/${match.mapname}.webp`"
         class="match-card__map-image"
@@ -83,6 +84,10 @@ function onMapImageError(event) {
     grid-template-columns: 1fr 1fr
     &__info
       grid-column: 1 / -1
+  &__match-id
+    color: #666
+    font-size: 11px
+    margin-bottom: 4px
   &__map-name
     white-space: nowrap
     overflow: hidden
