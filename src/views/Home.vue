@@ -185,6 +185,8 @@ import { usePlayerData } from '../composables/usePlayerData.js'
 import { useTeams } from '../composables/useTeams.js'
 import { usePlayerDrawer } from '../composables/usePlayerDrawer.js'
 import { useDiscord } from '../composables/useDiscord.js'
+import { syncGodChange } from '../composables/usePlayerGodSync.js'
+import { fetchPlayerElos } from '../composables/usePlayerElo.js'
 import HistoryDrawer from "@/components/HistoryDrawer.vue";
 
 // Toast notifications
@@ -218,26 +220,7 @@ const {
 const reset = () => resetPlayerData(team1, team2)
 const moveToAvailable = (id) => moveToAvailableFunction(id, team1, team2)
 
-const handleGodChange = (data) => {
-  const refs = [players, team1, team2];
-
-  for (const ref of refs) {
-    const player = ref.value.find(p => p.id === data.id);
-
-    if (!player) continue;
-
-    const newGod = player.eloData.gods.find(
-        g => g.key === data.god
-    );
-
-    if (newGod) {
-      player.elo = Math.round(newGod.elo);
-      player.god = newGod.god;
-    }
-
-    break;
-  }
-};
+const handleGodChange = (data) => syncGodChange([players, team1, team2], data);
 // Player drawer
 const { active, playerDetailsActive, openPlayerDetails } = usePlayerDrawer(playersMap)
 
@@ -316,36 +299,5 @@ function openHistoryDrawer() {
   history.value = matchup?.value.history;
 }
 
-onMounted(async () => {
-  await Promise.all(
-      players.value.map(async player => {
-        try {
-          const { elos } = await fetch(
-              `${import.meta.env.VITE_API_BASE_URL}/elos/${player.profile_id}`
-          ).then(r => r.json());
-
-          if (!elos) {
-            console.warn(`${player.name} has no Elo data yet. Play some more games!`);
-            return;
-          }
-
-          const playerElo = {
-            global: elos.find(e => e.god === "")?.elo,
-            gods: elos.filter(e => e.god !== "").map((g) => ({...g, key: g.god})),
-          }
-
-          const topResult = playerElo.gods[0];
-
-          if (topResult) {
-            player.elo = Math.round(topResult.elo)
-            player.god = topResult.god;
-            player.eloData = playerElo;
-          }
-
-        } catch (err) {
-          console.error(`Failed to fetch elo for ${player.profile_id}`, err)
-        }
-      })
-  )
-})
+onMounted(() => fetchPlayerElos(players))
 </script>
