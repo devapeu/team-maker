@@ -29,6 +29,7 @@ export function useTeams() {
     "1074203172,1074910820": "Team Rayo",
     "1074849746,1075027222": "Team C.A.F.E.",
     "1074203172,1074849746,1074910820": "Oops! All Zeus",
+    "1074199836,1074839111,1074849746": "Team Donkey",
   }
 
   const team1Label = computed(() => teamNames[team1Key.value] || 'Equipo 1')
