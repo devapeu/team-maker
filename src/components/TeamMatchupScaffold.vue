@@ -52,7 +52,7 @@ const hasNoMatches = computed(() => props.team1?.wins === 0 && props.team2?.wins
     <div class="teams__wrapper" style="margin-bottom: 0!important" :class="thumbnail ? 'thumbnail' : ''">
       <div class="teams__team">
         <div class="teams__header">
-          <div class="teams__score">{{ team1.score }}</div>
+          <div class="teams__score">{{ Math.round(team1.score) }}</div>
           <div class="teams__header-side">
             <div 
               class="wins"
@@ -75,7 +75,7 @@ const hasNoMatches = computed(() => props.team1?.wins === 0 && props.team2?.wins
       </div>
       <div class="teams__team">
         <div class="teams__header teams__header--inverse">
-          <div class="teams__score">{{ team2.score }}</div>
+          <div class="teams__score">{{ Math.round(team2.score) }}</div>
           <div class="teams__header-side">
             <div 
               class="wins"

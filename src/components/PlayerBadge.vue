@@ -66,7 +66,7 @@ function handleGodSelection(key) {
           tabindex="0"
           role="button"
           @contextmenu="clickScore">
-        {{ player.elo }}
+        {{ Math.round(player.elo) }}
       </span>
     </n-dropdown>
   </div>

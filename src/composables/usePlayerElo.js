@@ -17,13 +17,11 @@ export async function fetchPlayerElos(players) {
           gods: elos.filter(e => e.god !== '').map((g) => ({ ...g, key: g.god })),
         }
 
-        const topResult = playerElo.gods[0]
-
-        if (topResult) {
-          player.elo = Math.round(topResult.elo)
-          player.god = topResult.god
-          player.eloData = playerElo
+        const mainGodElo = playerElo.gods.find(e => e.god === player.god);
+        if (mainGodElo) {
+          player.elo = mainGodElo.elo
         }
+        player.eloData = playerElo
       } catch (err) {
         console.error(`Failed to fetch elo for ${player.profile_id}`, err)
       }

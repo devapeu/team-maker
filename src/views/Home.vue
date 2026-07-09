@@ -55,7 +55,7 @@
         <div class="teams__wrapper">
           <div class="teams__team">
             <div class="teams__header">
-              <h2 class="teams__score">{{ team1Score }}</h2>
+              <h2 class="teams__score">{{ Math.round(team1Score) }}</h2>
               <div 
                 class="teams__wins"
                 :class="hasNoMatches ? 'teams__wins--no-matches' : ''">
@@ -80,7 +80,7 @@
           <div class="teams__team">
             <div class="teams__header teams__header--inverse">
               <h2 class="teams__score">
-                {{ team2Score }}
+                {{ Math.round(team2Score) }}
               </h2>
               <div 
                 class="teams__wins"
