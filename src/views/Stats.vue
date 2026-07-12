@@ -131,7 +131,7 @@ const upsetsAfter = computed(() => {
 
   switch (upsetsFilter.value) {
     case '2-weeks':
-      today.setWeek(today.setWeek() - 2);
+      today.setDay(today.setDay() - 14);
       return Math.round(today.getTime() / 1000);
     case '1-month':
       today.setMonth(today.getMonth() - 1);
