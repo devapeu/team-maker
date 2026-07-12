@@ -53,6 +53,7 @@
         <div class="stats-card__header">
           <h2>Mayores sorpresas</h2>
           <select v-model="upsetsFilter" class="stats-select">
+            <option value="2-weeks">Últimas 2 semanas</option>
             <option value="1-month">Último mes</option>
             <option value="2-month">Últimos 2 meses</option>
             <option value="6-month">Últimos 6 meses</option>
@@ -129,6 +130,9 @@ const upsetsAfter = computed(() => {
   const today = new Date();
 
   switch (upsetsFilter.value) {
+    case '2-weeks':
+      today.setWeek(today.setWeek() - 2);
+      return Math.round(today.getTime() / 1000);
     case '1-month':
       today.setMonth(today.getMonth() - 1);
       return Math.round(today.getTime() / 1000);
