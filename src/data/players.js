@@ -108,7 +108,7 @@ export const PLAYERS_ARRAY = [
       micro: 35,
     },
     profile_id: 1074849746,
-    god: "zeus",
+    god: "hades",
     color: "#ff00ff",
   },
   {
