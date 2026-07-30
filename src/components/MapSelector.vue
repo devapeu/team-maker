@@ -57,15 +57,16 @@ function chooseMap() {
 onMounted(fetchMapCounts);
 </script>
 <style lang="sass" scoped>
+@use "../styles/abstracts/_variables" as *
 
 .map-selector
   margin-top: 4px
   display: flex
   align-items: center
   gap: 16px
-  border: 1px solid #948772
+  border: 1px solid $bronze-200
   padding: 20px
-  background: #161005
+  background: $bronze-900
   border-radius: 5px
   &__image
     max-width: 84px
@@ -74,20 +75,20 @@ onMounted(fetchMapCounts);
     padding: 4px 8px
 
 .map-button
-  border: 1px solid #948772
+  border: 1px solid $bronze-200
   border-radius: 5px
-  color: #ddd
-  background: linear-gradient(to bottom, #3A3121, #161005)
+  color: $bronze-50
+  background: linear-gradient(to bottom, $bronze-600, $bronze-900)
   box-shadow: inset 0 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 5px rgba(0, 0, 0, 0.5)
   transition: 150ms ease-out all
   cursor: pointer
   font-family: "DM Sans"
   @media (pointer: fine)
     &:hover
-      background: linear-gradient(to bottom, #5c4727, #0f0b03)
+      background: linear-gradient(to bottom, $bronze-400, $bronze-950)
       box-shadow: inset 0 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 5px rgba(255, 191, 0, 0.25)
-      color: #edb634
-      border: 1px solid #d0a84b
+      color: $gold-200
+      border: 1px solid $gold-300
 
 .first-map-button
   margin: auto

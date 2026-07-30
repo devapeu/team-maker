@@ -34,20 +34,16 @@
             v-if="matchup !== null"
             class="teams__probability"
             @click="openHistoryDrawer">
-            <div 
-              class="teams__probability-item" 
-              :style="{ 
-                width: (matchup && matchup[team1Key] ? matchup[team1Key].probability : 0) + '%',
-                backgroundColor: (matchup && matchup[team1Key] && matchup[team1Key].probability > 50) ? '#246a4c' : '#333'
-              }">
+            <div
+              class="teams__probability-item"
+              :class="{ 'teams__probability-item--win': matchup && matchup[team1Key] && matchup[team1Key].probability > 50 }"
+              :style="{ width: (matchup && matchup[team1Key] ? matchup[team1Key].probability : 0) + '%' }">
               {{ (matchup && matchup[team1Key] ? matchup[team1Key].probability.toFixed() : 0) }}%
             </div>
-            <div 
-              class="teams__probability-item left" 
-              :style="{ 
-                width: (matchup && matchup[team2Key] ? matchup[team2Key].probability : 0) + '%',
-                backgroundColor: (matchup && matchup[team2Key] && matchup[team2Key].probability > 50) ? '#246a4c' : '#333'
-              }">
+            <div
+              class="teams__probability-item left"
+              :class="{ 'teams__probability-item--win': matchup && matchup[team2Key] && matchup[team2Key].probability > 50 }"
+              :style="{ width: (matchup && matchup[team2Key] ? matchup[team2Key].probability : 0) + '%' }">
               {{ (matchup && matchup[team2Key] ? matchup[team2Key].probability.toFixed() : 0) }}%
             </div>
           </div>

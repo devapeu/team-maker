@@ -380,13 +380,15 @@ watch(
 </script>
 
 <style scoped lang="sass">
+@use "../styles/abstracts/_variables" as *
+
 .player-info
   display: flex
   gap: 12px
   align-items: center
   padding-bottom: 12px
   margin-bottom: 16px
-  border-bottom: 1px solid #948772
+  border-bottom: 1px solid $bronze-200
   &__image
     width: 48px
     border-left-style: solid
@@ -397,9 +399,9 @@ watch(
 .empty-state
   margin-top: 10px
   padding: 20px
-  color: #aaa
+  color: $bronze-50
   text-align: center
-  border: 1px solid #948772
+  border: 1px solid $bronze-200
 
 .player-controls
   display: flex
@@ -408,7 +410,7 @@ watch(
   justify-content: flex-end
   label
     font-weight: 500
-    color: #bbb
+    color: $bronze-100
   select
     padding: 2px 10px
 
@@ -422,12 +424,12 @@ watch(
   width: 100%
   padding: 6px
   background: none
-  border: 1px solid #948772
-  color: #bbb
+  border: 1px solid $bronze-200
+  color: $bronze-100
   cursor: pointer
   &:hover
-    border-color: #c4a96d
-    color: #eee
+    border-color: $bronze-100
+    color: $bronze-25
 
 .player-section-subtitle
   font-style: italic
@@ -435,13 +437,13 @@ watch(
 
 .percent
   &-teal
-    color: #31e1bb
+    color: $color-stat-teal
   &-green
-    color: #4ce171
+    color: $color-stat-green
   &-yellow
-    color: #ffde7e
+    color: $color-stat-yellow
   &-red
-    color: #f47a7a
+    color: $color-stat-salmon
 
 .chart
   height: 450px

@@ -77,15 +77,15 @@ function onMapImageError(event) {
   grid-template-columns: 140px 1fr 1fr
   gap: 20px
   padding: 16px
-  background: $background-light
-  border: 1px solid #4d4841
+  background: $bronze-700
+  border: 1px solid $bronze-400
   border-radius: 5px
   @media (max-width: 600px)
     grid-template-columns: 1fr 1fr
     &__info
       grid-column: 1 / -1
   &__match-id
-    color: #666
+    color: $bronze-400
     font-size: 11px
     margin-bottom: 4px
   &__map-name
@@ -97,13 +97,13 @@ function onMapImageError(event) {
     display: block
     margin-bottom: 4px
   &__meta
-    color: #aaa
+    color: $bronze-50
     font-size: 13px
   &__elo-diff
     display: inline-block
     margin-top: 6px
     padding: 2px 8px
-    background: $gold-600
+    background: $gold-400
     color: $gold-950
     font-size: 12px
     font-weight: bold
@@ -112,7 +112,7 @@ function onMapImageError(event) {
     display: flex
     justify-content: space-between
     align-items: center
-    color: #aaa
+    color: $bronze-50
     margin-bottom: 8px
   &--large
     .match-card__map-image
@@ -123,7 +123,7 @@ function onMapImageError(event) {
         width: 36px
 
 .player-list
-  background: #1c1b14
+  background: $bronze-800
   padding: 8px
   border-radius: 4px
   list-style: none
@@ -137,5 +137,5 @@ function onMapImageError(event) {
   &__elo
     margin-left: auto
     font-family: $font-serif
-    color: $gold-500
+    color: $gold-100
 </style>

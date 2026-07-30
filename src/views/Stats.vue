@@ -259,7 +259,7 @@ onMounted(() => {
   align-items: center
   gap: 6px
   font-size: 13px
-  color: #bbb
+  color: $bronze-100
   cursor: pointer
   white-space: nowrap
   input
@@ -267,16 +267,16 @@ onMounted(() => {
 
 .stats-select
   padding: 2px 10px
-  background: $color-background
+  background: $bronze-800
   color: white
-  border: 1px solid #948772
+  border: 1px solid $bronze-200
 
 .empty-state
   margin-top: 10px
   padding: 20px
-  color: #aaa
+  color: $bronze-50
   text-align: center
-  border: 1px solid #948772
+  border: 1px solid $bronze-200
 
 .match-list
   list-style: none
