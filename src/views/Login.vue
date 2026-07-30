@@ -53,6 +53,8 @@ async function handleSubmit() {
 </script>
 
 <style lang="sass" scoped>
+@use "../styles/abstracts/_variables" as *
+
 .login
   display: flex
   justify-content: center
@@ -63,8 +65,8 @@ async function handleSubmit() {
     gap: 16px
     width: 100%
     max-width: 320px
-    background: #161005
-    border: 1px solid #948772
+    background: $bronze-900
+    border: 1px solid $bronze-200
     border-radius: 5px
     padding: 24px
   &__title
@@ -76,12 +78,12 @@ async function handleSubmit() {
     flex-direction: column
     gap: 6px
     font-size: 13px
-    color: #bbb
+    color: $gray-400
   &__input
     padding: 8px 10px
-    background: #1c1b14
+    background: $bronze-800
     color: white
-    border: 1px solid #948772
+    border: 1px solid $bronze-200
     border-radius: 2px
   &__button
     margin-top: 8px

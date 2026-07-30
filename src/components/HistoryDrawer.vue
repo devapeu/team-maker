@@ -48,13 +48,15 @@ function closeDrawer() {
 </template>
 
 <style scoped lang="sass">
+@use "../styles/abstracts/_variables" as *
+
 .drawer-title
   display: flex
   gap: 12px
   align-items: center
   padding-bottom: 12px
   margin-bottom: 16px
-  border-bottom: 1px solid #948772
+  border-bottom: 1px solid $bronze-200
 
 .match-list
   list-style: none

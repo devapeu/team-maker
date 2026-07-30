@@ -55,18 +55,14 @@
               @click="openHistoryDrawer">
               <div
                 class="teams__probability-item"
-                :style="{
-                  width: (matchup && matchup[team1Key] ? matchup[team1Key].probability : 0) + '%',
-                  backgroundColor: (matchup && matchup[team1Key] && matchup[team1Key].probability > 50) ? '#246a4c' : '#333'
-                }">
+                :class="{ 'teams__probability-item--win': matchup && matchup[team1Key] && matchup[team1Key].probability > 50 }"
+                :style="{ width: (matchup && matchup[team1Key] ? matchup[team1Key].probability : 0) + '%' }">
                 {{ (matchup && matchup[team1Key] ? matchup[team1Key].probability.toFixed() : 0) }}%
               </div>
               <div
                 class="teams__probability-item left"
-                :style="{
-                  width: (matchup && matchup[team2Key] ? matchup[team2Key].probability : 0) + '%',
-                  backgroundColor: (matchup && matchup[team2Key] && matchup[team2Key].probability > 50) ? '#246a4c' : '#333'
-                }">
+                :class="{ 'teams__probability-item--win': matchup && matchup[team2Key] && matchup[team2Key].probability > 50 }"
+                :style="{ width: (matchup && matchup[team2Key] ? matchup[team2Key].probability : 0) + '%' }">
                 {{ (matchup && matchup[team2Key] ? matchup[team2Key].probability.toFixed() : 0) }}%
               </div>
             </div>
@@ -352,8 +348,8 @@ onMounted(async () => {
   flex-wrap: wrap
   gap: 16px
   padding: 16px
-  background: $background-light
-  border: 1px solid #4d4841
+  background: $bronze-700
+  border: 1px solid $gray-900
   border-radius: 5px
 
 .filter-control
@@ -361,24 +357,24 @@ onMounted(async () => {
   flex-direction: column
   gap: 6px
   font-size: 13px
-  color: #bbb
+  color: $gray-400
   select, input
     padding: 4px 10px
-    background: $color-background
+    background: $bronze-800
     color: white
-    border: 1px solid #948772
+    border: 1px solid $bronze-200
     border-radius: 2px
 
 .teams__team--winner
-  border-color: $gold-500
+  border-color: $gold-100
   box-shadow: 0 0 8px rgba(255, 197, 63, 0.4)
 
 .empty-state
   margin-top: 10px
   padding: 20px
-  color: #aaa
+  color: $gray-500
   text-align: center
-  border: 1px solid #948772
+  border: 1px solid $bronze-200
 
 .match-list
   list-style: none

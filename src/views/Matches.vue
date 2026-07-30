@@ -171,8 +171,8 @@ onMounted(() => fetchMatches({ reset: true }));
   flex-direction: column
   gap: 16px
   padding: 16px
-  background: $background-light
-  border: 1px solid #4d4841
+  background: $bronze-700
+  border: 1px solid $gray-900
   border-radius: 5px
   @media (max-width: 768px)
     order: -1
@@ -186,12 +186,12 @@ onMounted(() => fetchMatches({ reset: true }));
   flex-direction: column
   gap: 6px
   font-size: 13px
-  color: #bbb
+  color: $gray-400
   select, input
     padding: 4px 10px
-    background: $color-background
+    background: $bronze-800
     color: white
-    border: 1px solid #948772
+    border: 1px solid $bronze-200
     border-radius: 2px
 
 .toggle-control
@@ -199,7 +199,7 @@ onMounted(() => fetchMatches({ reset: true }));
   align-items: center
   gap: 6px
   font-size: 13px
-  color: #bbb
+  color: $gray-400
   cursor: pointer
   input
     cursor: pointer
@@ -207,9 +207,9 @@ onMounted(() => fetchMatches({ reset: true }));
 .empty-state
   margin-top: 10px
   padding: 20px
-  color: #aaa
+  color: $gray-500
   text-align: center
-  border: 1px solid #948772
+  border: 1px solid $bronze-200
 
 .matches-footer
   display: flex
@@ -224,10 +224,10 @@ onMounted(() => fetchMatches({ reset: true }));
   padding-bottom: 16px
 
 .map-button
-  border: 1px solid #948772
+  border: 1px solid $bronze-200
   border-radius: 5px
-  color: #ddd
-  background: linear-gradient(to bottom, #3A3121, #161005)
+  color: $gray-200
+  background: linear-gradient(to bottom, $bronze-600, $bronze-900)
   box-shadow: inset 0 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 5px rgba(0, 0, 0, 0.5)
   transition: 150ms ease-out all
   cursor: pointer
@@ -238,5 +238,5 @@ onMounted(() => fetchMatches({ reset: true }));
     cursor: default
   @media (pointer: fine)
     &:hover:not(:disabled)
-      background: linear-gradient(to bottom, #5c4727, #0f0b03)
+      background: linear-gradient(to bottom, $bronze-400, $bronze-950)
 </style>
