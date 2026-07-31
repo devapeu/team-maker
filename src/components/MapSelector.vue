@@ -58,6 +58,7 @@ onMounted(fetchMapCounts);
 </script>
 <style lang="sass" scoped>
 @use "../styles/abstracts/_variables" as *
+@use "../styles/abstracts/_mixins" as *
 
 .map-selector
   margin-top: 4px
@@ -75,20 +76,11 @@ onMounted(fetchMapCounts);
     padding: 4px 8px
 
 .map-button
-  border: 1px solid $bronze-200
-  border-radius: 5px
-  color: $gray-200
-  background: linear-gradient(to bottom, $bronze-600, $bronze-900)
-  box-shadow: inset 0 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 5px rgba(0, 0, 0, 0.5)
-  transition: 150ms ease-out all
-  cursor: pointer
+  @include bronze-button
   font-family: "DM Sans"
   @media (pointer: fine)
     &:hover
-      background: linear-gradient(to bottom, $bronze-400, $bronze-950)
-      box-shadow: inset 0 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 5px rgba(255, 191, 0, 0.25)
-      color: $gold-200
-      border: 1px solid $gold-300
+      @include bronze-button-hover
 
 .first-map-button
   margin: auto

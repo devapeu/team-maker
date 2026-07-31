@@ -54,6 +54,7 @@ async function handleSubmit() {
 
 <style lang="sass" scoped>
 @use "../styles/abstracts/_variables" as *
+@use "../styles/abstracts/_mixins" as *
 
 .login
   display: flex
@@ -86,7 +87,11 @@ async function handleSubmit() {
     border: 1px solid $bronze-200
     border-radius: 2px
   &__button
+    @include bronze-button
     margin-top: 8px
     text-align: center
     justify-content: center
+    @media (pointer: fine)
+      &:hover
+        @include bronze-button-hover
 </style>

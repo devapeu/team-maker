@@ -1,4 +1,5 @@
 @use "../abstracts/variables" as *
+@use "../abstracts/mixins" as *
 
 .teams
   &__labels
@@ -23,9 +24,7 @@
         text-align: right
         padding-right: 4px
   &__header
-    display: flex
-    justify-content: space-between
-    align-items: center
+    @include flex-between
     padding: 4px
     &--inverse
       flex-direction: row-reverse
@@ -85,24 +84,15 @@
     padding-left: 44px
     padding-right: 36px
     padding: 10px 20px
-    cursor: pointer
-    color: $gray-200
-    border: 1px solid $bronze-200
-    border-radius: 5px
+    @include bronze-button
     font-size: 16px
     font-family: $font-sans
-    background: linear-gradient(to bottom, $bronze-600, $bronze-900)
-    box-shadow: inset 0 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 5px rgba(0, 0, 0, 0.5)
-    transition: 150ms ease-out all
     display: inline-flex
     align-items: center
     gap: 8px
     @media (pointer: fine)
       &:hover
-        background: linear-gradient(to bottom, $bronze-400, $bronze-950)
-        box-shadow: inset 0 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 5px rgba(255, 191, 0, 0.25)
-        color: $gold-200
-        border: 1px solid $gold-300
+        @include bronze-button-hover
     &__icon
       width: 24px
       height: 24px
@@ -118,7 +108,8 @@
         border-radius: 4px
         padding: 4px
   &__button:hover &__button__icon
-    transform: translateY(-2px)
+    path
+      fill: $gold-300
   @media (min-width: 1024px)
     font-size: 18px
     &__team

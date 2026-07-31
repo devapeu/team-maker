@@ -220,6 +220,7 @@ onMounted(() => {
 
 <style lang="sass" scoped>
 @use "../styles/abstracts/_variables" as *
+@use "../styles/abstracts/_mixins" as *
 
 .stats
   max-width: 1180px
@@ -246,42 +247,24 @@ onMounted(() => {
     opacity: 0.75
     margin-bottom: 12px
   &__header
-    display: flex
-    justify-content: space-between
-    align-items: center
+    @include flex-between
     gap: 12px
     margin-bottom: 10px
     h2
       margin-bottom: 0
 
 .toggle-control
-  display: flex
-  align-items: center
-  gap: 6px
-  font-size: 13px
-  color: $gray-400
-  cursor: pointer
+  @include toggle-control
   white-space: nowrap
-  input
-    cursor: pointer
 
 .stats-select
+  @include dark-field
   padding: 2px 10px
-  background: $bronze-800
-  color: white
-  border: 1px solid $bronze-200
 
 .empty-state
-  margin-top: 10px
-  padding: 20px
-  color: $gray-500
-  text-align: center
-  border: 1px solid $bronze-200
+  @include empty-state
 
 .match-list
-  list-style: none
-  display: flex
-  flex-direction: column
-  gap: 16px
+  @include stacked-list
   margin-bottom: 16px
 </style>

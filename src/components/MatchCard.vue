@@ -71,15 +71,14 @@ function onMapImageError(event) {
 
 <style lang="sass" scoped>
 @use "../styles/abstracts/_variables" as *
+@use "../styles/abstracts/_mixins" as *
 
 .match-card
+  @include bronze-panel
   display: grid
   grid-template-columns: 140px 1fr 1fr
   gap: 20px
   padding: 16px
-  background: $bronze-700
-  border: 1px solid $gray-900
-  border-radius: 5px
   @media (max-width: 600px)
     grid-template-columns: 1fr 1fr
     &__info
@@ -109,9 +108,7 @@ function onMapImageError(event) {
     font-weight: bold
     border-radius: 4px
   &__team-title
-    display: flex
-    justify-content: space-between
-    align-items: center
+    @include flex-between
     color: $gray-500
     margin-bottom: 8px
   &--large

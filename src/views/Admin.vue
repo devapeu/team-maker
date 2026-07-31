@@ -311,14 +311,13 @@ onMounted(async () => {
 
 <style lang="sass" scoped>
 @use "../styles/abstracts/_variables" as *
+@use "../styles/abstracts/_mixins" as *
 
 .admin
   padding: 0 16px
   margin: auto
   &__header
-    display: flex
-    justify-content: space-between
-    align-items: center
+    @include flex-between
     margin-bottom: 16px
 
 .admin-layout
@@ -344,41 +343,22 @@ onMounted(async () => {
     font-weight: 400
 
 .match-details
+  @include bronze-panel
   display: flex
   flex-wrap: wrap
   gap: 16px
   padding: 16px
-  background: $bronze-700
-  border: 1px solid $gray-900
-  border-radius: 5px
 
 .filter-control
-  display: flex
-  flex-direction: column
-  gap: 6px
-  font-size: 13px
-  color: $gray-400
-  select, input
-    padding: 4px 10px
-    background: $bronze-800
-    color: white
-    border: 1px solid $bronze-200
-    border-radius: 2px
+  @include filter-control
 
 .teams__team--winner
   border-color: $gold-100
   box-shadow: 0 0 8px rgba(255, 197, 63, 0.4)
 
 .empty-state
-  margin-top: 10px
-  padding: 20px
-  color: $gray-500
-  text-align: center
-  border: 1px solid $bronze-200
+  @include empty-state
 
 .match-list
-  list-style: none
-  display: flex
-  flex-direction: column
-  gap: 12px
+  @include stacked-list(12px)
 </style>

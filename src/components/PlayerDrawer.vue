@@ -381,14 +381,10 @@ watch(
 
 <style scoped lang="sass">
 @use "../styles/abstracts/_variables" as *
+@use "../styles/abstracts/_mixins" as *
 
 .player-info
-  display: flex
-  gap: 12px
-  align-items: center
-  padding-bottom: 12px
-  margin-bottom: 16px
-  border-bottom: 1px solid $bronze-200
+  @include drawer-header
   &__image
     width: 48px
     border-left-style: solid
@@ -397,11 +393,7 @@ watch(
     margin-bottom: 0
 
 .empty-state
-  margin-top: 10px
-  padding: 20px
-  color: $gray-500
-  text-align: center
-  border: 1px solid $bronze-200
+  @include empty-state
 
 .player-controls
   display: flex

@@ -49,18 +49,11 @@ function closeDrawer() {
 
 <style scoped lang="sass">
 @use "../styles/abstracts/_variables" as *
+@use "../styles/abstracts/_mixins" as *
 
 .drawer-title
-  display: flex
-  gap: 12px
-  align-items: center
-  padding-bottom: 12px
-  margin-bottom: 16px
-  border-bottom: 1px solid $bronze-200
+  @include drawer-header
 
 .match-list
-  list-style: none
-  display: flex
-  flex-direction: column
-  gap: 16px
+  @include stacked-list
 </style>

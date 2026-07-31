@@ -151,6 +151,7 @@ onMounted(() => fetchMatches({ reset: true }));
 
 <style lang="sass" scoped>
 @use "../styles/abstracts/_variables" as *
+@use "../styles/abstracts/_mixins" as *
 
 .matches
   max-width: 1180px
@@ -167,13 +168,11 @@ onMounted(() => fetchMatches({ reset: true }));
     grid-template-columns: 1fr
 
 .matches-filters
+  @include bronze-panel
   display: flex
   flex-direction: column
   gap: 16px
   padding: 16px
-  background: $bronze-700
-  border: 1px solid $gray-900
-  border-radius: 5px
   @media (max-width: 768px)
     order: -1
   h2
@@ -182,34 +181,13 @@ onMounted(() => fetchMatches({ reset: true }));
     font-weight: 400
 
 .filter-control
-  display: flex
-  flex-direction: column
-  gap: 6px
-  font-size: 13px
-  color: $gray-400
-  select, input
-    padding: 4px 10px
-    background: $bronze-800
-    color: white
-    border: 1px solid $bronze-200
-    border-radius: 2px
+  @include filter-control
 
 .toggle-control
-  display: flex
-  align-items: center
-  gap: 6px
-  font-size: 13px
-  color: $gray-400
-  cursor: pointer
-  input
-    cursor: pointer
+  @include toggle-control
 
 .empty-state
-  margin-top: 10px
-  padding: 20px
-  color: $gray-500
-  text-align: center
-  border: 1px solid $bronze-200
+  @include empty-state
 
 .matches-footer
   display: flex
@@ -217,20 +195,11 @@ onMounted(() => fetchMatches({ reset: true }));
   margin: 24px 0 48px
 
 .match-list
-  list-style: none
-  display: flex
-  flex-direction: column
-  gap: 16px
+  @include stacked-list
   padding-bottom: 16px
 
 .map-button
-  border: 1px solid $bronze-200
-  border-radius: 5px
-  color: $gray-200
-  background: linear-gradient(to bottom, $bronze-600, $bronze-900)
-  box-shadow: inset 0 0 2px 4px rgba(0, 0, 0, 0.5), 0 0 5px rgba(0, 0, 0, 0.5)
-  transition: 150ms ease-out all
-  cursor: pointer
+  @include bronze-button
   font-family: "DM Sans"
   padding: 8px 24px
   &:disabled
