@@ -134,7 +134,7 @@ const hasNoMatches = computed(() => props.team1?.wins === 0 && props.team2?.wins
   align-items: center
   justify-content: center
   border-radius: 2px
-  border: 0.5px solid $gray-800
+  border: 0.5px solid $gray-900
   &--no-matches
     color: $gray-700
 .thumbnail
@@ -158,12 +158,12 @@ const hasNoMatches = computed(() => props.team1?.wins === 0 && props.team2?.wins
     margin-top: 0
     gap: 2px
     border-width: 0.5px
-    border-color: $gray-800
+    border-color: $gray-900
   .teams__score
     font-size: 10px
   .team-box
     border-width: 0.5px
-    border-color: $gray-800
+    border-color: $gray-900
   :deep(.player)
     height: 21px
     font-size: 8px

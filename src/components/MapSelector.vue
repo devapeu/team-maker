@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="draggable-label">Selección de Mapa</div>
+    <div class="draggable-label">Selección de mapa</div>
     <div class="map-selector">
       <template v-if="hasDisplayedMap">
         <img
@@ -65,7 +65,7 @@ onMounted(fetchMapCounts);
   display: flex
   align-items: center
   gap: 16px
-  border: 1px solid $bronze-200
+  border: 1px solid $bronze-500
   padding: 20px
   background: $bronze-900
   border-radius: 5px

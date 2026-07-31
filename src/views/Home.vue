@@ -24,6 +24,7 @@
     </div>
     <!-- Teams -->
     <div>
+      <h2 class="draggable-label" style="margin-bottom: 4px;  ">Configuración de equipos</h2>
       <div class="teams">
         <div>
           <div class="teams__labels">
