@@ -10,17 +10,17 @@
           </div>
           <draggable v-model="players" item-key="name" group="players" class="player-pool">
             <template #item="{ element, index }">
-              <PlayerBadge 
-                :player="element" 
-                @click-score="moveToAvailable(element.id)"
-                @change-god="handleGodChange"
-                @click-profile="openPlayerDetails"/>
+              <PlayerBadge
+                  :player="element"
+                  @click-score="moveToAvailable(element.id)"
+                  @change-god="handleGodChange"
+                  @click-profile="openPlayerDetails"/>
             </template>
           </draggable>
         </div>
       </div>
       <!-- Random Map Box -->
-      <MapSelector />
+      <MapSelector/>
     </div>
     <!-- Teams -->
     <div>
@@ -32,116 +32,114 @@
             <span>{{ team2Label }}</span>
           </div>
           <div
-            v-if="matchup !== null"
-            class="teams__probability"
-            @click="openHistoryDrawer">
+              v-if="matchup !== null"
+              class="teams__probability"
+              @click="openHistoryDrawer">
             <div
-              class="teams__probability-item"
-              :class="{ 'teams__probability-item--win': matchup && matchup[team1Key] && matchup[team1Key].probability > 50 }"
-              :style="{ width: (matchup && matchup[team1Key] ? matchup[team1Key].probability : 0) + '%' }">
+                class="teams__probability-item"
+                :class="{ 'teams__probability-item--win': matchup && matchup[team1Key] && matchup[team1Key].probability > 50 }"
+                :style="{ width: (matchup && matchup[team1Key] ? matchup[team1Key].probability : 0) + '%' }">
               {{ (matchup && matchup[team1Key] ? matchup[team1Key].probability.toFixed() : 0) }}%
             </div>
             <div
-              class="teams__probability-item left"
-              :class="{ 'teams__probability-item--win': matchup && matchup[team2Key] && matchup[team2Key].probability > 50 }"
-              :style="{ width: (matchup && matchup[team2Key] ? matchup[team2Key].probability : 0) + '%' }">
+                class="teams__probability-item left"
+                :class="{ 'teams__probability-item--win': matchup && matchup[team2Key] && matchup[team2Key].probability > 50 }"
+                :style="{ width: (matchup && matchup[team2Key] ? matchup[team2Key].probability : 0) + '%' }">
               {{ (matchup && matchup[team2Key] ? matchup[team2Key].probability.toFixed() : 0) }}%
             </div>
           </div>
-        </div>
-        <div class="teams__wrapper">
-          <div class="teams__team">
-            <div class="teams__header">
-              <h2 class="teams__score">{{ Math.round(team1Score) }}</h2>
-              <div 
-                class="teams__wins"
-                :class="hasNoMatches ? 'teams__wins--no-matches' : ''">
-                <template v-if="hasNoMatches">
-                  -
-                </template>
-                <template v-else>
-                  {{ matchup[team1Key]?.wins }}
-                </template>
+          <div class="teams__wrapper">
+            <div class="teams__team">
+              <div class="teams__header">
+                <h2 class="teams__score">{{ Math.round(team1Score) }}</h2>
+                <div
+                    class="teams__wins"
+                    :class="hasNoMatches ? 'teams__wins--no-matches' : ''">
+                  <template v-if="hasNoMatches">
+                    -
+                  </template>
+                  <template v-else>
+                    {{ matchup[team1Key]?.wins }}
+                  </template>
+                </div>
               </div>
+              <draggable v-model="team1" item-key="name" group="players" class="team-box">
+                <template #item="{ element }">
+                  <PlayerBadge
+                      :player="element"
+                      @change-god="handleGodChange"
+                      @click-profile="openPlayerDetails"/>
+                </template>
+              </draggable>
             </div>
-            <draggable v-model="team1" item-key="name" group="players" class="team-box">
-              <template #item="{ element }">
-                <PlayerBadge 
-                  :player="element"
-                  @change-god="handleGodChange"
-                  @click-profile="openPlayerDetails" />
-              </template>
-            </draggable>
-          </div>
-          
-          <div class="teams__team">
-            <div class="teams__header teams__header--inverse">
-              <h2 class="teams__score">
-                {{ Math.round(team2Score) }}
-              </h2>
-              <div 
-                class="teams__wins"
-                :class="hasNoMatches ? 'teams__wins--no-matches' : ''">
-                <template v-if="hasNoMatches">
-                  -
-                </template>
-                <template v-else>
-                  {{ matchup[team2Key]?.wins }}
-                </template>
+
+            <div class="teams__team">
+              <div class="teams__header teams__header--inverse">
+                <h2 class="teams__score">
+                  {{ Math.round(team2Score) }}
+                </h2>
+                <div
+                    class="teams__wins"
+                    :class="hasNoMatches ? 'teams__wins--no-matches' : ''">
+                  <template v-if="hasNoMatches">
+                    -
+                  </template>
+                  <template v-else>
+                    {{ matchup[team2Key]?.wins }}
+                  </template>
+                </div>
               </div>
+              <draggable v-model="team2" item-key="name" group="players" class="team-box">
+                <template #item="{ element }">
+                  <PlayerBadge
+                      :player="element"
+                      @change-god="handleGodChange"
+                      @click-profile="openPlayerDetails"/>
+                </template>
+              </draggable>
             </div>
-            <draggable v-model="team2" item-key="name" group="players" class="team-box">
-              <template #item="{ element }">
-                <PlayerBadge 
-                  :player="element"
-                  @change-god="handleGodChange"
-                  @click-profile="openPlayerDetails" />
-              </template>
-            </draggable>
+          </div>
+          <div
+              v-if="allPlayersPresent"
+              class="all-players-present">
+            gogogogogogogogo
+          </div>
+          <div class="teams__controls">
+            <button class="teams__button" @click="autoBalanceTeams">
+              <ShuffleIcon class="teams__button__icon" aria-hidden="true"/>
+              Auto Balance
+            </button>
+            <button class="teams__button" @click="saveConfiguration">
+              Guardar
+            </button>
           </div>
         </div>
-        <div 
-          v-if="allPlayersPresent"
-          class="all-players-present">
-          gogogogogogogogo
-        </div>
-        <div class="teams__controls">
-          <button class="teams__button" @click="autoBalanceTeams">
-            <ShuffleIcon class="teams__button__icon" aria-hidden="true"/>
-            Auto Balance
-          </button>
-          <button class="teams__button" @click="saveConfiguration">
-            Guardar
-          </button>
-        </div>
-      </div>
-      <div>
-        <div 
-          v-if="Object.keys(savedConfigurations).length > 0"
-          class="saved-configurations">
+        <div
+            v-if="Object.keys(savedConfigurations).length > 0"
+            class="saved-configurations">
           <div class="saved-configurations__header">
             Opciones guardadas
-            <button 
-              class="saved-configurations__send-button"
-              @click="handleSendToDiscord" title="Enviar a Discord">
+            <button
+                class="saved-configurations__send-button"
+                @click="handleSendToDiscord" title="Enviar a Discord">
               <DiscordIcon aria-hidden="true"/>
               Enviar a Discord
             </button>
           </div>
           <ul id="saved-configurations" class="saved-configurations__container">
-            <li 
-              v-for="(item, key, index) in savedConfigurations"
-              :key="key"
-              class="saved-configurations__item">
+            <li
+                v-for="(item, key, index) in savedConfigurations"
+                :key="key"
+                class="saved-configurations__item">
               <div class="saved-configurations__label">
-                {{ String.fromCharCode(65 + index ) }}
+                {{ String.fromCharCode(65 + index) }}
               </div>
-              <TeamMatchupScaffold 
-                class="saved-configurations__team"
-                :team1="item.team1"
-                :team2="item.team2"
-                thumbnail
-                @click="removeConfiguration(key)" />
+              <TeamMatchupScaffold
+                  class="saved-configurations__team"
+                  :team1="item.team1"
+                  :team2="item.team2"
+                  thumbnail
+                  @click="removeConfiguration(key)"/>
             </li>
           </ul>
         </div>
@@ -149,25 +147,25 @@
     </div>
   </main>
   <PlayerDrawer
-    v-model:active="active"
-    :playerDetailsActive="playerDetailsActive"
-    :averages="averages" />
+      v-model:active="active"
+      :playerDetailsActive="playerDetailsActive"
+      :averages="averages"/>
   <HistoryDrawer
-    v-model:active="historyDrawerActive"
-    :history="history" />
+      v-model:active="historyDrawerActive"
+      :history="history"/>
   <div class="toast-container" aria-live="polite">
     <div
-      v-for="t in toasts"
-      :key="t.id"
-      class="toast"
-      :class="`toast--${t.type}`">
+        v-for="t in toasts"
+        :key="t.id"
+        class="toast"
+        :class="`toast--${t.type}`">
       {{ t.message }}
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted, toRaw } from 'vue'
+import {ref, computed, onMounted, toRaw} from 'vue'
 import draggable from "vuedraggable/dist/vuedraggable.common";
 import PlayerBadge from '../components/PlayerBadge.vue';
 import PlayerDrawer from '../components/PlayerDrawer.vue';
@@ -177,17 +175,17 @@ import MapSelector from '../components/MapSelector.vue';
 import TeamMatchupScaffold from '../components/TeamMatchupScaffold.vue';
 
 // Composables
-import { useToast } from '../composables/useToast.js'
-import { usePlayerData } from '../composables/usePlayerData.js'
-import { useTeams } from '../composables/useTeams.js'
-import { usePlayerDrawer } from '../composables/usePlayerDrawer.js'
-import { useDiscord } from '../composables/useDiscord.js'
-import { syncGodChange } from '../composables/usePlayerGodSync.js'
-import { fetchPlayerElos } from '../composables/usePlayerElo.js'
+import {useToast} from '../composables/useToast.js'
+import {usePlayerData} from '../composables/usePlayerData.js'
+import {useTeams} from '../composables/useTeams.js'
+import {usePlayerDrawer} from '../composables/usePlayerDrawer.js'
+import {useDiscord} from '../composables/useDiscord.js'
+import {syncGodChange} from '../composables/usePlayerGodSync.js'
+import {fetchPlayerElos} from '../composables/usePlayerElo.js'
 import HistoryDrawer from "@/components/HistoryDrawer.vue";
 
 // Toast notifications
-const { toasts, showToast } = useToast()
+const {toasts, showToast} = useToast()
 
 // Player data management
 const {
@@ -219,10 +217,10 @@ const moveToAvailable = (id) => moveToAvailableFunction(id, team1, team2)
 
 const handleGodChange = (data) => syncGodChange([players, team1, team2], data);
 // Player drawer
-const { active, playerDetailsActive, openPlayerDetails } = usePlayerDrawer(playersMap)
+const {active, playerDetailsActive, openPlayerDetails} = usePlayerDrawer(playersMap)
 
 // Discord integration
-const { sendPlannerToDiscord } = useDiscord(showToast)
+const {sendPlannerToDiscord} = useDiscord(showToast)
 
 const handleSendToDiscord = () => {
   if (team1.value.length === 0 || team2.value.length === 0) {
@@ -249,7 +247,7 @@ const saveConfiguration = () => {
     return
   }
 
-  const { matchupKey: teamMatchId } = normalizeTeams([team1.value, team2.value]);
+  const {matchupKey: teamMatchId} = normalizeTeams([team1.value, team2.value]);
 
   if (savedConfigurations.value[teamMatchId]) {
     showToast('Ya has guardado esa configuración.', 'error', 3000)
