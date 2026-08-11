@@ -219,7 +219,6 @@ ChartJS.register(
 
 const props = defineProps({
   active: Boolean,
-  averages: Array,
   playerDetailsActive: Object | Boolean,
 })
 

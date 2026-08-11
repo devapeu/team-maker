@@ -2,40 +2,10 @@ import { ref } from 'vue'
 import { PLAYERS_ARRAY } from '../data/players.js'
 
 export function usePlayerData() {
-  // Process players and calculate overall scores
-  const playersMap = PLAYERS_ARRAY.map(player => {
-    const values = Object.values(player.scores)
-    const average = values.reduce((a, b) => a + b, 0) / values.length
-    return {
-      ...player,
-      score: Math.round(average),
-    }
-  })
-
-  // Calculate averages across all players
-  const averages = (() => {
-    const totals = {}
-    let count = 0
-
-    for (const player of PLAYERS_ARRAY) {
-      for (const [key, value] of Object.entries(player.scores)) {
-        totals[key] = (totals[key] || 0) + value
-      }
-      count++
-    }
-
-    const result = {}
-    for (const [key, total] of Object.entries(totals)) {
-      result[key] = Math.round(total / count)
-    }
-
-    return Object.values(result)
-  })()
-
-  const players = ref(playersMap)
+  const players = ref([...PLAYERS_ARRAY])
 
   function reset(team1Ref, team2Ref) {
-    players.value = [...playersMap]
+    players.value = [...PLAYERS_ARRAY]
     team1Ref.value = []
     team2Ref.value = []
   }
@@ -54,8 +24,6 @@ export function usePlayerData() {
 
   return {
     players,
-    playersMap,
-    averages,
     reset,
     moveToAvailable
   }

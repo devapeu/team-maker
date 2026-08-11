@@ -130,8 +130,7 @@
   </main>
   <PlayerDrawer
     v-model:active="active"
-    :playerDetailsActive="playerDetailsActive"
-    :averages="averages" />
+    :playerDetailsActive="playerDetailsActive" />
   <HistoryDrawer
     v-model:active="historyDrawerActive"
     :history="history" />
@@ -165,6 +164,7 @@ import { useAdminAuth } from '../composables/useAdminAuth.js'
 import { syncGodChange } from '../composables/usePlayerGodSync.js'
 import { fetchPlayerElos } from '../composables/usePlayerElo.js'
 import { ALL_GODS } from '../data/gods.js'
+import {PLAYERS_ARRAY} from "@/data/players.js";
 
 const router = useRouter()
 const { logout, getToken } = useAdminAuth()
@@ -174,8 +174,6 @@ const maps = getValidMaps();
 
 const {
   players,
-  playersMap,
-  averages,
   reset: resetPlayerData,
   moveToAvailable: moveToAvailableFunction
 } = usePlayerData()
@@ -197,7 +195,7 @@ const reset = () => resetPlayerData(team1, team2)
 const moveToAvailable = (id) => moveToAvailableFunction(id, team1, team2)
 const handleGodChange = (data) => syncGodChange([players, team1, team2], data)
 
-const { active, playerDetailsActive, openPlayerDetails } = usePlayerDrawer(playersMap)
+const { active, playerDetailsActive, openPlayerDetails } = usePlayerDrawer([...PLAYERS_ARRAY])
 
 const historyDrawerActive = ref(false)
 const history = ref(null);

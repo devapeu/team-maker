@@ -149,8 +149,7 @@
   </main>
   <PlayerDrawer
     v-model:active="active"
-    :playerDetailsActive="playerDetailsActive"
-    :averages="averages" />
+    :playerDetailsActive="playerDetailsActive" />
   <HistoryDrawer
     v-model:active="historyDrawerActive"
     :history="history" />
@@ -184,6 +183,7 @@ import { useDiscord } from '../composables/useDiscord.js'
 import { syncGodChange } from '../composables/usePlayerGodSync.js'
 import { fetchPlayerElos } from '../composables/usePlayerElo.js'
 import HistoryDrawer from "@/components/HistoryDrawer.vue";
+import {PLAYERS_ARRAY} from "@/data/players.js";
 
 // Toast notifications
 const { toasts, showToast } = useToast()
@@ -191,8 +191,6 @@ const { toasts, showToast } = useToast()
 // Player data management
 const {
   players,
-  playersMap,
-  averages,
   reset: resetPlayerData,
   moveToAvailable: moveToAvailableFunction
 } = usePlayerData()
@@ -218,7 +216,7 @@ const moveToAvailable = (id) => moveToAvailableFunction(id, team1, team2)
 
 const handleGodChange = (data) => syncGodChange([players, team1, team2], data);
 // Player drawer
-const { active, playerDetailsActive, openPlayerDetails } = usePlayerDrawer(playersMap)
+const { active, playerDetailsActive, openPlayerDetails } = usePlayerDrawer([...PLAYERS_ARRAY])
 
 // Discord integration
 const { sendPlannerToDiscord } = useDiscord(showToast)
