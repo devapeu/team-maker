@@ -27,7 +27,7 @@
                   {{ entry.name }}
                 </div>
               </td>
-              <td>{{ Math.round(entry.elo) }}</td>
+              <td>{{ eloWhole(entry.elo) }}<span class="leaderboard-elo-decimal">.{{ eloDecimal(entry.elo) }}</span></td>
             </tr>
           </tbody>
         </table>
@@ -64,7 +64,7 @@
                 </div>
               </td>
 
-              <td>{{ Math.round(entry.elo) }}</td>
+              <td>{{ eloWhole(entry.elo) }}<span class="leaderboard-elo-decimal">.{{ eloDecimal(entry.elo) }}</span></td>
             </tr>
           </tbody>
         </table>
@@ -82,6 +82,14 @@ const PLAYERS_BY_ID = Object.fromEntries(PLAYERS_ARRAY.map(p => [p.profile_id, p
 
 const globalLeaderboard = ref([]);
 const godLeaderboard = ref([]);
+
+function eloWhole(elo) {
+  return elo.toFixed(1).split('.')[0];
+}
+
+function eloDecimal(elo) {
+  return elo.toFixed(1).split('.')[1];
+}
 
 async function fetchLeaderboard(scope) {
   try {
@@ -138,4 +146,7 @@ onMounted(async () => {
 .leaderboard-rank
   color: $bronze-100
   padding-left: 14px
+
+.leaderboard-elo-decimal
+  color: $bronze-100
 </style>
