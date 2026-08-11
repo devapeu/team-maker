@@ -9,6 +9,7 @@
       <nav class="header__nav">
         <router-link to="/matches">Partidas</router-link>
         <router-link to="/stats">Estadísticas</router-link>
+        <router-link to="/posiciones">Posiciones</router-link>
       </nav>
     </div>
   </header>

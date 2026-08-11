@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from './views/Home.vue'
 import Stats from './views/Stats.vue'
+import Leaderboard from './views/Leaderboard.vue'
 import Matches from './views/Matches.vue'
 import Login from './views/Login.vue'
 import Admin from './views/Admin.vue'
@@ -16,6 +17,11 @@ const routes = [
     path: '/stats',
     name: 'Stats',
     component: Stats
+  },
+  {
+    path: '/posiciones',
+    name: 'Leaderboard',
+    component: Leaderboard
   },
   {
     path: '/matches',
